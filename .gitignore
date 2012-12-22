@@ -1,4 +1,6 @@
 vogella2/.idea/
 *.class
 out/
+.idea/
+*.iml
 
