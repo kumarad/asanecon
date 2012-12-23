@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">Asanecon</string>
     <string name="no_stocks">No Stocks</string>
+    <string name="stock_add_hint">Input stock symbol here</string>
+    <string name="stock_add_button">Add</string>
 </resources>

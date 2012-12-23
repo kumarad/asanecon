@@ -1,4 +1,4 @@
-package com.example.techan.database;
+package com.techan.database;
 
 
 import android.content.Context;
