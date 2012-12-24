@@ -24,19 +24,21 @@ public class StockAddActivity extends Activity {
 
         addText = (EditText) findViewById(R.id.stock_add);
         String currentText = (bundle == null) ? null : bundle.getString(CURRENT_TEXT);
-        addText.setText(currentText);
+        if(currentText != null)
+            addText.setText(currentText);
 
         Button confirmButton = (Button) findViewById(R.id.stock_add_button);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (TextUtils.isEmpty(addText.getText().toString())) {
+                    //todo confirm that it is a valid symbol here ?
                     showErrorToast();
                 } else {
                     // RESULT_OK is negative. Returning a negative value is the same as calling
                     // startActivity on the calling activity.
                     setResult(RESULT_OK);
 
-                    // will call onPause or onSaveInstanceState which will end up saving information
+                    // will call onDestroy which will end up saving information
                     // in database.
                     finish();
                 }
@@ -52,11 +54,21 @@ public class StockAddActivity extends Activity {
     // Called when the activity is no longer the primary activity. Android can
     // kill this activity if running low on memory. So should persist any data
     // that shouldn't be lost at this point.
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        addSymbol();
+//    }
+
     @Override
-    protected void onPause() {
-        super.onPause();
-        addSymbol();
+    protected void onDestroy() {
+        if(isFinishing()) {
+            addSymbol();
+        }
+
+        super.onDestroy();
     }
+
 
     // Called before the activity is put in a background state. Save stuff in the bundle.
     // When the activity comes back to the foreground it is passed to onCreate to help recreate
