@@ -14,14 +14,31 @@
     <!--</ImageView>-->
 
     <TextView
-            android:id="@+id/label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/symbol"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="8dp"
             android:layout_marginTop="6dp"
             android:lines="1"
             android:text="@+id/TextView01"
             android:textSize="24dp"
             >
     </TextView>
+
+    <TextView
+            android:id="@+id/price"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="6dp"
+            android:lines="1"
+            android:text="@+id/TextView02"
+            android:textSize="24dp"
+            >
+    </TextView>
+
+
 
 </LinearLayout>

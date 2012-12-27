@@ -26,8 +26,8 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
     // Construction
     /////////////////////
 
-    // Maps colums from a cursor to TextViews or ImageViews defined in an XML file.
-    private SimpleCursorAdapter adapter;
+    // Maps columns from a cursor to TextViews or ImageViews defined in an XML file.
+    private StockCursorAdapter adapter;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -54,10 +54,10 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         // Initialize loader for this activity. Loads stuff from data base asynchronously.
         getLoaderManager().initLoader(0, null, this);
 
-        // Create a cursor that maps each stock symbol to the appropriate filed on the UI.
+        // Create a cursor that maps each stock symbol to the appropriate field on the UI.
         String[] from = new String[] {StocksTable.COLUMN_SYMBOL};
-        int[] to = new int[] { R.id.label};
-        adapter = new SimpleCursorAdapter(this, R.layout.stock_row, null, from, to, 0);
+        int[] to = new int[] { R.id.symbol};
+        adapter = new StockCursorAdapter(this, R.layout.stock_row, null, from, to, 0);
 
         setListAdapter(adapter);
     }

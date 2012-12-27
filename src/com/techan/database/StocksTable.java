@@ -11,6 +11,7 @@ public class StocksTable {
     public static final String TABLE_STOCKS = "stocks";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_SYMBOL = "sym";
+    public static final int COLUMN_SYMBOL_INDEX = 1;
 
     public static Set<String> stocksColumns = new HashSet<String>();
     static {
