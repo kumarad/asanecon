@@ -37,6 +37,7 @@ public class DownloadQuote {
 
                 stockData.name = rowData[0].replace("\"", "");
                 stockData.priceStr = rowData[1];
+                stockData.price = Double.parseDouble(stockData.priceStr);
             }
         } catch(IOException e) {
             getRequest.abort();
@@ -48,9 +49,6 @@ public class DownloadQuote {
             }
         }
 
-
-        //TODO Should probably have value saved off in data base for cases
-        //TODO where the network failed us.
         return stockData;
     }
 }

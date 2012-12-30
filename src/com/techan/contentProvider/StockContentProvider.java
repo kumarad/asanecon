@@ -21,9 +21,10 @@ public class StockContentProvider  extends ContentProvider {
     private StocksDatabaseHelper database;
 
     // content://com.techan.contentprovider/stocks
-    private static final String AUTHORITY = "com.techan.contentprovider";
+    private static final String AUTHORITY = "com.techan.contentprovider";  // Matches what is placed in manifesto
     private static final String BASE_PATH = "stocks";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
+    public static final String STOCK_URI = "content://" + AUTHORITY + "/";
 
     // Content resolver - single global instance in the application that provides access to content providers.
     public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/stocks";

@@ -1,21 +1,23 @@
 package com.techan.stockDownload;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.widget.TextView;
-
-import java.lang.ref.WeakReference;
+import com.techan.contentProvider.StockContentProvider;
+import com.techan.database.StocksTable;
 
 public class QuoteDownloadTask extends AsyncTask<String, Void, StockData> {
 
     final String symbol;
 
-    // A download in progress won't prevent a killed activity's TextView from being
-    // garbage collected by making this reference a weak reference.
-    final WeakReference<TextView> textViewReference;
+    final ContentResolver contentResolver;
+    final Uri addedUri;
 
-    public QuoteDownloadTask(String symbol, TextView textView) {
+    public QuoteDownloadTask(String symbol, ContentResolver contentResolver, Uri addedUri) {
         this.symbol = symbol;
-        this.textViewReference = new WeakReference<TextView>(textView);
+        this.contentResolver = contentResolver;
+        this.addedUri = addedUri;
     }
 
     // Download stock data for the symbol.
@@ -31,12 +33,10 @@ public class QuoteDownloadTask extends AsyncTask<String, Void, StockData> {
             data = null;
         }
 
-        if(textViewReference != null) {
-            // Hasn't been garbage collected.
-            TextView textView = textViewReference.get();
-            if(textView != null) {
-                textView.setText(data.priceStr);
-            }
-        }
+        ContentValues values = new ContentValues();
+        values.put(StocksTable.COLUMN_PRICE, data.price);
+        //contentResolver.update(StockContentProvider.CONTENT_URI, values, "sym='" + symbol + "'", null);
+        Uri uri = Uri.parse(StockContentProvider.STOCK_URI + addedUri);
+        contentResolver.update(uri, values, null, null);
     }
 }

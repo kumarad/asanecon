@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
+import com.techan.stockDownload.QuoteDownloadTask;
 
 public class StockAddActivity extends Activity {
 
@@ -88,6 +89,10 @@ public class StockAddActivity extends Activity {
 
         ContentValues values = new ContentValues();
         values.put(StocksTable.COLUMN_SYMBOL, symbol);
-        return getContentResolver().insert(StockContentProvider.CONTENT_URI, values);
+        Uri addedUri = getContentResolver().insert(StockContentProvider.CONTENT_URI, values);
+
+        (new QuoteDownloadTask(symbol, this.getContentResolver(), addedUri)).execute();
+
+        return addedUri;
     }
 }

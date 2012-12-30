@@ -55,8 +55,8 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         getLoaderManager().initLoader(0, null, this);
 
         // Create a cursor that maps each stock symbol to the appropriate field on the UI.
-        String[] from = new String[] {StocksTable.COLUMN_SYMBOL};
-        int[] to = new int[] { R.id.symbol};
+        String[] from = new String[] {StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE};
+        int[] to = new int[] { R.id.symbol, R.id.price};
         adapter = new StockCursorAdapter(this, R.layout.stock_row, null, from, to, 0);
 
         setListAdapter(adapter);
@@ -72,7 +72,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
 
         // Cursor query must have an integer column "_id" for the CursorAdapter to work.
         // The cursors id will be _id.
-        String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL};
+        String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE};
 
         // CONTENT_URI = "content://com.techan.contentprovider/stocks"
         return new CursorLoader(this, StockContentProvider.CONTENT_URI, projection,

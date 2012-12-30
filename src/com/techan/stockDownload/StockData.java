@@ -7,7 +7,7 @@ public class StockData {
     public String symbol;
     public String name;
     public String priceStr;
-    //public Double price;                 stockData.price = Double.parseDouble();
+    public Double price;
 
     public StockData(String symbol) {
         this.symbol = symbol;
