@@ -31,7 +31,7 @@ public class QuoteDownloadTask extends AsyncTask<String, Void, List<StockData>> 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
             symbols.add(cursor.getString(StocksTable.COLUMN_SYMBOL_INDEX));
-            uris.add(Uri.parse(StockContentProvider.STOCK_URI_STR + Integer.toString(cursor.getInt(0))));
+            uris.add(Uri.parse(StockContentProvider.STOCK_URI_STR + Integer.toString(cursor.getInt(StocksTable.COLUMN_ID_INDEX))));
             cursor.moveToNext();
         }
 

@@ -10,6 +10,7 @@ public class StocksTable {
     // Database table
     public static final String TABLE_STOCKS = "stocks";
     public static final String COLUMN_ID = "_id";
+    public static final int COLUMN_ID_INDEX = 0;
     public static final String COLUMN_SYMBOL = "sym";
     public static final int COLUMN_SYMBOL_INDEX = 1;
     public static final String COLUMN_PRICE = "price";

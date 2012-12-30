@@ -81,7 +81,7 @@ public class StockAddActivity extends Activity {
     }
 
     private Uri addSymbol() {
-        String symbol = addText.getText().toString();
+        String symbol = addText.getText().toString().toUpperCase();
         if(symbol.length() == 0) {
             // Should never happen.
             throw new RuntimeException("Should never have a null symbol string.");
