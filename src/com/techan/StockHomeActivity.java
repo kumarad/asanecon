@@ -10,9 +10,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.SimpleCursorAdapter;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
+import com.techan.stockDownload.QuoteDownloadTask;
 
 /**
  * Cursor - access to the result of a database query.
@@ -82,6 +82,9 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
+
+        // Update from the network.
+        (new QuoteDownloadTask(this.getContentResolver(), data)).execute();
     }
 
     @Override
@@ -93,8 +96,6 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
     // Menu on top right that allows insertion of items in list/database.
     /////////////////////////////////////////////////////////////////////
     private static final int ACTIVITY_CREATE = 0;
-    private static final int ACTIVITY_EDIT = 1;
-    private static final int DELETE_ID = Menu.FIRST + 1;
 
     // Create the menu based on the XML defintion
     @Override

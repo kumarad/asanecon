@@ -5,7 +5,6 @@ public class StockData {
     public static String LAST_TRADE_PRICE = "l1";
 
     public String symbol;
-    public String name;
     public String priceStr;
     public Double price;
 

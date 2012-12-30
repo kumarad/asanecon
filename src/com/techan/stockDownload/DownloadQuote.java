@@ -9,19 +9,31 @@ import org.apache.http.protocol.HttpContext;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DownloadQuote {
 
     static String URL_PREFIX = "http://download.finance.yahoo.com/d/quotes.csv?s=";
     static String TAG_PREFIX = "&f=";
+    static String SYMBOL_SEPERATOR = "+";
 
-    public static StockData download(String symbol, String... tags) {
-        String url = URL_PREFIX + symbol + TAG_PREFIX;
+    public static List<StockData> download(List<String> symbols, String... tags) {
+        // Generate url
+        String url = URL_PREFIX;
+        for(int i = 0; i < symbols.size(); ++i) {
+            if(i > 0 && i < symbols.size()) {
+                url += SYMBOL_SEPERATOR;
+            }
+            url += symbols.get(i);
+        }
+        url += TAG_PREFIX;
+
         for(String tag : tags) {
             url += tag;
         }
 
-        StockData stockData = new StockData(symbol);
+        List<StockData> stockDataList = new ArrayList<StockData>();
         AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
         HttpContext localContext = new BasicHttpContext();
         HttpGet getRequest = new HttpGet(url);
@@ -29,15 +41,16 @@ public class DownloadQuote {
             HttpResponse response = client.execute(getRequest, localContext);
             BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
-            String result = "";
             String line = "";
             while((line = reader.readLine()) != null) {
-                result += line + ",";
-                String[] rowData = result.split(",");
+                String[] rowData = line.split(",");
 
-                stockData.name = rowData[0].replace("\"", "");
+                String symbol = rowData[0].replace("\"", "");
+                StockData stockData = new StockData(symbol);
                 stockData.priceStr = rowData[1];
                 stockData.price = Double.parseDouble(stockData.priceStr);
+
+                stockDataList.add(stockData);
             }
         } catch(IOException e) {
             getRequest.abort();
@@ -49,6 +62,6 @@ public class DownloadQuote {
             }
         }
 
-        return stockData;
+        return stockDataList;
     }
 }

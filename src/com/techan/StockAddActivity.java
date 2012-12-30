@@ -90,8 +90,8 @@ public class StockAddActivity extends Activity {
         ContentValues values = new ContentValues();
         values.put(StocksTable.COLUMN_SYMBOL, symbol);
         Uri addedUri = getContentResolver().insert(StockContentProvider.CONTENT_URI, values);
-
-        (new QuoteDownloadTask(symbol, this.getContentResolver(), addedUri)).execute();
+        Uri uri = Uri.parse(StockContentProvider.BASE_URI_STR + addedUri);
+        (new QuoteDownloadTask(this.getContentResolver(), uri, symbol)).execute();
 
         return addedUri;
     }

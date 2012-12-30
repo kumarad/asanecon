@@ -2,41 +2,60 @@ package com.techan.stockDownload;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
 
-public class QuoteDownloadTask extends AsyncTask<String, Void, StockData> {
+import java.util.ArrayList;
+import java.util.List;
 
-    final String symbol;
+public class QuoteDownloadTask extends AsyncTask<String, Void, List<StockData>> {
+
+    final List<String> symbols = new ArrayList<String>();
+    final List<Uri> uris = new ArrayList<Uri>();
 
     final ContentResolver contentResolver;
-    final Uri addedUri;
 
-    public QuoteDownloadTask(String symbol, ContentResolver contentResolver, Uri addedUri) {
-        this.symbol = symbol;
+    public QuoteDownloadTask(ContentResolver contentResolver, Uri addedUri, String symbol) {
         this.contentResolver = contentResolver;
-        this.addedUri = addedUri;
+        this.uris.add(addedUri);
+        symbols.add(symbol);
+    }
+
+    public QuoteDownloadTask(ContentResolver contentResolver, Cursor cursor) {
+        this.contentResolver = contentResolver;
+
+        // Get all the symbols.
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()) {
+            symbols.add(cursor.getString(StocksTable.COLUMN_SYMBOL_INDEX));
+            uris.add(Uri.parse(StockContentProvider.STOCK_URI_STR + Integer.toString(cursor.getInt(0))));
+            cursor.moveToNext();
+        }
+
     }
 
     // Download stock data for the symbol.
     @Override
-    protected StockData doInBackground(String... params) {
-        return DownloadQuote.download(symbol, StockData.NAME, StockData.LAST_TRADE_PRICE);
+    protected List<StockData> doInBackground(String... params) {
+        return DownloadQuote.download(symbols, StockData.NAME, StockData.LAST_TRADE_PRICE);
     }
 
-    // Once data has been downloaded, associated it with the appropriate view.
+    // Once data has been downloaded, update database.
     @Override
-    protected void onPostExecute(StockData data) {
+    protected void onPostExecute(List<StockData> dataList) {
         if(isCancelled()) {
-            data = null;
+            return;
         }
 
-        ContentValues values = new ContentValues();
-        values.put(StocksTable.COLUMN_PRICE, data.price);
-        //contentResolver.update(StockContentProvider.CONTENT_URI, values, "sym='" + symbol + "'", null);
-        Uri uri = Uri.parse(StockContentProvider.STOCK_URI + addedUri);
-        contentResolver.update(uri, values, null, null);
+        int i = 0;
+        for(StockData data : dataList) {
+            ContentValues values = new ContentValues();
+            values.put(StocksTable.COLUMN_PRICE, data.price);
+            contentResolver.update(uris.get(i), values, null, null);
+            ++i;
+        }
     }
 }

@@ -24,11 +24,9 @@ public class StockContentProvider  extends ContentProvider {
     private static final String AUTHORITY = "com.techan.contentprovider";  // Matches what is placed in manifesto
     private static final String BASE_PATH = "stocks";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
-    public static final String STOCK_URI = "content://" + AUTHORITY + "/";
 
-    // Content resolver - single global instance in the application that provides access to content providers.
-    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/stocks";
-    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/stock";
+    public static final String BASE_URI_STR = "content://" + AUTHORITY + "/";
+    public static final String STOCK_URI_STR = "content://" + AUTHORITY + "/" + BASE_PATH + "/";
 
     // URI Handling
     // Codes used dor UriMatcher.
