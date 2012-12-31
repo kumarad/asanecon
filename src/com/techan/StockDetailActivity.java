@@ -5,13 +5,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
@@ -20,6 +16,7 @@ public class StockDetailActivity extends Activity {
 
     private Uri stockUri;
     private Cursor stockCursor;
+    private String symbol;
 
     // Bundle passed into onCreate represents saved state
     // for situations where the activity is being restored
@@ -41,7 +38,8 @@ public class StockDetailActivity extends Activity {
 
         stockCursor.moveToFirst();
         TextView symbolView = (TextView) this.findViewById(R.id.detailSymbol);
-        symbolView.setText(stockCursor.getString(StocksTable.COLUMN_SYMBOL_INDEX));
+        symbol = stockCursor.getString(StocksTable.COLUMN_SYMBOL_INDEX);
+        symbolView.setText(symbol);
 
         TextView priceView = (TextView) this.findViewById(R.id.detailPrice);
         priceView.setText(stockCursor.getString(StocksTable.COLUMN_PRICE_INDEX));

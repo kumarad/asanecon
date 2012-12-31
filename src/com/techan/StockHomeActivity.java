@@ -117,7 +117,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
                 insertStock();
                 return true;
             case R.id.refresh:
-                //(new QuoteDownloadTask(this.getContentResolver(), )).execute();
+                (new QuoteDownloadTask(this.getContentResolver())).execute();
                 return true;
         }
         return super.onOptionsItemSelected(item);

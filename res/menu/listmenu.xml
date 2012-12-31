@@ -3,13 +3,13 @@
 
     <item
             android:id="@+id/insert"
-            android:showAsAction="always"
+            android:showAsAction="never"
             android:title="Insert">
     </item>
 
     <item
             android:id="@+id/refresh"
-            android:showAsAction="always"
+            android:showAsAction="never"
             android:title="Refresh">
     </item>
 
