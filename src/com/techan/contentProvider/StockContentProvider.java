@@ -28,6 +28,10 @@ public class StockContentProvider  extends ContentProvider {
     public static final String BASE_URI_STR = "content://" + AUTHORITY + "/";
     public static final String STOCK_URI_STR = "content://" + AUTHORITY + "/" + BASE_PATH + "/";
 
+    // Content resolver - single global instance in your application that provides access to your (and other app) content providers.
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/stocks";
+    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/stock";
+
     // URI Handling
     // Codes used dor UriMatcher.
     private static final int STOCKS = 10;   // query for all stocks in database

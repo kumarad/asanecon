@@ -6,10 +6,13 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
 import com.techan.stockDownload.QuoteDownloadTask;
@@ -60,6 +63,9 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         adapter = new StockCursorAdapter(this, R.layout.stock_row, null, from, to, 0);
 
         setListAdapter(adapter);
+
+        // Update from the network.
+        (new QuoteDownloadTask(this.getContentResolver())).execute();
     }
 
     /////////////////////
@@ -82,9 +88,6 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
-
-        // Update from the network.
-        (new QuoteDownloadTask(this.getContentResolver(), data)).execute();
     }
 
     @Override
@@ -96,6 +99,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
     // Menu on top right that allows insertion of items in list/database.
     /////////////////////////////////////////////////////////////////////
     private static final int ACTIVITY_CREATE = 0;
+    private static final int ACTIVITY_EDIT = 1;
 
     // Create the menu based on the XML defintion
     @Override
@@ -112,6 +116,9 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
             case R.id.insert:
                 insertStock();
                 return true;
+            case R.id.refresh:
+                //(new QuoteDownloadTask(this.getContentResolver(), )).execute();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -119,6 +126,35 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
     private void insertStock() {
         Intent i = new Intent(this, StockAddActivity.class);
         startActivityForResult(i, ACTIVITY_CREATE);
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // List Item Click Response
+    /////////////////////////////////////////////////////////////////////
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        // the id is the id of the cursor row which is _id from the database by convention.
+        super.onListItemClick(l,v, position, id);
+
+        // Create an intent. Like an action.
+        Intent i = new Intent(this, StockDetailActivity.class);
+
+        // StockContentProvider.CONTENT_ITEM_TYPE is the key for the extra info
+        // being placed in the intent.
+        Uri stockUri = Uri.parse(StockContentProvider.CONTENT_URI + "/" + id);
+        i.putExtra(StockContentProvider.CONTENT_ITEM_TYPE, stockUri);
+
+        // First arg is the intent that defines the activity to be started.
+        // Second arg identifies the call. The onActivityResult method is invoked
+        // with the same identifier.
+        startActivityForResult(i, ACTIVITY_EDIT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        // A negative value (RESULT_OK) is invoked which causes startActivity to get called.
+        // Nothing special to do here.
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
 }

@@ -23,6 +23,11 @@
                 android:windowSoftInputMode="stateVisible|adjustResize" >
         </activity>
 
+        <activity
+                android:name=".StockDetailActivity"
+                android:windowSoftInputMode="stateVisible|adjustResize" >
+        </activity>
+
         <provider
                 android:name=".contentProvider.StockContentProvider"
                 android:authorities="com.techan.contentprovider" >

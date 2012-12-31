@@ -7,4 +7,10 @@
             android:title="Insert">
     </item>
 
+    <item
+            android:id="@+id/refresh"
+            android:showAsAction="always"
+            android:title="Refresh">
+    </item>
+
 </menu> 

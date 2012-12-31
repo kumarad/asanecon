@@ -24,8 +24,11 @@ public class QuoteDownloadTask extends AsyncTask<String, Void, List<StockData>> 
         symbols.add(symbol);
     }
 
-    public QuoteDownloadTask(ContentResolver contentResolver, Cursor cursor) {
+    public QuoteDownloadTask(ContentResolver contentResolver) {
         this.contentResolver = contentResolver;
+
+        String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL};
+        Cursor cursor = contentResolver.query(StockContentProvider.CONTENT_URI, projection, null, null, null);
 
         // Get all the symbols.
         cursor.moveToFirst();
