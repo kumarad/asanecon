@@ -29,7 +29,7 @@ public class StockDetailActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         stockUri = (Uri)extras.get(StockContentProvider.CONTENT_ITEM_TYPE);
 
-        String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE};
+        String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_PE};
         stockCursor = getContentResolver().query(stockUri, projection, null, null, null);
 
         if(stockCursor.getCount() != 1) {
@@ -44,6 +44,8 @@ public class StockDetailActivity extends Activity {
         TextView priceView = (TextView) this.findViewById(R.id.detailPrice);
         priceView.setText(stockCursor.getString(StocksTable.COLUMN_PRICE_INDEX));
 
+        TextView peView = (TextView) this.findViewById(R.id.detailPe);
+        peView.setText(stockCursor.getString(StocksTable.COLUMN_PE_INDEX));
     }
 
     /////////////////////////////////////////////////////////////////////

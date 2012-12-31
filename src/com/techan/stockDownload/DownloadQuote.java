@@ -49,6 +49,7 @@ public class DownloadQuote {
                 StockData stockData = new StockData(symbol);
                 stockData.priceStr = rowData[1];
                 stockData.price = Double.parseDouble(stockData.priceStr);
+                stockData.pe = Double.parseDouble(rowData[2]);
 
                 stockDataList.add(stockData);
             }

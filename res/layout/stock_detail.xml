@@ -22,5 +22,14 @@
     </TextView>
 
 
+    <TextView
+            android:id="@+id/detailPe"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:lines="1"
+            android:textSize="24dp"
+            android:gravity="right">
+    </TextView>
+
 
 </LinearLayout>

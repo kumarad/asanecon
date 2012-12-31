@@ -43,7 +43,7 @@ public class QuoteDownloadTask extends AsyncTask<String, Void, List<StockData>> 
     // Download stock data for the symbol.
     @Override
     protected List<StockData> doInBackground(String... params) {
-        return DownloadQuote.download(symbols, StockData.NAME, StockData.LAST_TRADE_PRICE);
+        return DownloadQuote.download(symbols, StockData.NAME, StockData.LAST_TRADE_PRICE, StockData.PE);
     }
 
     // Once data has been downloaded, update database.
@@ -57,6 +57,7 @@ public class QuoteDownloadTask extends AsyncTask<String, Void, List<StockData>> 
         for(StockData data : dataList) {
             ContentValues values = new ContentValues();
             values.put(StocksTable.COLUMN_PRICE, data.price);
+            values.put(StocksTable.COLUMN_PE, data.pe);
             contentResolver.update(uris.get(i), values, null, null);
             ++i;
         }

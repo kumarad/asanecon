@@ -15,19 +15,23 @@ public class StocksTable {
     public static final int COLUMN_SYMBOL_INDEX = 1;
     public static final String COLUMN_PRICE = "price";
     public static final int COLUMN_PRICE_INDEX = 2;
+    public static final String COLUMN_PE = "pe";
+    public static final int COLUMN_PE_INDEX = 3;
 
     public static Set<String> stocksColumns = new HashSet<String>();
     static {
         stocksColumns.add(COLUMN_ID);
         stocksColumns.add(COLUMN_SYMBOL);
         stocksColumns.add(COLUMN_PRICE);
+        stocksColumns.add(COLUMN_PE);
     }
 
     // Database creation SQL statement
     private static final String DATABASE_CREATE = "create table " + TABLE_STOCKS + "(" +
             COLUMN_ID + " integer primary key autoincrement, " +
             COLUMN_SYMBOL + " text unique not null, " +
-            COLUMN_PRICE + " real default 0);";
+            COLUMN_PRICE + " real default 0, " +
+            COLUMN_PE + " real default 0);";
 
     public static void onCreate(SQLiteDatabase database) {
         database.execSQL(DATABASE_CREATE);
