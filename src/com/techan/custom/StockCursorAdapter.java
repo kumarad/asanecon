@@ -33,11 +33,11 @@ public class StockCursorAdapter extends SimpleCursorAdapter {
         View row = convertView;
         c.moveToPosition(position);
 
-        String symbolStr = c.getString(StocksTable.COLUMN_SYMBOL_INDEX);
+        String symbolStr = c.getString(1);
         TextView symbolView = (TextView) convertView.findViewById(R.id.symbol);
         symbolView.setText(symbolStr);
 
-        Double price = c.getDouble(StocksTable.COLUMN_PRICE_INDEX);
+        Double price = c.getDouble(2);
         TextView priceView = (TextView) convertView.findViewById(R.id.price);
         priceView.setText(Double.toString(price));
 

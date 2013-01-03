@@ -33,17 +33,16 @@ public class QuoteDownloadTask extends AsyncTask<String, Void, List<StockData>> 
         // Get all the symbols.
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            symbols.add(cursor.getString(StocksTable.COLUMN_SYMBOL_INDEX));
-            uris.add(Uri.parse(StockContentProvider.STOCK_URI_STR + Integer.toString(cursor.getInt(StocksTable.COLUMN_ID_INDEX))));
+            symbols.add(cursor.getString(1));
+            uris.add(Uri.parse(StockContentProvider.STOCK_URI_STR + Integer.toString(cursor.getInt(0))));
             cursor.moveToNext();
         }
-
     }
 
     // Download stock data for the symbol.
     @Override
     protected List<StockData> doInBackground(String... params) {
-        return DownloadQuote.download(symbols, StockData.NAME, StockData.LAST_TRADE_PRICE, StockData.PE);
+        return DownloadQuote.download(symbols);
     }
 
     // Once data has been downloaded, update database.
@@ -56,10 +55,33 @@ public class QuoteDownloadTask extends AsyncTask<String, Void, List<StockData>> 
         int i = 0;
         for(StockData data : dataList) {
             ContentValues values = new ContentValues();
+
             values.put(StocksTable.COLUMN_PRICE, data.price);
+
+            String[] selection = {StocksTable.COLUMN_LOW, StocksTable.COLUMN_HIGH};
+            Cursor cursor = contentResolver.query(uris.get(i),selection, null, null, null);
+            cursor.moveToFirst();
+            if(cursor.getInt(0) == 0 || data.daysLow < cursor.getInt(0))
+                values.put(StocksTable.COLUMN_LOW,data.daysLow);
+
+            if(data.daysHigh > cursor.getInt(1))
+                values.put(StocksTable.COLUMN_HIGH, data.daysHigh);
+
             values.put(StocksTable.COLUMN_PE, data.pe);
+            values.put(StocksTable.COLUMN_PEG, data.peg);
+            values.put(StocksTable.COLUMN_MOV_AVG_50, data.moveAvg50);
+            values.put(StocksTable.COLUMN_MOV_AVG_200, data.moveAvg200);
+            values.put(StocksTable.COLUMN_TRADING_VOLUME, data.tradingVol);
+            values.put(StocksTable.COLUMN_NAME, data.name.replace("\"",""));
+
             contentResolver.update(uris.get(i), values, null, null);
             ++i;
+        }
+    }
+
+    public void download() {
+        if(symbols.size() != 0) {
+            execute();
         }
     }
 }

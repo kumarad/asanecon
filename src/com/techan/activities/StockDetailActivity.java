@@ -9,14 +9,12 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.*;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.techan.R;
 import com.techan.contentProvider.StockContentProvider;
+import com.techan.custom.Util;
 import com.techan.database.StocksTable;
 
 public class StockDetailActivity extends Activity {
@@ -32,65 +30,62 @@ public class StockDetailActivity extends Activity {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.stock_detail);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         Bundle extras = getIntent().getExtras();
         stockUri = (Uri)extras.get(StockContentProvider.CONTENT_ITEM_TYPE);
 
-        String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_PE};
-        stockCursor = getContentResolver().query(stockUri, projection, null, null, null);
+        //String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_PE};
+        stockCursor = getContentResolver().query(stockUri, null, null, null, null);
 
         if(stockCursor.getCount() != 1) {
             throw new RuntimeException("Was not able to find details for stock.");
         }
 
         stockCursor.moveToFirst();
-        TextView symbolView = (TextView) this.findViewById(R.id.detailSymbol);
-        symbol = stockCursor.getString(StocksTable.COLUMN_SYMBOL_INDEX);
-        symbolView.setText(symbol);
+        TextView symbolView = (TextView) this.findViewById(R.id.detailNameSymbol);
+        symbol = stockCursor.getString(1);
+        String name = stockCursor.getString(10);
+        symbolView.setText(name);
+        symbolView.append(" ("+symbol+")");
 
         TextView priceView = (TextView) this.findViewById(R.id.detailPrice);
         priceView.setText("Price: ");
-        priceView.append(stockCursor.getString(StocksTable.COLUMN_PRICE_INDEX));
+        priceView.append(stockCursor.getString(2));
+
+        TextView lowView = (TextView) this.findViewById(R.id.detailLow);
+        lowView.setText("Low: ");
+        lowView.append(stockCursor.getString(3));
+
+        TextView highView = (TextView) this.findViewById(R.id.detailHigh);
+        highView.setText("High: ");
+        highView.append(stockCursor.getString(4));
 
         TextView peView = (TextView) this.findViewById(R.id.detailPe);
         peView.setText("PE: ");
-        peView.append(stockCursor.getString(StocksTable.COLUMN_PE_INDEX));
+        peView.append(stockCursor.getString(5));
 
+        TextView pegView = (TextView) this.findViewById(R.id.detailPeg);
+        pegView.setText("PEG: ");
+        pegView.append(stockCursor.getString(6));
+
+        TextView mov50View = (TextView) this.findViewById(R.id.detailMovAvg50);
+        mov50View.setText("50d movAvg: ");
+        mov50View.append(stockCursor.getString(7));
+
+        TextView mov200View = (TextView) this.findViewById(R.id.detailMovAvg200);
+        mov200View.setText("200d movAvg: ");
+        mov200View.append(stockCursor.getString(8));
+
+        TextView volView = (TextView) this.findViewById(R.id.detailTradingVol);
+        volView.setText("Volume: ");
+        volView.append(Long.toString((long) stockCursor.getDouble(9)));
 
         ProgressBar stopLoss = (ProgressBar) this.findViewById(R.id.stopLoss);
-
-        // Define a shape with rounded corners
-        final float[] roundedCorners = new float[] { 5, 5, 5, 5, 5, 5, 5, 5 };
-        ShapeDrawable pgDrawable = new ShapeDrawable(new RoundRectShape(roundedCorners, null, null));
-
-        // Sets the progressBar color
-        pgDrawable.getPaint().setColor(Color.parseColor("#93d500"));
-
-        // Adds the drawable to your progressBar
-        ClipDrawable progress = new ClipDrawable(pgDrawable, Gravity.LEFT, ClipDrawable.HORIZONTAL);
-
-        stopLoss.setProgressDrawable(progress);
-        stopLoss.setBackground(getResources().getDrawable(android.R.drawable.progress_horizontal));
-        stopLoss.setProgress(10);
-
-
+        Util.createBar(this, stopLoss, "#93d500", 35);
 
         ProgressBar stopLossR = (ProgressBar) this.findViewById(R.id.stopLossR);
-        // Define a shape with rounded corners
-        final float[] roundedCornersR = new float[] { 5, 5, 5, 5, 5, 5, 5, 5 };
-        ShapeDrawable pgDrawableR = new ShapeDrawable(new RoundRectShape(roundedCornersR, null, null));
-
-        // Sets the progressBar color
-        pgDrawableR.getPaint().setColor(Color.parseColor("#E52B50"));
-
-        // Adds the drawable to your progressBar
-        ClipDrawable progressR = new ClipDrawable(pgDrawableR, Gravity.LEFT, ClipDrawable.HORIZONTAL);
-
-        stopLossR.setProgressDrawable(progressR);
-        stopLossR.setBackground(getResources().getDrawable(android.R.drawable.progress_horizontal));
-        stopLossR.setProgress(10);
-
-
+        Util.createBar(this, stopLossR, "#E52B50", 10);
     }
 
     /////////////////////////////////////////////////////////////////////

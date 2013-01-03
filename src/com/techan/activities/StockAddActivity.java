@@ -94,7 +94,6 @@ public class StockAddActivity extends Activity {
 
         // Check to see if the symbol is already in the database. Can't have duplicates.
         String[] projection = {StocksTable.COLUMN_ID};
-        String[] selection = {};
         Cursor cursor = getContentResolver().query(StockContentProvider.CONTENT_URI, projection, StocksTable.COLUMN_SYMBOL + "='" + symbol + "'", null, null);
         if(cursor.getCount() != 0) {
             // Already in cursor.

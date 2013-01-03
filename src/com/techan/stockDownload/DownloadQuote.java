@@ -18,7 +18,7 @@ public class DownloadQuote {
     static String TAG_PREFIX = "&f=";
     static String SYMBOL_SEPERATOR = "+";
 
-    public static List<StockData> download(List<String> symbols, String... tags) {
+    public static List<StockData> download(List<String> symbols) {
         // Generate url
         String url = URL_PREFIX;
         for(int i = 0; i < symbols.size(); ++i) {
@@ -29,9 +29,7 @@ public class DownloadQuote {
         }
         url += TAG_PREFIX;
 
-        for(String tag : tags) {
-            url += tag;
-        }
+        url += StockData.TAGS;
 
         List<StockData> stockDataList = new ArrayList<StockData>();
         AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
@@ -45,11 +43,27 @@ public class DownloadQuote {
             while((line = reader.readLine()) != null) {
                 String[] rowData = line.split(",");
 
+
+                if(rowData.length < 10) {
+                    throw new RuntimeException("Unexpected data from yahoo.");
+                }
+
                 String symbol = rowData[0].replace("\"", "");
                 StockData stockData = new StockData(symbol);
-                stockData.priceStr = rowData[1];
-                stockData.price = Double.parseDouble(stockData.priceStr);
-                stockData.pe = Double.parseDouble(rowData[2]);
+
+                stockData.price = Double.parseDouble(rowData[1]);
+                stockData.daysLow = Double.parseDouble(rowData[2]);
+                stockData.daysHigh = Double.parseDouble(rowData[3]);
+                stockData.pe = Double.parseDouble(rowData[4]);
+                stockData.peg = Double.parseDouble(rowData[5]);
+                stockData.moveAvg50 = Double.parseDouble(rowData[6]);
+                stockData.moveAvg200 = Double.parseDouble(rowData[7]);
+                stockData.tradingVol = Double.parseDouble(rowData[8]);
+
+                int nameLength = rowData.length - 9;
+                for(int i = 0; i < nameLength; ++i) {
+                    stockData.name = rowData[9 + i];
+                }
 
                 stockDataList.add(stockData);
             }
