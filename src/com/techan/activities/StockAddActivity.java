@@ -35,7 +35,7 @@ public class StockAddActivity extends Activity {
             public void onClick(View view) {
                 if (TextUtils.isEmpty(addText.getText().toString())) {
                     //todo confirm that it is a valid symbol here ?
-                    showErrorToast();
+                    showErrorToast("Please insert stock symbol to be added.");
                 } else {
                     addSymbol();
 
@@ -52,14 +52,9 @@ public class StockAddActivity extends Activity {
     }
 
     // Provides feedback in a small pop up black window.
-    private void showErrorToast() {
-        Toast.makeText(StockAddActivity.this, "Please insert stock symbol to be added.", Toast.LENGTH_LONG).show();
+    private void showErrorToast(String error) {
+        Toast.makeText(StockAddActivity.this, error, Toast.LENGTH_LONG).show();
     }
-
-    private void showDupToast() {
-        Toast.makeText(StockAddActivity.this, "Stock symbol already added.", Toast.LENGTH_LONG).show();
-    }
-
 
     // Called when the activity is no longer the primary activity. Android can
     // kill this activity if running low on memory. So should persist any data
@@ -88,8 +83,13 @@ public class StockAddActivity extends Activity {
     private void addSymbol() {
         String symbol = addText.getText().toString().toUpperCase();
         if(symbol.length() == 0) {
-            // Should never happen.
-            throw new RuntimeException("Should never have a null symbol string.");
+            showErrorToast("Nothing input.");
+            return;
+        }
+
+        if(symbol.matches("[a-zA-Z]+") != true) {
+            showErrorToast("Stock symbol should only contains alphabets.");
+            return;
         }
 
         // Check to see if the symbol is already in the database. Can't have duplicates.
@@ -97,7 +97,7 @@ public class StockAddActivity extends Activity {
         Cursor cursor = getContentResolver().query(StockContentProvider.CONTENT_URI, projection, StocksTable.COLUMN_SYMBOL + "='" + symbol + "'", null, null);
         if(cursor.getCount() != 0) {
             // Already in cursor.
-            showDupToast();
+            showErrorToast("Stock symbol already added.");
             return;
         }
 
