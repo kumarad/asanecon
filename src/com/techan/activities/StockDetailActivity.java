@@ -1,14 +1,21 @@
-package com.techan;
+package com.techan.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.techan.R;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
 
@@ -48,6 +55,42 @@ public class StockDetailActivity extends Activity {
         TextView peView = (TextView) this.findViewById(R.id.detailPe);
         peView.setText("PE: ");
         peView.append(stockCursor.getString(StocksTable.COLUMN_PE_INDEX));
+
+
+        ProgressBar stopLoss = (ProgressBar) this.findViewById(R.id.stopLoss);
+
+        // Define a shape with rounded corners
+        final float[] roundedCorners = new float[] { 5, 5, 5, 5, 5, 5, 5, 5 };
+        ShapeDrawable pgDrawable = new ShapeDrawable(new RoundRectShape(roundedCorners, null, null));
+
+        // Sets the progressBar color
+        pgDrawable.getPaint().setColor(Color.parseColor("#93d500"));
+
+        // Adds the drawable to your progressBar
+        ClipDrawable progress = new ClipDrawable(pgDrawable, Gravity.LEFT, ClipDrawable.HORIZONTAL);
+
+        stopLoss.setProgressDrawable(progress);
+        stopLoss.setBackground(getResources().getDrawable(android.R.drawable.progress_horizontal));
+        stopLoss.setProgress(10);
+
+
+
+        ProgressBar stopLossR = (ProgressBar) this.findViewById(R.id.stopLossR);
+        // Define a shape with rounded corners
+        final float[] roundedCornersR = new float[] { 5, 5, 5, 5, 5, 5, 5, 5 };
+        ShapeDrawable pgDrawableR = new ShapeDrawable(new RoundRectShape(roundedCornersR, null, null));
+
+        // Sets the progressBar color
+        pgDrawableR.getPaint().setColor(Color.parseColor("#E52B50"));
+
+        // Adds the drawable to your progressBar
+        ClipDrawable progressR = new ClipDrawable(pgDrawableR, Gravity.LEFT, ClipDrawable.HORIZONTAL);
+
+        stopLossR.setProgressDrawable(progressR);
+        stopLossR.setBackground(getResources().getDrawable(android.R.drawable.progress_horizontal));
+        stopLossR.setProgress(10);
+
+
     }
 
     /////////////////////////////////////////////////////////////////////

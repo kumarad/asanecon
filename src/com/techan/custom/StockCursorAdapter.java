@@ -1,4 +1,4 @@
-package com.techan;
+package com.techan.custom;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import com.techan.R;
 import com.techan.database.StocksTable;
 import com.techan.stockDownload.QuoteDownloadTask;
 

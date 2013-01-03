@@ -1,4 +1,4 @@
-package com.techan;
+package com.techan.activities;
 
 import android.app.ListActivity;
 import android.app.LoaderManager;
@@ -13,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import com.techan.R;
+import com.techan.custom.StockCursorAdapter;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
 import com.techan.stockDownload.QuoteDownloadTask;

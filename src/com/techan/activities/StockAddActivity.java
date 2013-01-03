@@ -1,4 +1,4 @@
-package com.techan;
+package com.techan.activities;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.techan.R;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
 import com.techan.stockDownload.QuoteDownloadTask;
