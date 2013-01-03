@@ -42,10 +42,12 @@ public class StockDetailActivity extends Activity {
         symbolView.setText(symbol);
 
         TextView priceView = (TextView) this.findViewById(R.id.detailPrice);
-        priceView.setText(stockCursor.getString(StocksTable.COLUMN_PRICE_INDEX));
+        priceView.setText("Price: ");
+        priceView.append(stockCursor.getString(StocksTable.COLUMN_PRICE_INDEX));
 
         TextView peView = (TextView) this.findViewById(R.id.detailPe);
-        peView.setText(stockCursor.getString(StocksTable.COLUMN_PE_INDEX));
+        peView.setText("PE: ");
+        peView.append(stockCursor.getString(StocksTable.COLUMN_PE_INDEX));
     }
 
     /////////////////////////////////////////////////////////////////////

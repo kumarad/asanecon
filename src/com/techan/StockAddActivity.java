@@ -2,6 +2,7 @@ package com.techan;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -35,6 +36,8 @@ public class StockAddActivity extends Activity {
                     //todo confirm that it is a valid symbol here ?
                     showErrorToast();
                 } else {
+                    addSymbol();
+
                     // RESULT_OK is negative. Returning a negative value is the same as calling
                     // startActivity on the calling activity.
                     setResult(RESULT_OK);
@@ -52,6 +55,11 @@ public class StockAddActivity extends Activity {
         Toast.makeText(StockAddActivity.this, "Please insert stock symbol to be added.", Toast.LENGTH_LONG).show();
     }
 
+    private void showDupToast() {
+        Toast.makeText(StockAddActivity.this, "Stock symbol already added.", Toast.LENGTH_LONG).show();
+    }
+
+
     // Called when the activity is no longer the primary activity. Android can
     // kill this activity if running low on memory. So should persist any data
     // that shouldn't be lost at this point.
@@ -61,14 +69,10 @@ public class StockAddActivity extends Activity {
 //        addSymbol();
 //    }
 
-    @Override
-    protected void onDestroy() {
-        if(isFinishing()) {
-            addSymbol();
-        }
-
-        super.onDestroy();
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//    }
 
 
     // Called before the activity is put in a background state. Save stuff in the bundle.
@@ -80,11 +84,21 @@ public class StockAddActivity extends Activity {
         outState.putString(CURRENT_TEXT, addText.getText().toString());
     }
 
-    private Uri addSymbol() {
+    private void addSymbol() {
         String symbol = addText.getText().toString().toUpperCase();
         if(symbol.length() == 0) {
             // Should never happen.
             throw new RuntimeException("Should never have a null symbol string.");
+        }
+
+        // Check to see if the symbol is already in the database. Can't have duplicates.
+        String[] projection = {StocksTable.COLUMN_ID};
+        String[] selection = {};
+        Cursor cursor = getContentResolver().query(StockContentProvider.CONTENT_URI, projection, StocksTable.COLUMN_SYMBOL + "='" + symbol + "'", null, null);
+        if(cursor.getCount() != 0) {
+            // Already in cursor.
+            showDupToast();
+            return;
         }
 
         ContentValues values = new ContentValues();
@@ -92,7 +106,5 @@ public class StockAddActivity extends Activity {
         Uri addedUri = getContentResolver().insert(StockContentProvider.CONTENT_URI, values);
         Uri uri = Uri.parse(StockContentProvider.BASE_URI_STR + addedUri);
         (new QuoteDownloadTask(this.getContentResolver(), uri, symbol)).execute();
-
-        return addedUri;
     }
 }

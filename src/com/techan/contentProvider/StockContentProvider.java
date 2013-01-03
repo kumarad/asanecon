@@ -5,10 +5,12 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import com.techan.database.StocksDatabaseHelper;
 import com.techan.database.StocksTable;
 
@@ -90,7 +92,7 @@ public class StockContentProvider  extends ContentProvider {
         switch(uriType) {
             case STOCKS :
                 // Insert a stock symbol.
-                id = db.insert(StocksTable.TABLE_STOCKS, null, values);
+                id = db.insertOrThrow(StocksTable.TABLE_STOCKS, null, values);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
