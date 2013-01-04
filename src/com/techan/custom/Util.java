@@ -1,6 +1,7 @@
 package com.techan.custom;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ShapeDrawable;
@@ -25,5 +26,22 @@ public class Util {
         bar.setBackground(activity.getResources().getDrawable(android.R.drawable.progress_horizontal));
         bar.setProgress(progressInt);
 
+    }
+
+    public static double parseDouble(String s) {
+        try {
+            return Double.parseDouble(s);
+        } catch(NumberFormatException e) {
+            return 0.0;
+        }
+    }
+
+    public static String parseDouble(Cursor c, int index) {
+        double d = c.getDouble(index);
+        if(d == 0) {
+            return "N/A";
+        }
+
+        return Double.toString(d);
     }
 }

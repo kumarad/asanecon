@@ -3,10 +3,6 @@ package com.techan.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.ClipDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
@@ -15,7 +11,6 @@ import android.widget.TextView;
 import com.techan.R;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
-import com.techan.database.StocksTable;
 
 public class StockDetailActivity extends Activity {
 
@@ -35,7 +30,6 @@ public class StockDetailActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         stockUri = (Uri)extras.get(StockContentProvider.CONTENT_ITEM_TYPE);
 
-        //String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_PE};
         stockCursor = getContentResolver().query(stockUri, null, null, null, null);
 
         if(stockCursor.getCount() != 1) {
@@ -51,35 +45,41 @@ public class StockDetailActivity extends Activity {
 
         TextView priceView = (TextView) this.findViewById(R.id.detailPrice);
         priceView.setText("Price: ");
-        priceView.append(stockCursor.getString(2));
+        priceView.append(Util.parseDouble(stockCursor, 2));
 
         TextView lowView = (TextView) this.findViewById(R.id.detailLow);
         lowView.setText("Low: ");
-        lowView.append(stockCursor.getString(3));
+        lowView.append(Util.parseDouble(stockCursor, 3));
 
         TextView highView = (TextView) this.findViewById(R.id.detailHigh);
         highView.setText("High: ");
-        highView.append(stockCursor.getString(4));
+        highView.append(Util.parseDouble(stockCursor, 4));
 
         TextView peView = (TextView) this.findViewById(R.id.detailPe);
         peView.setText("PE: ");
-        peView.append(stockCursor.getString(5));
+        peView.append(Util.parseDouble(stockCursor, 5));
 
         TextView pegView = (TextView) this.findViewById(R.id.detailPeg);
         pegView.setText("PEG: ");
-        pegView.append(stockCursor.getString(6));
+        pegView.append(Util.parseDouble(stockCursor, 6));
 
         TextView mov50View = (TextView) this.findViewById(R.id.detailMovAvg50);
         mov50View.setText("50d movAvg: ");
-        mov50View.append(stockCursor.getString(7));
+        mov50View.append(Util.parseDouble(stockCursor, 7));
 
         TextView mov200View = (TextView) this.findViewById(R.id.detailMovAvg200);
         mov200View.setText("200d movAvg: ");
-        mov200View.append(stockCursor.getString(8));
+        mov200View.append(Util.parseDouble(stockCursor, 8));
 
         TextView volView = (TextView) this.findViewById(R.id.detailTradingVol);
         volView.setText("Volume: ");
-        volView.append(Long.toString((long) stockCursor.getDouble(9)));
+        double volDouble = stockCursor.getDouble(9);
+        if(volDouble != 0) {
+            volView.append(Long.toString((long) volDouble));
+        } else {
+            volView.append("N/A");
+
+        }
 
         ProgressBar stopLoss = (ProgressBar) this.findViewById(R.id.stopLoss);
         Util.createBar(this, stopLoss, "#93d500", 35);

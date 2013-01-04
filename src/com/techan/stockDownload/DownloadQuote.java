@@ -1,6 +1,7 @@
 package com.techan.stockDownload;
 
 import android.net.http.AndroidHttpClient;
+import com.techan.custom.Util;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.protocol.BasicHttpContext;
@@ -51,14 +52,14 @@ public class DownloadQuote {
                 String symbol = rowData[0].replace("\"", "");
                 StockData stockData = new StockData(symbol);
 
-                stockData.price = Double.parseDouble(rowData[1]);
-                stockData.daysLow = Double.parseDouble(rowData[2]);
-                stockData.daysHigh = Double.parseDouble(rowData[3]);
-                stockData.pe = Double.parseDouble(rowData[4]);
-                stockData.peg = Double.parseDouble(rowData[5]);
-                stockData.moveAvg50 = Double.parseDouble(rowData[6]);
-                stockData.moveAvg200 = Double.parseDouble(rowData[7]);
-                stockData.tradingVol = Double.parseDouble(rowData[8]);
+                stockData.price = Util.parseDouble(rowData[1]);
+                stockData.daysLow = Util.parseDouble(rowData[2]);
+                stockData.daysHigh = Util.parseDouble(rowData[3]);
+                stockData.pe = Util.parseDouble(rowData[4]);
+                stockData.peg = Util.parseDouble(rowData[5]);
+                stockData.moveAvg50 = Util.parseDouble(rowData[6]);
+                stockData.moveAvg200 = Util.parseDouble(rowData[7]);
+                stockData.tradingVol = Util.parseDouble(rowData[8]);
 
                 int nameLength = rowData.length - 9;
                 for(int i = 0; i < nameLength; ++i) {

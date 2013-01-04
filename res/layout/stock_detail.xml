@@ -6,7 +6,7 @@
 
     <TextView
             android:id="@+id/detailNameSymbol"
-            android:layout_width="1000dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:lines="1"
             android:textSize="24dp"
@@ -15,7 +15,7 @@
 
     <TextView
             android:id="@+id/detailPrice"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:lines="1"
             android:textSize="24dp"
@@ -24,7 +24,7 @@
 
     <TextView
             android:id="@+id/detailLow"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:lines="1"
             android:textSize="24dp"
@@ -33,7 +33,7 @@
 
     <TextView
             android:id="@+id/detailHigh"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:lines="1"
             android:textSize="24dp"
@@ -43,7 +43,7 @@
 
     <TextView
             android:id="@+id/detailPe"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:lines="1"
             android:textSize="24dp"
@@ -52,7 +52,7 @@
 
     <TextView
             android:id="@+id/detailPeg"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:lines="1"
             android:textSize="24dp"
@@ -61,7 +61,7 @@
 
     <TextView
             android:id="@+id/detailMovAvg50"
-            android:layout_width="500dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:lines="1"
             android:textSize="24dp"
@@ -70,7 +70,7 @@
 
     <TextView
             android:id="@+id/detailMovAvg200"
-            android:layout_width="500dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:lines="1"
             android:textSize="24dp"
@@ -79,7 +79,7 @@
 
     <TextView
             android:id="@+id/detailTradingVol"
-            android:layout_width="500dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:lines="1"
             android:textSize="24dp"
