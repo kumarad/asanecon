@@ -10,6 +10,8 @@ public class StockData {
     public static String MOV_AVG_50 = "m3";
     public static String MOV_AVG_200 = "m4";
     public static String TRADING_VOLUME = "v";
+    public static String AVERAGE_TRADING_VOLUME = "a2";
+    public static String CHANGE = "c1";
     public static String NAME = "n";
 
     public static String TAGS = SYMBOL +
@@ -21,6 +23,8 @@ public class StockData {
                                 MOV_AVG_50 +
                                 MOV_AVG_200 +
                                 TRADING_VOLUME +
+                                AVERAGE_TRADING_VOLUME +
+                                CHANGE +
                                 NAME;
 
 
@@ -33,6 +37,8 @@ public class StockData {
     public Double moveAvg50;
     public Double moveAvg200;
     public Double tradingVol;
+    public Double avgTradingVol;
+    public Double change;
     public String name;
 
     public StockData(String symbol) {

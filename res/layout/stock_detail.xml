@@ -23,6 +23,15 @@
     </TextView>
 
     <TextView
+            android:id="@+id/detailChange"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:lines="1"
+            android:textSize="24dp"
+            android:gravity="left">
+    </TextView>
+
+    <TextView
             android:id="@+id/detailLow"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
@@ -79,6 +88,15 @@
 
     <TextView
             android:id="@+id/detailTradingVol"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:lines="1"
+            android:textSize="24dp"
+            android:gravity="left">
+    </TextView>
+
+    <TextView
+            android:id="@+id/detailAvgTradingVol"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:lines="1"

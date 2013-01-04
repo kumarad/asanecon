@@ -72,6 +72,8 @@ public class QuoteDownloadTask extends AsyncTask<String, Void, List<StockData>> 
             values.put(StocksTable.COLUMN_MOV_AVG_50, data.moveAvg50);
             values.put(StocksTable.COLUMN_MOV_AVG_200, data.moveAvg200);
             values.put(StocksTable.COLUMN_TRADING_VOLUME, data.tradingVol);
+            values.put(StocksTable.COLUMN_AVG_TRADING_VOLUME, data.avgTradingVol);
+            values.put(StocksTable.COLUMN_CHANGE, data.change);
             values.put(StocksTable.COLUMN_NAME, data.name.replace("\"",""));
 
             contentResolver.update(uris.get(i), values, null, null);

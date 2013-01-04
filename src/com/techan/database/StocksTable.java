@@ -19,6 +19,8 @@ public class StocksTable {
     public static final String COLUMN_MOV_AVG_50 = "movAvg50";
     public static final String COLUMN_MOV_AVG_200 = "movAvg200";
     public static final String COLUMN_TRADING_VOLUME = "tradeVol";
+    public static final String COLUMN_AVG_TRADING_VOLUME = "avgTradeVol";
+    public static final String COLUMN_CHANGE = "change";
     public static final String COLUMN_NAME = "name";
 
     public static Set<String> stocksColumns = new HashSet<String>();
@@ -33,6 +35,8 @@ public class StocksTable {
         stocksColumns.add(COLUMN_MOV_AVG_50);
         stocksColumns.add(COLUMN_MOV_AVG_200);
         stocksColumns.add(COLUMN_TRADING_VOLUME);
+        stocksColumns.add(COLUMN_AVG_TRADING_VOLUME);
+        stocksColumns.add(COLUMN_CHANGE);
         stocksColumns.add(COLUMN_NAME);
     }
 
@@ -48,6 +52,8 @@ public class StocksTable {
             COLUMN_MOV_AVG_50 + " real default 0, " +
             COLUMN_MOV_AVG_200 + " real default 0, " +
             COLUMN_TRADING_VOLUME + " real default 0, " +
+            COLUMN_AVG_TRADING_VOLUME + " real default 0, " +
+            COLUMN_CHANGE + " real default 0, " +
             COLUMN_NAME + " text);";
 
     public static void onCreate(SQLiteDatabase database) {

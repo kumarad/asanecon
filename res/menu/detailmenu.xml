@@ -3,8 +3,8 @@
 
     <item
             android:id="@+id/delete"
-            android:showAsAction="never"
-            android:title="Delete">
+            android:showAsAction="always"
+            android:title="-">
     </item>
 
 </menu> 

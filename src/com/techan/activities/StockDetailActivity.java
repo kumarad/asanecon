@@ -1,6 +1,8 @@
 package com.techan.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -39,13 +41,17 @@ public class StockDetailActivity extends Activity {
         stockCursor.moveToFirst();
         TextView symbolView = (TextView) this.findViewById(R.id.detailNameSymbol);
         symbol = stockCursor.getString(1);
-        String name = stockCursor.getString(10);
+        String name = stockCursor.getString(12);
         symbolView.setText(name);
         symbolView.append(" ("+symbol+")");
 
         TextView priceView = (TextView) this.findViewById(R.id.detailPrice);
         priceView.setText("Price: ");
         priceView.append(Util.parseDouble(stockCursor, 2));
+
+        TextView changeView = (TextView) this.findViewById(R.id.detailChange);
+        changeView.setText("Change: ");
+        changeView.append(Util.parseDouble(stockCursor, 11));
 
         TextView lowView = (TextView) this.findViewById(R.id.detailLow);
         lowView.setText("Low: ");
@@ -78,7 +84,15 @@ public class StockDetailActivity extends Activity {
             volView.append(Long.toString((long) volDouble));
         } else {
             volView.append("N/A");
+        }
 
+        TextView avgVolView = (TextView) this.findViewById(R.id.detailAvgTradingVol);
+        avgVolView.setText("Avg Volume: ");
+        double avgVolDouble = stockCursor.getDouble(10);
+        if(avgVolDouble != 0) {
+            avgVolView.append(Long.toString((long) avgVolDouble));
+        } else {
+            avgVolView.append("N/A");
         }
 
         ProgressBar stopLoss = (ProgressBar) this.findViewById(R.id.stopLoss);
@@ -106,7 +120,24 @@ public class StockDetailActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete:
-                deleteStock();
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle("Are you sure you want to delete stock?");
+                alertDialog.setMessage("Click yes to confirm deletion.");
+                alertDialog.setCancelable(false);
+                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteStock();
+                    }
+                });
+                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                alertDialog.create().show();
                 return true;
         }
         return super.onOptionsItemSelected(item);

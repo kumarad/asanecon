@@ -88,7 +88,7 @@ public class StockAddActivity extends Activity {
         }
 
         if(symbol.matches("[\\.a-zA-Z0-9]+") != true) {
-            showErrorToast("Stock symbol should only contains alphabets.");
+            showErrorToast("Stock symbol can only contain letters and periods.");
             return;
         }
 

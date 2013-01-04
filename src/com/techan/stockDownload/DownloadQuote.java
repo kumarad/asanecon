@@ -45,7 +45,7 @@ public class DownloadQuote {
                 String[] rowData = line.split(",");
 
 
-                if(rowData.length < 10) {
+                if(rowData.length < 12) {
                     throw new RuntimeException("Unexpected data from yahoo.");
                 }
 
@@ -60,10 +60,12 @@ public class DownloadQuote {
                 stockData.moveAvg50 = Util.parseDouble(rowData[6]);
                 stockData.moveAvg200 = Util.parseDouble(rowData[7]);
                 stockData.tradingVol = Util.parseDouble(rowData[8]);
+                stockData.avgTradingVol = Util.parseDouble(rowData[9]);
+                stockData.change = Util.parseDouble(rowData[10]);
 
-                int nameLength = rowData.length - 9;
+                int nameLength = rowData.length - 11;
                 for(int i = 0; i < nameLength; ++i) {
-                    stockData.name = rowData[9 + i];
+                    stockData.name = rowData[11 + i];
                 }
 
                 stockDataList.add(stockData);

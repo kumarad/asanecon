@@ -3,14 +3,14 @@
 
     <item
             android:id="@+id/insert"
-            android:showAsAction="never"
-            android:title="Insert">
+            android:showAsAction="always"
+            android:title="+">
     </item>
 
     <item
             android:id="@+id/refresh"
-            android:showAsAction="never"
-            android:title="Refresh">
+            android:showAsAction="always"
+            android:title="R">
     </item>
 
 </menu> 
