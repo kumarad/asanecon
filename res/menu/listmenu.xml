@@ -4,13 +4,16 @@
     <item
             android:id="@+id/insert"
             android:showAsAction="always"
-            android:title="+">
+            android:icon="@drawable/ic_menu_add"
+            >
     </item>
 
     <item
             android:id="@+id/refresh"
             android:showAsAction="always"
-            android:title="R">
+            android:icon="@drawable/ic_menu_refresh"
+            >
+
     </item>
 
 </menu> 
