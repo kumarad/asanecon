@@ -5,9 +5,18 @@
                 android:layout_height="fill_parent">
 
     <TextView
+            android:id="@+id/lastUpdate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="#848482"
+            />
+
+    <TextView
             android:id="@+id/detailNameSymbol"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/lastUpdate"
             />
 
     <LinearLayout
