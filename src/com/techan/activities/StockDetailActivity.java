@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
@@ -45,61 +46,81 @@ public class StockDetailActivity extends Activity {
         symbolView.setText(name);
         symbolView.append(" ("+symbol+")");
 
-        TextView priceView = (TextView) this.findViewById(R.id.detailPrice);
-        priceView.setText("Price: ");
-        priceView.append(Util.parseDouble(stockCursor, 2));
+        TextView priceValView = (TextView) this.findViewById(R.id.detailPriceVal);
+        priceValView.setText(Util.parseDouble(stockCursor, 2));
 
-        TextView changeView = (TextView) this.findViewById(R.id.detailChange);
-        changeView.setText("Change: ");
-        changeView.append(Util.parseDouble(stockCursor, 11));
-
-        TextView lowView = (TextView) this.findViewById(R.id.detailLow);
-        lowView.setText("Low: ");
-        lowView.append(Util.parseDouble(stockCursor, 3));
-
-        TextView highView = (TextView) this.findViewById(R.id.detailHigh);
-        highView.setText("High: ");
-        highView.append(Util.parseDouble(stockCursor, 4));
+        TextView changeView = (TextView) this.findViewById(R.id.detailPriceChange);
+        double change = stockCursor.getDouble(11);
+        if(change < 0) {
+            changeView.setTextColor(Color.RED);
+        } else if(change > 0) {
+            changeView.setTextColor(Color.GREEN);
+        }
+        changeView.setText("(");
+        changeView.append(Double.toString(change));
+        changeView.append(")");
 
         TextView peView = (TextView) this.findViewById(R.id.detailPe);
         peView.setText("PE: ");
-        peView.append(Util.parseDouble(stockCursor, 5));
+        TextView peValView = (TextView) this.findViewById(R.id.detailPeVal);
+        peValView.setText(Util.parseDouble(stockCursor, 5));
+
+//        ProgressBar stopLoss = (ProgressBar) this.findViewById(R.id.stopLoss);
+//        Util.createBar(this, stopLoss, "#93d500", 35);
+//
+        ProgressBar stopLossR = (ProgressBar) this.findViewById(R.id.stopLoss);
+        Util.createBar(this, stopLossR, "#E52B50", 10);
+
+
 
         TextView pegView = (TextView) this.findViewById(R.id.detailPeg);
         pegView.setText("PEG: ");
-        pegView.append(Util.parseDouble(stockCursor, 6));
+        TextView pegValView = (TextView) this.findViewById(R.id.detailPegVal);
+        pegValView.setText(Util.parseDouble(stockCursor, 6));
+
+
+        TextView lowView = (TextView) this.findViewById(R.id.detailLow);
+        lowView.setText("Low: ");
+        TextView lowValView = (TextView) this.findViewById(R.id.detailLowVal);
+        lowValView.setText(Util.parseDouble(stockCursor, 3));
+
+        TextView highView = (TextView) this.findViewById(R.id.detailHigh);
+        highView.setText("High: ");
+        TextView highValView = (TextView) this.findViewById(R.id.detailHighVal);
+        highValView.setText(Util.parseDouble(stockCursor, 4));
+
+        TextView volView = (TextView) this.findViewById(R.id.detailVol);
+        volView.setText("Volume: ");
+        TextView volValView = (TextView) this.findViewById(R.id.detailVolVal);
+        double volDouble = stockCursor.getDouble(9);
+        if(volDouble != 0) {
+            volValView.setText(Long.toString((long) volDouble));
+        } else {
+            volValView.setText("N/A");
+        }
+
+        TextView avgVolView = (TextView) this.findViewById(R.id.detailAvgVol);
+        avgVolView.setText("Avg Volume: ");
+        TextView avgVolValView = (TextView) this.findViewById(R.id.detailAvgVolVal);
+        double avgVolDouble = stockCursor.getDouble(10);
+        if(avgVolDouble != 0) {
+            avgVolValView.setText(Long.toString((long) avgVolDouble));
+        } else {
+            avgVolValView.setText("N/A");
+        }
+
+
+
 
         TextView mov50View = (TextView) this.findViewById(R.id.detailMovAvg50);
         mov50View.setText("50d movAvg: ");
-        mov50View.append(Util.parseDouble(stockCursor, 7));
+        TextView mov50ValView = (TextView) this.findViewById(R.id.detailMovAvg50Val);
+        mov50ValView.setText(Util.parseDouble(stockCursor, 7));
 
         TextView mov200View = (TextView) this.findViewById(R.id.detailMovAvg200);
         mov200View.setText("200d movAvg: ");
-        mov200View.append(Util.parseDouble(stockCursor, 8));
-
-        TextView volView = (TextView) this.findViewById(R.id.detailTradingVol);
-        volView.setText("Volume: ");
-        double volDouble = stockCursor.getDouble(9);
-        if(volDouble != 0) {
-            volView.append(Long.toString((long) volDouble));
-        } else {
-            volView.append("N/A");
-        }
-
-        TextView avgVolView = (TextView) this.findViewById(R.id.detailAvgTradingVol);
-        avgVolView.setText("Avg Volume: ");
-        double avgVolDouble = stockCursor.getDouble(10);
-        if(avgVolDouble != 0) {
-            avgVolView.append(Long.toString((long) avgVolDouble));
-        } else {
-            avgVolView.append("N/A");
-        }
-
-        ProgressBar stopLoss = (ProgressBar) this.findViewById(R.id.stopLoss);
-        Util.createBar(this, stopLoss, "#93d500", 35);
-
-        ProgressBar stopLossR = (ProgressBar) this.findViewById(R.id.stopLossR);
-        Util.createBar(this, stopLossR, "#E52B50", 10);
+        TextView mov200ValView = (TextView) this.findViewById(R.id.detailMovAvg200Val);
+        mov200ValView.append(Util.parseDouble(stockCursor, 8));
     }
 
     /////////////////////////////////////////////////////////////////////

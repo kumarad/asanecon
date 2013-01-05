@@ -1,121 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
     <TextView
             android:id="@+id/detailNameSymbol"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:lines="1"
-            android:textSize="24dp"
-            android:gravity="left">
-    </TextView>
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/detailNameSymbol"
+            android:id="@+id/priceRow"
+            >
 
     <TextView
-            android:id="@+id/detailPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:lines="1"
-            android:textSize="24dp"
-            android:gravity="left">
-    </TextView>
+            android:id="@+id/detailPriceVal"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="fill_parent"
+            android:textSize="25sp"
+            />
 
     <TextView
-            android:id="@+id/detailChange"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:lines="1"
-            android:textSize="24dp"
-            android:gravity="left">
-    </TextView>
+            android:id="@+id/detailPriceChange"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="fill_parent"
+            android:textSize="25sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/priceRow"
+            android:id="@+id/lowHighRow"
+            >
+
+        <TextView
+                android:id="@+id/detailLow"
+                android:layout_width="0dp"
+                android:layout_weight=".15"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailLowVal"
+                android:layout_width="0dp"
+                android:layout_weight=".35"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailHigh"
+                android:layout_width="0dp"
+                android:layout_weight=".15"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailHighVal"
+                android:layout_width="0dp"
+                android:layout_weight=".35"
+                android:layout_height="fill_parent"
+                />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/lowHighRow"
+            android:id="@+id/volRow"
+            >
+
+        <TextView
+                android:id="@+id/detailVol"
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailVolVal"
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailAvgVol"
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailAvgVolVal"
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="fill_parent"
+                />
+
+    </LinearLayout>
+
 
     <TextView
-            android:id="@+id/detailLow"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:lines="1"
-            android:textSize="24dp"
-            android:gravity="left">
-    </TextView>
-
-    <TextView
-            android:id="@+id/detailHigh"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:lines="1"
-            android:textSize="24dp"
-            android:gravity="left">
-    </TextView>
+            android:id="@+id/divider1"
+            android:layout_below="@id/volRow"
+            android:layout_width="fill_parent"
+            android:layout_height="10dip"
+            />
 
 
-    <TextView
-            android:id="@+id/detailPe"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:lines="1"
-            android:textSize="24dp"
-            android:gravity="left">
-    </TextView>
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/divider1"
+            android:id="@+id/peRow"
+            >
 
-    <TextView
-            android:id="@+id/detailPeg"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:lines="1"
-            android:textSize="24dp"
-            android:gravity="left">
-    </TextView>
+        <TextView
+                android:id="@+id/detailPe"
+                android:layout_width="0dp"
+                android:layout_weight=".2"
+                android:layout_height="fill_parent"
+                />
 
-    <TextView
-            android:id="@+id/detailMovAvg50"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:lines="1"
-            android:textSize="24dp"
-            android:gravity="left">
-    </TextView>
+        <TextView
+                android:id="@+id/detailPeVal"
+                android:layout_width="0dp"
+                android:layout_weight=".8"
+                android:layout_height="fill_parent"
+                />
+    </LinearLayout>
 
-    <TextView
-            android:id="@+id/detailMovAvg200"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:lines="1"
-            android:textSize="24dp"
-            android:gravity="left">
-    </TextView>
-
-    <TextView
-            android:id="@+id/detailTradingVol"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:lines="1"
-            android:textSize="24dp"
-            android:gravity="left">
-    </TextView>
-
-    <TextView
-            android:id="@+id/detailAvgTradingVol"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:lines="1"
-            android:textSize="24dp"
-            android:gravity="left">
-    </TextView>
-
-    <ProgressBar
+    <com.techan.custom.ReverseProgressBar
+            android:layout_below="@id/peRow"
             android:id="@+id/stopLoss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="5dp"
+            />
 
-    <com.techan.custom.ReverseProgressBar
-            android:id="@+id/stopLossR"
-            android:layout_width="wrap_content"
+
+    <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_marginRight="5dp" />
+            android:weightSum="1.0"
+            android:layout_below="@id/stopLoss"
+            android:id="@+id/pegRow"
+            >
 
-</LinearLayout>
+        <TextView
+                android:id="@+id/detailPeg"
+                android:layout_width="0dp"
+                android:layout_weight=".2"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailPegVal"
+                android:layout_width="0dp"
+                android:layout_weight=".8"
+                android:layout_height="fill_parent"
+                />
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/divider2"
+            android:layout_below="@id/pegRow"
+            android:layout_width="fill_parent"
+            android:layout_height="10dip"
+            />
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/divider2"
+            android:id="@+id/movAvg50Row"
+            >
+
+        <TextView
+                android:id="@+id/detailMovAvg50"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailMovAvg50Val"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="fill_parent"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/movAvg50Row"
+            android:id="@+id/movAvg200Row"
+            >
+
+        <TextView
+                android:id="@+id/detailMovAvg200"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailMovAvg200Val"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="fill_parent"
+                />
+    </LinearLayout>
+
+
+
+</RelativeLayout>
