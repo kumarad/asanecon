@@ -21,7 +21,10 @@ public class StocksTable {
     public static final String COLUMN_TRADING_VOLUME = "tradeVol";
     public static final String COLUMN_AVG_TRADING_VOLUME = "avgTradeVol";
     public static final String COLUMN_CHANGE = "change";
+    public static final String COLUMN_10_DAY_HIGH = "high10Day";
+    public static final String COLUMN_60_DAY_HIGH = "high60Day";
     public static final String COLUMN_NAME = "name";
+
 
     public static Set<String> stocksColumns = new HashSet<String>();
     static {
@@ -54,6 +57,8 @@ public class StocksTable {
             COLUMN_TRADING_VOLUME + " real default 0, " +
             COLUMN_AVG_TRADING_VOLUME + " real default 0, " +
             COLUMN_CHANGE + " real default 0, " +
+            COLUMN_10_DAY_HIGH + " real default 0, " +
+            COLUMN_60_DAY_HIGH + " real default 0, " +
             COLUMN_NAME + " text);";
 
     public static void onCreate(SQLiteDatabase database) {

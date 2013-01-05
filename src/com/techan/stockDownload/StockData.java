@@ -39,6 +39,8 @@ public class StockData {
     public Double tradingVol;
     public Double avgTradingVol;
     public Double change;
+    public Double high10Day;
+    public Double high60Day;
     public String name;
 
     public StockData(String symbol) {

@@ -44,12 +44,13 @@ public class StockDetailActivity extends Activity {
         populatePEView();
         populateVolumeView();
         populateMovingAvgView();
+        populateHighs();
     }
 
     void populateGeneralView() {
         TextView symbolView = (TextView) this.findViewById(R.id.detailNameSymbol);
         symbol = stockCursor.getString(1);
-        String name = stockCursor.getString(12);
+        String name = stockCursor.getString(14);
         symbolView.setText(name);
         symbolView.append(" ("+symbol+")");
 
@@ -129,6 +130,19 @@ public class StockDetailActivity extends Activity {
         mov200View.setText("200d movAvg: ");
         TextView mov200ValView = (TextView) this.findViewById(R.id.detailMovAvg200Val);
         mov200ValView.append(Util.parseDouble(stockCursor, 8));
+    }
+
+    void populateHighs() {
+        TextView high10DayView = (TextView) this.findViewById(R.id.high10Day);
+        high10DayView.setText("High(10): ");
+        TextView high10DayValView = (TextView) this.findViewById(R.id.high10DayVal);
+        high10DayValView.setText(Util.parseDouble(stockCursor,12));
+
+        TextView high60DayView = (TextView) this.findViewById(R.id.high60Day);
+        high60DayView.setText("High(60): ");
+        TextView high60DayValView = (TextView) this.findViewById(R.id.high60DayVal);
+        high60DayValView.setText(Util.parseDouble(stockCursor,13));
+
     }
 
     /////////////////////////////////////////////////////////////////////
