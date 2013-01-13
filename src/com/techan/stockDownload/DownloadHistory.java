@@ -16,8 +16,9 @@ public class DownloadHistory {
     static String DAILY_INTERVAL = "&g=d";
     static int DAY_COUNT_10 = 10;
     static int DAY_COUNT_60 = 60;
+    static int DAY_COUNT_90 = 90;
 
-    public static StockHighs download(String symbol) {
+    public static StockTrends download(String symbol) {
         // Generate url
         String url = URL_PREFIX;
         url += symbol;
@@ -27,7 +28,7 @@ public class DownloadHistory {
         int endMonth = cal.get(Calendar.MONTH); // 0 based month
         int endYear = cal.get(Calendar.YEAR);
 
-        cal.add(Calendar.DAY_OF_MONTH, DAY_COUNT_60 * -1);
+        cal.add(Calendar.DAY_OF_MONTH, DAY_COUNT_90 * -1);
 
         int startDay = cal.get(Calendar.DAY_OF_MONTH);
         int startMonth = cal.get(Calendar.MONTH);
@@ -43,8 +44,11 @@ public class DownloadHistory {
 
         url += DAILY_INTERVAL;
 
-        double high10Day = 0;
+        boolean trackUpTrend = true;
+        double upTrendDayCount = 0;
+        double prevDayHigh = Double.MAX_VALUE;
         double high60Day = 0;
+        double low90Day = Double.MAX_VALUE;
 
         AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
         HttpContext localContext = new BasicHttpContext();
@@ -59,14 +63,24 @@ public class DownloadHistory {
                 i++;
                 String[] rowData = line.split(",");
 
-                double close = Double.parseDouble(rowData[4]);
-
-                if(i <= DAY_COUNT_10 && close > high10Day) {
-                    high10Day = close;
+                double high = Double.parseDouble(rowData[2]);
+                if(i <= DAY_COUNT_60 && high > high60Day) {
+                    high60Day = high;
                 }
 
-                if(i <= DAY_COUNT_60 && close > high60Day) {
-                    high60Day = close;
+                double low = Double.parseDouble(rowData[3]);
+                if(i <= DAY_COUNT_90 && low < low90Day ) {
+                    low90Day = low;
+                }
+
+                double close = Double.parseDouble(rowData[4]);
+                if(i <= DAY_COUNT_10 && trackUpTrend) {
+                    if(close < prevDayHigh) {
+                        upTrendDayCount++;
+                        prevDayHigh = close;
+                    } else {
+                        trackUpTrend = false;
+                    }
                 }
             }
         } catch(IOException e) {
@@ -79,7 +93,7 @@ public class DownloadHistory {
             }
         }
 
-        return new StockHighs(symbol, high10Day, high60Day);
+        return new StockTrends(symbol, upTrendDayCount, high60Day, low90Day);
 
     }
 }

@@ -44,13 +44,13 @@ public class StockDetailActivity extends Activity {
         populatePEView();
         populateVolumeView();
         populateMovingAvgView();
-        populateHighs();
+        populateTrends();
     }
 
     void populateGeneralView() {
         TextView symbolView = (TextView) this.findViewById(R.id.detailNameSymbol);
         symbol = stockCursor.getString(1);
-        String name = stockCursor.getString(14);
+        String name = stockCursor.getString(15);
         symbolView.setText(name);
         symbolView.append(" ("+symbol+")");
 
@@ -132,17 +132,21 @@ public class StockDetailActivity extends Activity {
         mov200ValView.append(Util.parseDouble(stockCursor, 8));
     }
 
-    void populateHighs() {
-        TextView high10DayView = (TextView) this.findViewById(R.id.high10Day);
-        high10DayView.setText("High(10): ");
-        TextView high10DayValView = (TextView) this.findViewById(R.id.high10DayVal);
-        high10DayValView.setText(Util.parseDouble(stockCursor,12));
+    void populateTrends() {
+        TextView upTrendCountView = (TextView) this.findViewById(R.id.upTrendCount);
+        upTrendCountView.setText("UpTrendDayCount: ");
+        TextView upTrendCountValView = (TextView) this.findViewById(R.id.upTrendCountVal);
+        upTrendCountValView.setText(Util.parseDouble(stockCursor,12));
 
         TextView high60DayView = (TextView) this.findViewById(R.id.high60Day);
         high60DayView.setText("High(60): ");
         TextView high60DayValView = (TextView) this.findViewById(R.id.high60DayVal);
         high60DayValView.setText(Util.parseDouble(stockCursor,13));
 
+        TextView low90DayView = (TextView) this.findViewById(R.id.low90Day);
+        low90DayView.setText("Low(90): ");
+        TextView low90DayValView = (TextView) this.findViewById(R.id.low90DayVal);
+        low90DayValView.setText(Util.parseDouble(stockCursor,14));
     }
 
     /////////////////////////////////////////////////////////////////////

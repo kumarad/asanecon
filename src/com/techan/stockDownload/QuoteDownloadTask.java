@@ -14,7 +14,7 @@ import java.util.List;
 public class QuoteDownloadTask extends AsyncTask<String, Void, List<StockData>> {
 
     final List<String> symbols = new ArrayList<String>();
-    final List<StockHighs> highs = new ArrayList<StockHighs>();
+    final List<StockTrends> highs = new ArrayList<StockTrends>();
     final List<Uri> uris = new ArrayList<Uri>();
 
     final ContentResolver contentResolver;
@@ -81,9 +81,10 @@ public class QuoteDownloadTask extends AsyncTask<String, Void, List<StockData>> 
             values.put(StocksTable.COLUMN_CHANGE, data.change);
             values.put(StocksTable.COLUMN_NAME, data.name.replace("\"",""));
 
-            StockHighs curHighs = highs.get(i);
-            values.put(StocksTable.COLUMN_10_DAY_HIGH, curHighs.high10Day);
-            values.put(StocksTable.COLUMN_60_DAY_HIGH, curHighs.high60Day);
+            StockTrends curTrends = highs.get(i);
+            values.put(StocksTable.COLUMN_UP_TREND_COUNT, curTrends.upTrendDayCount);
+            values.put(StocksTable.COLUMN_60_DAY_HIGH, curTrends.high60Day);
+            values.put(StocksTable.COLUMN_90_DAY_LOW, curTrends.low90Day);
 
             contentResolver.update(uris.get(i), values, null, null);
             ++i;

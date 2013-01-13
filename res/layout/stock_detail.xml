@@ -243,18 +243,18 @@
             android:layout_height="wrap_content"
             android:weightSum="1.0"
             android:layout_below="@id/movAvg200Row"
-            android:id="@+id/high10DayRow"
+            android:id="@+id/upTrendCountRow"
             >
 
         <TextView
-                android:id="@+id/high10Day"
+                android:id="@+id/upTrendCount"
                 android:layout_width="0dp"
                 android:layout_weight=".4"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/high10DayVal"
+                android:id="@+id/upTrendCountVal"
                 android:layout_width="0dp"
                 android:layout_weight=".6"
                 android:layout_height="fill_parent"
@@ -265,7 +265,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/high10DayRow"
+            android:layout_below="@id/upTrendCountRow"
             android:id="@+id/high60DayRow"
             >
 
@@ -284,6 +284,27 @@
                 />
     </LinearLayout>
 
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/high60DayRow"
+            android:id="@+id/low90DayRow"
+            >
 
+        <TextView
+                android:id="@+id/low90Day"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/low90DayVal"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="fill_parent"
+                />
+    </LinearLayout>
 
 </RelativeLayout>
