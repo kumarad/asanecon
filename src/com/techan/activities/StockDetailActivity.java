@@ -40,6 +40,11 @@ public class StockDetailActivity extends Activity {
         }
 
         stockCursor.moveToFirst();
+
+        TextView symbolView = (TextView) this.findViewById(R.id.lastUpdate);
+        String lastUpdateStr = stockCursor.getString(15);
+        symbolView.setText(lastUpdateStr);
+
         populateGeneralView();
         populatePEView();
         populateVolumeView();
@@ -50,7 +55,7 @@ public class StockDetailActivity extends Activity {
     void populateGeneralView() {
         TextView symbolView = (TextView) this.findViewById(R.id.detailNameSymbol);
         symbol = stockCursor.getString(1);
-        String name = stockCursor.getString(15);
+        String name = stockCursor.getString(16);
         symbolView.setText(name);
         symbolView.append(" ("+symbol+")");
 

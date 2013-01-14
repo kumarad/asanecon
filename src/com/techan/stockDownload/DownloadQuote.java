@@ -19,7 +19,7 @@ public class DownloadQuote {
     static String TAG_PREFIX = "&f=";
     static String SYMBOL_SEPERATOR = "+";
 
-    public static List<StockData> download(List<String> symbols) {
+    public static List<StockData> download(List<String> symbols, String dateStr) {
         // Generate url
         String url = URL_PREFIX;
         for(int i = 0; i < symbols.size(); ++i) {
@@ -62,6 +62,7 @@ public class DownloadQuote {
                 stockData.tradingVol = Util.parseDouble(rowData[8]);
                 stockData.avgTradingVol = Util.parseDouble(rowData[9]);
                 stockData.change = Util.parseDouble(rowData[10]);
+                stockData.dateStr = dateStr;
 
                 int nameLength = rowData.length - 11;
                 for(int i = 0; i < nameLength; ++i) {

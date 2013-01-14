@@ -41,6 +41,10 @@ public class StockData {
     public Double change;
     public String name;
 
+    public String dateStr;
+
+    public StockTrends stockTrends;
+
     public StockData(String symbol) {
         this.symbol = symbol;
     }

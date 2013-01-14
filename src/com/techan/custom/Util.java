@@ -9,6 +9,12 @@ import android.graphics.drawable.shapes.RoundRectShape;
 import android.view.Gravity;
 import android.widget.ProgressBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 public class Util {
 
     public static void createBar(Activity activity, ProgressBar bar,  String color, int progressInt) {
@@ -44,4 +50,27 @@ public class Util {
 
         return Double.toString(d);
     }
+
+    public static SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static boolean isDateSame(String lastUpdate, Calendar curCal) {
+        if(lastUpdate != null) {
+            // Stock has been updated before.
+            try {
+                Date dbDate = formater.parse(lastUpdate);
+                Calendar dbCal = new GregorianCalendar();
+                dbCal.setTime(dbDate);
+                if(dbCal.get(Calendar.DAY_OF_MONTH) == curCal.get(Calendar.DAY_OF_MONTH) &&
+                        dbCal.get(Calendar.MONTH) == curCal.get(Calendar.MONTH) &&
+                        dbCal.get(Calendar.YEAR) == curCal.get(Calendar.YEAR)) {
+                    // Stock already updated today once.
+                    return true;
+                }
+            } catch(ParseException e) {
+                throw new RuntimeException("Exception parsing date from db.", e);
+            }
+        }
+
+        return false;
+    }
+
 }

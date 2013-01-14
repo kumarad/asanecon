@@ -24,6 +24,7 @@ public class StocksTable {
     public static final String COLUMN_UP_TREND_COUNT = "upTrendCount";
     public static final String COLUMN_60_DAY_HIGH = "high60Day";
     public static final String COLUMN_90_DAY_LOW = "low90Day";
+    public static final String COLUMN_LAST_UPDATE = "lastUpdate";
     public static final String COLUMN_NAME = "name";
 
 
@@ -44,6 +45,7 @@ public class StocksTable {
         stocksColumns.add(COLUMN_UP_TREND_COUNT);
         stocksColumns.add(COLUMN_60_DAY_HIGH);
         stocksColumns.add(COLUMN_90_DAY_LOW);
+        stocksColumns.add(COLUMN_LAST_UPDATE);
         stocksColumns.add(COLUMN_NAME);
     }
 
@@ -64,6 +66,7 @@ public class StocksTable {
             COLUMN_UP_TREND_COUNT + " real default 0, " +
             COLUMN_60_DAY_HIGH + " real default 0, " +
             COLUMN_90_DAY_LOW + " real default 0," +
+            COLUMN_LAST_UPDATE + " text, " +
             COLUMN_NAME + " text);";
 
     public static void onCreate(SQLiteDatabase database) {
