@@ -3,4 +3,5 @@ vogella2/.idea/
 out/
 .idea/
 *.iml
+*.properties
 
