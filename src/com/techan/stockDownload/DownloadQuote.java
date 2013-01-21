@@ -44,7 +44,6 @@ public class DownloadQuote {
             while((line = reader.readLine()) != null) {
                 String[] rowData = line.split(",");
 
-
                 if(rowData.length < 12) {
                     throw new RuntimeException("Unexpected data from yahoo.");
                 }

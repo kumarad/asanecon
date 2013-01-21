@@ -100,45 +100,5 @@ public class DownloadHistory {
 
         data.stockTrends = new StockTrends(upTrendDayCount, high60Day, low90Day);
     }
-
-
-    public static double downloadForUpTrend(StockData data, Calendar cal) {
-        String url = generateUrl(data, cal, 10);
-
-        double upTrendDayCount = 0;
-        double prevDayClose = Double.MAX_VALUE;
-
-        AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
-        HttpContext localContext = new BasicHttpContext();
-        HttpGet getRequest = new HttpGet(url);
-        try {
-            HttpResponse response = client.execute(getRequest, localContext);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
-            String line = reader.readLine();    // First line defines columns.
-            while((line = reader.readLine()) != null) {
-                String[] rowData = line.split(",");
-
-                double close = Double.parseDouble(rowData[4]);
-                if(close < prevDayClose) {
-                    upTrendDayCount++;
-                    prevDayClose = close;
-                } else {
-                    return upTrendDayCount;
-                }
-            }
-        } catch(IOException e) {
-            getRequest.abort();
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(client != null) {
-                client.close();
-            }
-        }
-
-        return upTrendDayCount;
-    }
-
 }
 

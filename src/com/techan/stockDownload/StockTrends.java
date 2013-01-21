@@ -1,9 +1,9 @@
 package com.techan.stockDownload;
 
 public class StockTrends {
-    double upTrendDayCount;
-    double high60Day;
-    double low90Day;
+    public double upTrendDayCount;
+    public double high60Day;
+    public double low90Day;
 
     public StockTrends(double upTrendDayCount, double high60Day, double low90Day) {
         this.upTrendDayCount = upTrendDayCount;

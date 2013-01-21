@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.techan.R;
-import com.techan.database.StocksTable;
-import com.techan.stockDownload.QuoteDownloadTask;
 
 public class StockCursorAdapter extends SimpleCursorAdapter {
 

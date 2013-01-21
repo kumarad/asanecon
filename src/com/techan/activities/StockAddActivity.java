@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.techan.R;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
-import com.techan.stockDownload.QuoteDownloadTask;
+import com.techan.stockDownload.DownloadNewSymbolTask;
 
 public class StockAddActivity extends Activity {
 
@@ -105,6 +105,6 @@ public class StockAddActivity extends Activity {
         values.put(StocksTable.COLUMN_SYMBOL, symbol);
         Uri addedUri = getContentResolver().insert(StockContentProvider.CONTENT_URI, values);
         Uri uri = Uri.parse(StockContentProvider.BASE_URI_STR + addedUri);
-        (new QuoteDownloadTask(this.getContentResolver(), uri, symbol)).execute();
+        (new DownloadNewSymbolTask(this.getContentResolver(), uri, symbol)).execute();
     }
 }

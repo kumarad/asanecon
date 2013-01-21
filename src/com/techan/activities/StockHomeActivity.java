@@ -17,7 +17,7 @@ import com.techan.R;
 import com.techan.custom.StockCursorAdapter;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
-import com.techan.stockDownload.QuoteDownloadTask;
+import com.techan.stockDownload.RefreshAllTask;
 
 /**
  * Cursor - access to the result of a database query.
@@ -67,7 +67,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         setListAdapter(adapter);
 
         // Update from the network.
-        (new QuoteDownloadTask(this.getContentResolver())).download();
+        (new RefreshAllTask(this.getContentResolver())).download();
     }
 
     /////////////////////
@@ -119,7 +119,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
                 insertStock();
                 return true;
             case R.id.refresh:
-                (new QuoteDownloadTask(this.getContentResolver())).download();
+                (new RefreshAllTask(this.getContentResolver())).download();
                 return true;
         }
         return super.onOptionsItemSelected(item);
