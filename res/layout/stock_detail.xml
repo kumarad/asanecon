@@ -253,12 +253,17 @@
                 android:layout_height="fill_parent"
                 />
 
-        <TextView
-                android:id="@+id/upTrendCountVal"
+
+        <com.techan.custom.TextProgressBar
+                android:layout_below="@id/upTrendCountRow"
+                android:id="@+id/upTrendBar"
                 android:layout_width="0dp"
                 android:layout_weight=".6"
+                style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_height="fill_parent"
+                android:layout_marginRight="5dp"
                 />
+
     </LinearLayout>
 
     <LinearLayout

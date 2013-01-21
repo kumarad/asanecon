@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.techan.R;
 import com.techan.contentProvider.StockContentProvider;
+import com.techan.custom.TextProgressBar;
 import com.techan.custom.Util;
 
 public class StockDetailActivity extends Activity {
@@ -139,9 +140,15 @@ public class StockDetailActivity extends Activity {
 
     void populateTrends() {
         TextView upTrendCountView = (TextView) this.findViewById(R.id.upTrendCount);
-        upTrendCountView.setText("UpTrendDayCount: ");
-        TextView upTrendCountValView = (TextView) this.findViewById(R.id.upTrendCountVal);
-        upTrendCountValView.setText(Util.parseDouble(stockCursor,12));
+        upTrendCountView.setText("Up Trend: ");
+
+        int dayCount = (int)stockCursor.getDouble(12);
+        if(dayCount > 10)
+            dayCount = 10;
+        TextProgressBar upTrendBar = (TextProgressBar) this.findViewById(R.id.upTrendBar);
+        Util.createBar(this, upTrendBar, "#93d500", dayCount*10);
+        upTrendBar.setText(Integer.toString(dayCount) + "/10 Days");
+
 
         TextView high60DayView = (TextView) this.findViewById(R.id.high60Day);
         high60DayView.setText("High(60): ");
