@@ -42,7 +42,7 @@ public class StockDetailActivity extends Activity {
 
         stockCursor.moveToFirst();
 
-        TextView symbolView = (TextView) this.findViewById(R.id.lastUpdate);
+        TextView symbolView = (TextView) this.findViewById(R.id.old_lastUpdate);
         String lastUpdateStr = stockCursor.getString(15);
         symbolView.setText(lastUpdateStr);
 
@@ -54,16 +54,16 @@ public class StockDetailActivity extends Activity {
     }
 
     void populateGeneralView() {
-        TextView symbolView = (TextView) this.findViewById(R.id.detailNameSymbol);
+        TextView symbolView = (TextView) this.findViewById(R.id.old_detailNameSymbol);
         symbol = stockCursor.getString(1);
         String name = stockCursor.getString(16);
         symbolView.setText(name);
         symbolView.append(" ("+symbol+")");
 
-        TextView priceValView = (TextView) this.findViewById(R.id.detailPriceVal);
+        TextView priceValView = (TextView) this.findViewById(R.id.old_detailPriceVal);
         priceValView.setText(Util.parseDouble(stockCursor, 2));
 
-        TextView changeView = (TextView) this.findViewById(R.id.detailPriceChange);
+        TextView changeView = (TextView) this.findViewById(R.id.old_detailPriceChange);
         double change = stockCursor.getDouble(11);
         if(change < 0) {
             changeView.setTextColor(Color.RED);
@@ -74,40 +74,40 @@ public class StockDetailActivity extends Activity {
         changeView.append(Double.toString(change));
         changeView.append(")");
 
-        TextView lowView = (TextView) this.findViewById(R.id.detailLow);
+        TextView lowView = (TextView) this.findViewById(R.id.old_detailLow);
         lowView.setText("Low: ");
-        TextView lowValView = (TextView) this.findViewById(R.id.detailLowVal);
+        TextView lowValView = (TextView) this.findViewById(R.id.old_detailLowVal);
         lowValView.setText(Util.parseDouble(stockCursor, 3));
 
-        TextView highView = (TextView) this.findViewById(R.id.detailHigh);
+        TextView highView = (TextView) this.findViewById(R.id.old_detailHigh);
         highView.setText("High: ");
-        TextView highValView = (TextView) this.findViewById(R.id.detailHighVal);
+        TextView highValView = (TextView) this.findViewById(R.id.old_detailHighVal);
         highValView.setText(Util.parseDouble(stockCursor, 4));
     }
 
     void populatePEView() {
-        TextView peView = (TextView) this.findViewById(R.id.detailPe);
+        TextView peView = (TextView) this.findViewById(R.id.old_detailPe);
         peView.setText("PE: ");
-        TextView peValView = (TextView) this.findViewById(R.id.detailPeVal);
+        TextView peValView = (TextView) this.findViewById(R.id.old_detailPeVal);
         peValView.setText(Util.parseDouble(stockCursor, 5));
 
-//        ProgressBar stopLoss = (ProgressBar) this.findViewById(R.id.stopLoss);
+//        ProgressBar stopLoss = (ProgressBar) this.findViewById(R.id.old_stopLoss);
 //        Util.createBar(this, stopLoss, "#93d500", 35);
 //
-        ProgressBar stopLossR = (ProgressBar) this.findViewById(R.id.stopLoss);
+        ProgressBar stopLossR = (ProgressBar) this.findViewById(R.id.old_stopLoss);
         Util.createBar(this, stopLossR, "#E52B50", 10);
 
-        TextView pegView = (TextView) this.findViewById(R.id.detailPeg);
+        TextView pegView = (TextView) this.findViewById(R.id.old_detailPeg);
         pegView.setText("PEG: ");
-        TextView pegValView = (TextView) this.findViewById(R.id.detailPegVal);
+        TextView pegValView = (TextView) this.findViewById(R.id.old_detailPegVal);
         pegValView.setText(Util.parseDouble(stockCursor, 6));
 
     }
 
     void populateVolumeView() {
-        TextView volView = (TextView) this.findViewById(R.id.detailVol);
+        TextView volView = (TextView) this.findViewById(R.id.old_detailVol);
         volView.setText("Volume: ");
-        TextView volValView = (TextView) this.findViewById(R.id.detailVolVal);
+        TextView volValView = (TextView) this.findViewById(R.id.old_detailVolVal);
         double volDouble = stockCursor.getDouble(9);
         if(volDouble != 0) {
             volValView.setText(Long.toString((long) volDouble));
@@ -115,9 +115,9 @@ public class StockDetailActivity extends Activity {
             volValView.setText("N/A");
         }
 
-        TextView avgVolView = (TextView) this.findViewById(R.id.detailAvgVol);
+        TextView avgVolView = (TextView) this.findViewById(R.id.old_detailAvgVol);
         avgVolView.setText("Avg Volume: ");
-        TextView avgVolValView = (TextView) this.findViewById(R.id.detailAvgVolVal);
+        TextView avgVolValView = (TextView) this.findViewById(R.id.old_detailAvgVolVal);
         double avgVolDouble = stockCursor.getDouble(10);
         if(avgVolDouble != 0) {
             avgVolValView.setText(Long.toString((long) avgVolDouble));
@@ -127,37 +127,37 @@ public class StockDetailActivity extends Activity {
     }
 
     void populateMovingAvgView() {
-        TextView mov50View = (TextView) this.findViewById(R.id.detailMovAvg50);
+        TextView mov50View = (TextView) this.findViewById(R.id.old_detailMovAvg50);
         mov50View.setText("50d movAvg: ");
-        TextView mov50ValView = (TextView) this.findViewById(R.id.detailMovAvg50Val);
+        TextView mov50ValView = (TextView) this.findViewById(R.id.old_detailMovAvg50Val);
         mov50ValView.setText(Util.parseDouble(stockCursor, 7));
 
-        TextView mov200View = (TextView) this.findViewById(R.id.detailMovAvg200);
+        TextView mov200View = (TextView) this.findViewById(R.id.old_detailMovAvg200);
         mov200View.setText("200d movAvg: ");
-        TextView mov200ValView = (TextView) this.findViewById(R.id.detailMovAvg200Val);
+        TextView mov200ValView = (TextView) this.findViewById(R.id.old_detailMovAvg200Val);
         mov200ValView.append(Util.parseDouble(stockCursor, 8));
     }
 
     void populateTrends() {
-        TextView upTrendCountView = (TextView) this.findViewById(R.id.upTrendCount);
+        TextView upTrendCountView = (TextView) this.findViewById(R.id.old_upTrendCount);
         upTrendCountView.setText("Up Trend: ");
 
         int dayCount = (int)stockCursor.getDouble(12);
         if(dayCount > 10)
             dayCount = 10;
-        TextProgressBar upTrendBar = (TextProgressBar) this.findViewById(R.id.upTrendBar);
+        TextProgressBar upTrendBar = (TextProgressBar) this.findViewById(R.id.old_upTrendBar);
         Util.createBar(this, upTrendBar, "#93d500", dayCount*10);
         upTrendBar.setText(Integer.toString(dayCount) + "/10 Days");
 
 
-        TextView high60DayView = (TextView) this.findViewById(R.id.high60Day);
+        TextView high60DayView = (TextView) this.findViewById(R.id.old_high60Day);
         high60DayView.setText("High(60): ");
-        TextView high60DayValView = (TextView) this.findViewById(R.id.high60DayVal);
+        TextView high60DayValView = (TextView) this.findViewById(R.id.old_high60DayVal);
         high60DayValView.setText(Util.parseDouble(stockCursor,13));
 
-        TextView low90DayView = (TextView) this.findViewById(R.id.low90Day);
+        TextView low90DayView = (TextView) this.findViewById(R.id.old_low90Day);
         low90DayView.setText("Low(90): ");
-        TextView low90DayValView = (TextView) this.findViewById(R.id.low90DayVal);
+        TextView low90DayValView = (TextView) this.findViewById(R.id.old_low90DayVal);
         low90DayValView.setText(Util.parseDouble(stockCursor,14));
     }
 

@@ -5,7 +5,7 @@
                 android:layout_height="fill_parent">
 
     <TextView
-            android:id="@+id/lastUpdate"
+            android:id="@+id/old_lastUpdate"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
@@ -13,22 +13,22 @@
             />
 
     <TextView
-            android:id="@+id/detailNameSymbol"
+            android:id="@+id/old_detailNameSymbol"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lastUpdate"
+            android:layout_below="@id/old_lastUpdate"
             />
 
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/detailNameSymbol"
-            android:id="@+id/priceRow"
+            android:layout_below="@id/old_detailNameSymbol"
+            android:id="@+id/old_priceRow"
             >
 
     <TextView
-            android:id="@+id/detailPriceVal"
+            android:id="@+id/old_detailPriceVal"
             android:layout_width="0dp"
             android:layout_weight=".5"
             android:layout_height="fill_parent"
@@ -36,7 +36,7 @@
             />
 
     <TextView
-            android:id="@+id/detailPriceChange"
+            android:id="@+id/old_detailPriceChange"
             android:layout_width="0dp"
             android:layout_weight=".5"
             android:layout_height="fill_parent"
@@ -48,33 +48,33 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/priceRow"
-            android:id="@+id/lowHighRow"
+            android:layout_below="@id/old_priceRow"
+            android:id="@+id/old_lowHighRow"
             >
 
         <TextView
-                android:id="@+id/detailLow"
+                android:id="@+id/old_detailLow"
                 android:layout_width="0dp"
                 android:layout_weight=".15"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/detailLowVal"
+                android:id="@+id/old_detailLowVal"
                 android:layout_width="0dp"
                 android:layout_weight=".35"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/detailHigh"
+                android:id="@+id/old_detailHigh"
                 android:layout_width="0dp"
                 android:layout_weight=".15"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/detailHighVal"
+                android:id="@+id/old_detailHighVal"
                 android:layout_width="0dp"
                 android:layout_weight=".35"
                 android:layout_height="fill_parent"
@@ -86,33 +86,33 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/lowHighRow"
-            android:id="@+id/volRow"
+            android:layout_below="@id/old_lowHighRow"
+            android:id="@+id/old_volRow"
             >
 
         <TextView
-                android:id="@+id/detailVol"
+                android:id="@+id/old_detailVol"
                 android:layout_width="0dp"
                 android:layout_weight=".25"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/detailVolVal"
+                android:id="@+id/old_detailVolVal"
                 android:layout_width="0dp"
                 android:layout_weight=".25"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/detailAvgVol"
+                android:id="@+id/old_detailAvgVol"
                 android:layout_width="0dp"
                 android:layout_weight=".25"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/detailAvgVolVal"
+                android:id="@+id/old_detailAvgVolVal"
                 android:layout_width="0dp"
                 android:layout_weight=".25"
                 android:layout_height="fill_parent"
@@ -122,8 +122,8 @@
 
 
     <TextView
-            android:id="@+id/divider1"
-            android:layout_below="@id/volRow"
+            android:id="@+id/old_divider1"
+            android:layout_below="@id/old_volRow"
             android:layout_width="fill_parent"
             android:layout_height="10dip"
             />
@@ -133,19 +133,19 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/divider1"
-            android:id="@+id/peRow"
+            android:layout_below="@id/old_divider1"
+            android:id="@+id/old_peRow"
             >
 
         <TextView
-                android:id="@+id/detailPe"
+                android:id="@+id/old_detailPe"
                 android:layout_width="0dp"
                 android:layout_weight=".2"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/detailPeVal"
+                android:id="@+id/old_detailPeVal"
                 android:layout_width="0dp"
                 android:layout_weight=".8"
                 android:layout_height="fill_parent"
@@ -153,8 +153,8 @@
     </LinearLayout>
 
     <com.techan.custom.ReverseProgressBar
-            android:layout_below="@id/peRow"
-            android:id="@+id/stopLoss"
+            android:layout_below="@id/old_peRow"
+            android:id="@+id/old_stopLoss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@android:style/Widget.ProgressBar.Horizontal"
@@ -166,19 +166,19 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/stopLoss"
-            android:id="@+id/pegRow"
+            android:layout_below="@id/old_stopLoss"
+            android:id="@+id/old_pegRow"
             >
 
         <TextView
-                android:id="@+id/detailPeg"
+                android:id="@+id/old_detailPeg"
                 android:layout_width="0dp"
                 android:layout_weight=".2"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/detailPegVal"
+                android:id="@+id/old_detailPegVal"
                 android:layout_width="0dp"
                 android:layout_weight=".8"
                 android:layout_height="fill_parent"
@@ -186,8 +186,8 @@
     </LinearLayout>
 
     <TextView
-            android:id="@+id/divider2"
-            android:layout_below="@id/pegRow"
+            android:id="@+id/old_divider2"
+            android:layout_below="@id/old_pegRow"
             android:layout_width="fill_parent"
             android:layout_height="10dip"
             />
@@ -196,19 +196,19 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/divider2"
-            android:id="@+id/movAvg50Row"
+            android:layout_below="@id/old_divider2"
+            android:id="@+id/old_movAvg50Row"
             >
 
         <TextView
-                android:id="@+id/detailMovAvg50"
+                android:id="@+id/old_detailMovAvg50"
                 android:layout_width="0dp"
                 android:layout_weight=".4"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/detailMovAvg50Val"
+                android:id="@+id/old_detailMovAvg50Val"
                 android:layout_width="0dp"
                 android:layout_weight=".6"
                 android:layout_height="fill_parent"
@@ -219,19 +219,19 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/movAvg50Row"
-            android:id="@+id/movAvg200Row"
+            android:layout_below="@id/old_movAvg50Row"
+            android:id="@+id/old_movAvg200Row"
             >
 
         <TextView
-                android:id="@+id/detailMovAvg200"
+                android:id="@+id/old_detailMovAvg200"
                 android:layout_width="0dp"
                 android:layout_weight=".4"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/detailMovAvg200Val"
+                android:id="@+id/old_detailMovAvg200Val"
                 android:layout_width="0dp"
                 android:layout_weight=".6"
                 android:layout_height="fill_parent"
@@ -242,12 +242,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/movAvg200Row"
-            android:id="@+id/upTrendCountRow"
+            android:layout_below="@id/old_movAvg200Row"
+            android:id="@+id/old_upTrendCountRow"
             >
 
         <TextView
-                android:id="@+id/upTrendCount"
+                android:id="@+id/old_upTrendCount"
                 android:layout_width="0dp"
                 android:layout_weight=".4"
                 android:layout_height="fill_parent"
@@ -255,8 +255,8 @@
 
 
         <com.techan.custom.TextProgressBar
-                android:layout_below="@id/upTrendCountRow"
-                android:id="@+id/upTrendBar"
+                android:layout_below="@id/old_upTrendCountRow"
+                android:id="@+id/old_upTrendBar"
                 android:layout_width="0dp"
                 android:layout_weight=".6"
                 style="@android:style/Widget.ProgressBar.Horizontal"
@@ -270,19 +270,19 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/upTrendCountRow"
-            android:id="@+id/high60DayRow"
+            android:layout_below="@id/old_upTrendCountRow"
+            android:id="@+id/old_high60DayRow"
             >
 
         <TextView
-                android:id="@+id/high60Day"
+                android:id="@+id/old_high60Day"
                 android:layout_width="0dp"
                 android:layout_weight=".4"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/high60DayVal"
+                android:id="@+id/old_high60DayVal"
                 android:layout_width="0dp"
                 android:layout_weight=".6"
                 android:layout_height="fill_parent"
@@ -293,19 +293,19 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/high60DayRow"
-            android:id="@+id/low90DayRow"
+            android:layout_below="@id/old_high60DayRow"
+            android:id="@+id/old_low90DayRow"
             >
 
         <TextView
-                android:id="@+id/low90Day"
+                android:id="@+id/old_low90Day"
                 android:layout_width="0dp"
                 android:layout_weight=".4"
                 android:layout_height="fill_parent"
                 />
 
         <TextView
-                android:id="@+id/low90DayVal"
+                android:id="@+id/old_low90DayVal"
                 android:layout_width="0dp"
                 android:layout_weight=".6"
                 android:layout_height="fill_parent"

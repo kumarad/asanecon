@@ -139,7 +139,9 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         super.onListItemClick(l,v, position, id);
 
         // Create an intent. Like an action.
-        Intent i = new Intent(this, StockDetailActivity.class);
+//        Intent i = new Intent(this, StockDetailActivity.class);
+        Intent i = new Intent(this, StockDetailFragmentActivity.class);
+
 
         // StockContentProvider.CONTENT_ITEM_TYPE is the key for the extra info
         // being placed in the intent.

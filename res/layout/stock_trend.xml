@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:id="@+id/movAvg50Row"
+            >
+
+        <TextView
+                android:id="@+id/detailMovAvg50"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailMovAvg50Val"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="fill_parent"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/movAvg50Row"
+            android:id="@+id/movAvg200Row"
+            >
+
+        <TextView
+                android:id="@+id/detailMovAvg200"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailMovAvg200Val"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="fill_parent"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/movAvg200Row"
+            android:id="@+id/upTrendCountRow"
+            >
+
+        <TextView
+                android:id="@+id/upTrendCount"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:layout_height="fill_parent"
+                />
+
+
+        <com.techan.custom.TextProgressBar
+                android:layout_below="@id/upTrendCountRow"
+                android:id="@+id/upTrendBar"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_height="fill_parent"
+                android:layout_marginRight="5dp"
+                />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/upTrendCountRow"
+            android:id="@+id/high60DayRow"
+            >
+
+        <TextView
+                android:id="@+id/high60Day"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/high60DayVal"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="fill_parent"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/high60DayRow"
+            android:id="@+id/low90DayRow"
+            >
+
+        <TextView
+                android:id="@+id/low90Day"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/low90DayVal"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="fill_parent"
+                />
+    </LinearLayout>
+
+</RelativeLayout>
