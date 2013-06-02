@@ -9,6 +9,7 @@ import android.graphics.drawable.shapes.RoundRectShape;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -90,5 +91,11 @@ public class Util {
 
         return false;
     }
+
+    // Provides feedback in a small pop up black window.
+    public static void showErrorToast(Activity activity, String error) {
+        Toast.makeText(activity, error, Toast.LENGTH_LONG).show();
+    }
+
 
 }

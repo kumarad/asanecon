@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.techan.R;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
+import com.techan.profile.JSONManager;
 
 public class StockDetailFragmentActivity extends FragmentActivity {
     private Uri stockUri;
@@ -108,8 +109,8 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         switch (item.getItemId()) {
             case R.id.delete:
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-                alertDialog.setTitle("Are you sure you want to delete stock?");
-                alertDialog.setMessage("Click yes to confirm deletion.");
+                alertDialog.setTitle("Deleting stock from profile");
+                alertDialog.setMessage("Click yes to confirm");
                 alertDialog.setCancelable(false);
                 alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -132,6 +133,10 @@ public class StockDetailFragmentActivity extends FragmentActivity {
 
     private void deleteStock() {
         getContentResolver().delete(stockUri, null, null);
+
+        if(!JSONManager.removeSymbol(this.getApplicationContext(), symbol)) {
+            Util.showErrorToast(this, "Oops. Something on your device prevented profile data from being updated.");
+        }
 
         Intent i = new Intent(this, StockHomeActivity.class);
         startActivityForResult(i, ACTIVITY_CREATE);

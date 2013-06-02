@@ -9,11 +9,15 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 import com.techan.R;
 import com.techan.contentProvider.StockContentProvider;
+import com.techan.custom.Util;
+import com.techan.profile.JSONManager;
 import com.techan.database.StocksTable;
+import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.DownloadNewSymbolTask;
+
+import java.util.List;
 
 public class StockAddActivity extends Activity {
 
@@ -35,7 +39,7 @@ public class StockAddActivity extends Activity {
             public void onClick(View view) {
                 if (TextUtils.isEmpty(addText.getText().toString())) {
                     //todo confirm that it is a valid symbol here ?
-                    showErrorToast("Please insert stock symbol to be added.");
+                    Util.showErrorToast(StockAddActivity.this, "Please insert stock symbol to be added.");
                 } else {
                     addSymbol();
 
@@ -51,10 +55,6 @@ public class StockAddActivity extends Activity {
         });
     }
 
-    // Provides feedback in a small pop up black window.
-    private void showErrorToast(String error) {
-        Toast.makeText(StockAddActivity.this, error, Toast.LENGTH_LONG).show();
-    }
 
     // Called when the activity is no longer the primary activity. Android can
     // kill this activity if running low on memory. So should persist any data
@@ -83,12 +83,12 @@ public class StockAddActivity extends Activity {
     private void addSymbol() {
         String symbol = addText.getText().toString().toUpperCase();
         if(symbol.length() == 0) {
-            showErrorToast("Nothing input.");
+            Util.showErrorToast(this, "Nothing input.");
             return;
         }
 
-        if(symbol.matches("[\\.a-zA-Z0-9]+") != true) {
-            showErrorToast("Stock symbol can only contain letters and periods.");
+        if(!symbol.matches("[\\.a-zA-Z0-9]+")) {
+            Util.showErrorToast(this, "Stock symbol can only contain letters and periods.");
             return;
         }
 
@@ -97,7 +97,7 @@ public class StockAddActivity extends Activity {
         Cursor cursor = getContentResolver().query(StockContentProvider.CONTENT_URI, projection, StocksTable.COLUMN_SYMBOL + "='" + symbol + "'", null, null);
         if(cursor.getCount() != 0) {
             // Already in cursor.
-            showErrorToast("Stock symbol already added.");
+            Util.showErrorToast(this, "Stock symbol already added.");
             return;
         }
 
@@ -106,5 +106,26 @@ public class StockAddActivity extends Activity {
         Uri addedUri = getContentResolver().insert(StockContentProvider.CONTENT_URI, values);
         Uri uri = Uri.parse(StockContentProvider.BASE_URI_STR + addedUri);
         (new DownloadNewSymbolTask(this.getContentResolver(), uri, symbol)).execute();
+
+        if(!JSONManager.addSymbol(this.getApplicationContext(), symbol)) {
+            // Failure adding symbol to persistent file. Let user know.
+            Util.showErrorToast(this, "Oops. Something on your device prevented profile from being updated.");
+        }
+    }
+
+    private void testJSONManager(String symbol) {
+        SymbolProfile symProfile = new SymbolProfile(symbol);
+        if(symbol.equals("IBM")) {
+            symProfile.stopLossPercent = 25;
+        } else if(symbol.equals("MSFT")) {
+            symProfile.stopLossPercent = 10;
+            symProfile.stopLossPivot = 400.12;
+        }
+
+        JSONManager.addSymbolData(this.getApplicationContext(), symProfile);
+
+        List<SymbolProfile> profiles = JSONManager.getSymbols(this.getApplicationContext());
+
+        profiles.clear();
     }
 }
