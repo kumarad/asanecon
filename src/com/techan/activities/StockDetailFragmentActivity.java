@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,6 +57,9 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockCursor);
         viewPager = (ViewPager)findViewById(R.id.stock_pager);
         viewPager.setAdapter(stockPagerAdapter);
+
+        PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.stock_pager_title_strip);
+        pagerTabStrip.setTabIndicatorColor(Color.parseColor("#33b5e5"));
     }
 
     void populateGeneralView() {

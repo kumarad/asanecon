@@ -100,7 +100,7 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return "VOL";
             case 2:
-                return "TRENDS";
+                return "TR";
         }
 
         return null;
