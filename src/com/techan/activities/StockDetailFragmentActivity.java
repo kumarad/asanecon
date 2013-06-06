@@ -10,12 +10,21 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.Switch;
 import android.widget.TextView;
 import com.techan.R;
+import com.techan.activities.helpers.DeleteHelper;
+import com.techan.activities.helpers.PeHelper;
+import com.techan.activities.helpers.StopLossHelper;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
 import com.techan.profile.JSONManager;
@@ -97,7 +106,6 @@ public class StockDetailFragmentActivity extends FragmentActivity {
     /////////////////////////////////////////////////////////////////////
     // Menu on top right that allows deletion of item.
     /////////////////////////////////////////////////////////////////////
-    private static final int ACTIVITY_CREATE = 0;
 
     // Create the menu based on the XML defintion
     @Override
@@ -112,37 +120,16 @@ public class StockDetailFragmentActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete:
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-                alertDialog.setTitle("Deleting stock from profile");
-                alertDialog.setMessage("Click yes to confirm");
-                alertDialog.setCancelable(false);
-                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteStock();
-                    }
-                });
-                alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                alertDialog.create().show();
+                DeleteHelper.createDialog(this, stockUri, symbol);
+                return true;
+            case R.id.set_pe_target:
+                PeHelper.createDialog(this);
+                return true;
+            case R.id.set_stop_loss:
+                StopLossHelper.createDialog(this);
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
-    }
-
-    private void deleteStock() {
-        getContentResolver().delete(stockUri, null, null);
-
-        if(!JSONManager.removeSymbol(this.getApplicationContext(), symbol)) {
-            Util.showErrorToast(this, "Oops. Something on your device prevented profile data from being updated.");
-        }
-
-        Intent i = new Intent(this, StockHomeActivity.class);
-        startActivityForResult(i, ACTIVITY_CREATE);
     }
 }

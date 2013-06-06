@@ -4,4 +4,6 @@
     <string name="no_stocks">No Stocks</string>
     <string name="stock_add_hint">Input stock symbol here</string>
     <string name="stock_add_button">Add</string>
+    <string name="pe_target">PE Target</string>
+    <string name="stop_loss">Stop Loss</string>
 </resources>

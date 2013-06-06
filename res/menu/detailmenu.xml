@@ -8,4 +8,18 @@
             >
     </item>
 
-</menu> 
+    <item
+            android:id="@+id/set_pe_target"
+            android:showAsAction="collapseActionView"
+            android:title="@string/pe_target"
+            >
+    </item>
+
+    <item
+            android:id="@+id/set_stop_loss"
+            android:showAsAction="collapseActionView"
+            android:title="@string/stop_loss"
+            >
+    </item>
+
+</menu>
