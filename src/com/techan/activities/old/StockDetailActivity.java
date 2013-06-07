@@ -1,4 +1,4 @@
-package com.techan.activities;
+package com.techan.activities.old;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +12,7 @@ import android.view.*;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.techan.R;
+import com.techan.activities.StockHomeActivity;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.TextProgressBar;
 import com.techan.custom.Util;

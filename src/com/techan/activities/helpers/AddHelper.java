@@ -29,6 +29,8 @@ public class AddHelper {
         LayoutInflater inflater = parentActivity.getLayoutInflater();
         final View view = inflater.inflate(R.layout.stock_add, null);
 
+        //todo inspect the buy price and share count.
+
         alertDialog.setView(view);
         alertDialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override

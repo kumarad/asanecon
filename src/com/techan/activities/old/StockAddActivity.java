@@ -1,4 +1,4 @@
-package com.techan.activities;
+package com.techan.activities.old;
 
 import android.app.Activity;
 import android.content.ContentValues;

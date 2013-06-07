@@ -18,20 +18,20 @@
             </intent-filter>
         </activity>
 
-        <activity
-                android:name=".activities.StockAddActivity"
-                android:windowSoftInputMode="stateVisible|adjustResize" >
-        </activity>
+        <!--<activity-->
+                <!--android:name=".activities.StockAddActivity"-->
+                <!--android:windowSoftInputMode="stateVisible|adjustResize" >-->
+        <!--</activity>-->
 
         <activity
                 android:name=".activities.StockDetailFragmentActivity"
                 android:windowSoftInputMode="stateVisible|adjustResize" >
         </activity>
 
-        <activity
-                android:name=".activities.StockDetailActivity"
-                android:windowSoftInputMode="stateVisible|adjustResize" >
-        </activity>
+        <!--<activity-->
+                <!--android:name=".activities.StockDetailActivity"-->
+                <!--android:windowSoftInputMode="stateVisible|adjustResize" >-->
+        <!--</activity>-->
 
         <provider
                 android:name=".contentProvider.StockContentProvider"

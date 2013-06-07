@@ -1,17 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/add_divider"
+            android:layout_width="fill_parent"
+            android:layout_height="10dip"
+            />
 
     <EditText
                 android:id="@+id/stock_add"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="50sp"
                 android:singleLine="true"
-                android:hint="@string/stock_add_hint">
+                android:hint="@string/stock_add_hint"
+                android:layout_below="@id/add_divider">
         </EditText>
+
+    <TextView
+            android:id="@+id/add_divider2"
+            android:layout_width="fill_parent"
+            android:layout_height="10dip"
+            android:layout_below="@id/stock_add"
+            />
+
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50sp"
+            android:weightSum="1.0"
+            android:layout_below="@id/add_divider2"
+            android:id="@+id/buy_price_row"
+            >
+
+        <TextView
+                android:id="@+id/buy_price"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:text="Buy Price:"
+                />
+
+        <EditText
+                android:id="@+id/set_buy_price"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="fill_parent"
+                android:inputType="numberDecimal"
+                android:hint="Optional"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50sp"
+            android:weightSum="1.0"
+            android:gravity="center_vertical"
+            android:layout_below="@id/buy_price_row"
+            >
+
+        <TextView
+                android:id="@+id/share_count"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:layout_height="fill_parent"
+                android:text="Shares:"
+                />
+
+        <EditText
+                android:id="@+id/set_share_count"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="fill_parent"
+                android:inputType="number"
+                android:hint="Optional"
+                />
+    </LinearLayout>
+
 
     <!--<Button-->
             <!--android:id="@+id/stock_add_button"-->
@@ -20,4 +89,4 @@
             <!--android:text="@string/stock_add_button" >-->
     <!--</Button>-->
 
-</LinearLayout>
+</RelativeLayout>
