@@ -5,21 +5,19 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
 
-
-        <EditText
+    <EditText
                 android:id="@+id/stock_add"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:singleLine="true"
                 android:hint="@string/stock_add_hint">
         </EditText>
 
-    <Button
-            android:id="@+id/stock_add_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/stock_add_button" >
-    </Button>
+    <!--<Button-->
+            <!--android:id="@+id/stock_add_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/stock_add_button" >-->
+    <!--</Button>-->
 
 </LinearLayout>

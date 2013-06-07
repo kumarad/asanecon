@@ -5,23 +5,53 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <NumberPicker android:id="@+id/stop_loss_np"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:width="100dip"
-                  android:layout_alignParentTop="true"
-                  android:layout_centerHorizontal="true"/>
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="150sp"
+            android:weightSum="1.0"
+            android:id="@+id/edit_stop_loss_percent"
+            >
 
-    <EditText
-            android:id="@+id/edit_price"
-            android:inputType="numberDecimal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="4dp"
-            android:layout_below="@id/stop_loss_np"
-            />
+        <TextView
+                android:id="@+id/stop_loss_percent"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:text="Stop Loss %:"
+                />
+
+        <NumberPicker android:id="@+id/stop_loss_np"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:width="100dip"
+                      android:layout_weight=".5"
+                />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50sp"
+            android:weightSum="1.0"
+            android:layout_below="@id/edit_stop_loss_percent"
+            >
+
+        <TextView
+                android:id="@+id/saved_buy_price"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="fill_parent"
+                android:text="Buy Price:"
+                />
+
+        <TextView
+                android:id="@+id/edit_price"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="fill_parent"
+                />
+
+    </LinearLayout>
 
 </RelativeLayout>

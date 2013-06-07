@@ -34,25 +34,25 @@ public class StockAddActivity extends Activity {
         if(currentText != null)
             addText.setText(currentText);
 
-        Button confirmButton = (Button) findViewById(R.id.stock_add_button);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (TextUtils.isEmpty(addText.getText().toString())) {
-                    //todo confirm that it is a valid symbol here ?
-                    Util.showErrorToast(StockAddActivity.this, "Please insert stock symbol to be added.");
-                } else {
-                    addSymbol();
-
-                    // RESULT_OK is negative. Returning a negative value is the same as calling
-                    // startActivity on the calling activity.
-                    setResult(RESULT_OK);
-
-                    // will call onDestroy which will end up saving information
-                    // in database.
-                    finish();
-                }
-            }
-        });
+//        Button confirmButton = (Button) findViewById(R.id.stock_add_button);
+//        confirmButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view) {
+//                if (TextUtils.isEmpty(addText.getText().toString())) {
+//                    //todo confirm that it is a valid symbol here ?
+//                    Util.showErrorToast(StockAddActivity.this, "Please insert stock symbol to be added.");
+//                } else {
+//                    addSymbol();
+//
+//                    // RESULT_OK is negative. Returning a negative value is the same as calling
+//                    // startActivity on the calling activity.
+//                    setResult(RESULT_OK);
+//
+//                    // will call onDestroy which will end up saving information
+//                    // in database.
+//                    finish();
+//                }
+//            }
+//        });
     }
 
     // Called before the activity is put in a background state. Save stuff in the bundle.
