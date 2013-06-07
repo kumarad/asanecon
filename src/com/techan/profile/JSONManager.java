@@ -11,55 +11,50 @@ import java.util.Iterator;
 import java.util.List;
 
 public class JSONManager {
-    private static JSONObject curJSONObject;
+    private final PersistenceManager persistenceManager;
+    private JSONObject jsonObject;
 
-    private static JSONObject getRoot(Context ctx) throws JSONException {
-        if(curJSONObject == null) {
-            String s = PersistenceManager.read(ctx);
-            if(s.equals("")) {
-                curJSONObject = new JSONObject();
-            } else {
-                curJSONObject = new JSONObject(s);
+    public JSONManager(Context ctx) {
+        persistenceManager = new PersistenceManager(ctx);
+
+        String s = persistenceManager.read();
+        if(s.equals("")) {
+            jsonObject = new JSONObject();
+        } else {
+            try {
+                jsonObject = new JSONObject(s);
+            } catch(JSONException e) {
+                Log.e(Constants.LOG_TAG, "Failed to construct JSONObject");
+                throw new RuntimeException("Failed to construct JSONObject");
             }
         }
-
-        return curJSONObject;
     }
 
-    public static boolean addSymbol(Context ctx, String symbol) {
+    public boolean addSymbol(String symbol) {
         try {
-            JSONObject jsonObject = getRoot(ctx);
-
             // Add symbol.
             jsonObject.put(symbol, new JSONObject());
 
             // Update file.
-            return  PersistenceManager.write(ctx, jsonObject.toString());
+            return  persistenceManager.write(jsonObject.toString());
         } catch(JSONException e) {
             Log.e(Constants.LOG_TAG, "Failed to add symbol to JSON object.");
             return false;
         }
     }
 
-    public static boolean removeSymbol(Context ctx, String symbol) {
-        try {
-            JSONObject jsonObject = getRoot(ctx);
+    public boolean removeSymbol(String symbol) {
+        // Add symbol.
+        jsonObject.remove(symbol);
 
-            // Add symbol.
-            jsonObject.remove(symbol);
-
-            // Update file.
-            return  PersistenceManager.write(ctx, jsonObject.toString());
-        } catch(JSONException e) {
-            Log.e(Constants.LOG_TAG, "Failed to add symbol to JSON object.");
-            return false;
-        }
+        // Update file.
+        return  persistenceManager.write(jsonObject.toString());
     }
 
-    public static boolean addSymbolData(Context ctx, SymbolProfile profile) {
+    public boolean addSymbolData(SymbolProfile profile) {
         JSONObject symbolJson;
         try {
-            symbolJson = getRoot(ctx).getJSONObject(profile.symbol);
+            symbolJson = jsonObject.getJSONObject(profile.symbol);
         } catch(JSONException e) {
             Log.e(Constants.LOG_TAG, "Failed to get json object");
             return false;
@@ -86,18 +81,16 @@ public class JSONManager {
             }
         }
 
-        if(!PersistenceManager.write(ctx, curJSONObject.toString())) {
+        if(!persistenceManager.write(jsonObject.toString())) {
             status = false;
         }
 
         return status;
     }
 
-    public static List<SymbolProfile> getSymbols(Context ctx) {
+    public List<SymbolProfile> getSymbols() {
         List<SymbolProfile> profiles = new ArrayList<SymbolProfile>();
         try {
-            JSONObject jsonObject = getRoot(ctx);
-
             // Populate list.
             Iterator iter = jsonObject.keys();
             while(iter.hasNext()) {
@@ -118,7 +111,7 @@ public class JSONManager {
         }
     }
 
-    private static SymbolProfile getSymbolProfile(String symbol, JSONObject symbolJson) throws JSONException {
+    private SymbolProfile getSymbolProfile(String symbol, JSONObject symbolJson) throws JSONException {
         SymbolProfile symbolProfile = new SymbolProfile(symbol);
 
         Iterator subIter = symbolJson.keys();
@@ -138,5 +131,9 @@ public class JSONManager {
         }
 
         return symbolProfile;
+    }
+
+    public void forceDelete() {
+        persistenceManager.forceDelete();
     }
 }

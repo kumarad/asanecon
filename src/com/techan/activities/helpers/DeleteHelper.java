@@ -8,7 +8,7 @@ import android.net.Uri;
 
 import com.techan.activities.StockHomeActivity;
 import com.techan.custom.Util;
-import com.techan.profile.JSONManager;
+import com.techan.profile.ProfileManager;
 
 public class DeleteHelper {
     public static void createDialog(final Activity parentActivity, final Uri stockUri, final String symbol) {
@@ -38,7 +38,7 @@ public class DeleteHelper {
     private static void deleteStock(Activity parentActivity, Uri stockUri, String symbol) {
         parentActivity.getContentResolver().delete(stockUri, null, null);
 
-        if(!JSONManager.removeSymbol(parentActivity.getApplicationContext(), symbol)) {
+        if(!ProfileManager.removeSymbol(parentActivity.getApplicationContext(), symbol)) {
             Util.showErrorToast(parentActivity, "Oops. Something on your device prevented profile data from being updated.");
         }
 

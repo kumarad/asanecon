@@ -12,12 +12,12 @@ import android.widget.EditText;
 import com.techan.R;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
-import com.techan.profile.JSONManager;
 import com.techan.database.StocksTable;
+import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.DownloadNewSymbolTask;
 
-import java.util.List;
+import java.util.Collection;
 
 public class StockAddActivity extends Activity {
 
@@ -55,22 +55,6 @@ public class StockAddActivity extends Activity {
         });
     }
 
-
-    // Called when the activity is no longer the primary activity. Android can
-    // kill this activity if running low on memory. So should persist any data
-    // that shouldn't be lost at this point.
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        addSymbol();
-//    }
-
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//    }
-
-
     // Called before the activity is put in a background state. Save stuff in the bundle.
     // When the activity comes back to the foreground it is passed to onCreate to help recreate
     // the state of the activity.
@@ -107,14 +91,16 @@ public class StockAddActivity extends Activity {
         Uri uri = Uri.parse(StockContentProvider.BASE_URI_STR + addedUri);
         (new DownloadNewSymbolTask(this.getContentResolver(), uri, symbol)).execute();
 
-        if(!JSONManager.addSymbol(this.getApplicationContext(), symbol)) {
+        if(!ProfileManager.addSymbol(this.getApplicationContext(), symbol)) {
             // Failure adding symbol to persistent file. Let user know.
             Util.showErrorToast(this, "Oops. Something on your device prevented profile from being updated.");
         }
+
+        testJSONManager(symbol);
     }
 
     private void testJSONManager(String symbol) {
-        SymbolProfile symProfile = new SymbolProfile(symbol);
+        SymbolProfile symProfile = ProfileManager.getSymbolData(symbol);
         if(symbol.equals("IBM")) {
             symProfile.stopLossPercent = 25;
         } else if(symbol.equals("MSFT")) {
@@ -122,10 +108,8 @@ public class StockAddActivity extends Activity {
             symProfile.stopLossPivot = 400.12;
         }
 
-        JSONManager.addSymbolData(this.getApplicationContext(), symProfile);
+        ProfileManager.addSymbolData(symProfile);
 
-        List<SymbolProfile> profiles = JSONManager.getSymbols(this.getApplicationContext());
-
-        profiles.clear();
+        Collection<SymbolProfile> profiles = ProfileManager.getSymbols(this.getApplicationContext());
     }
 }

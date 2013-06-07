@@ -7,12 +7,12 @@ import java.io.*;
 
 public class PersistenceManager {
 
-    public static final String FILE_NAME = "techan_profile";
-    public static int fileSize = 0;
-    public static boolean initialized = false;
+    private static final String FILE_NAME = "techan_profile";
+    private int fileSize = 0;
+    private Context ctx;
 
-    private static boolean initialize(Context ctx) {
-        initialized = false;
+    public PersistenceManager(Context ctx) {
+        this.ctx = ctx;
         try {
             // Will throw FileNotFoundException if file hasn't been created yet.
             // First time app starts we won't find the file.
@@ -25,13 +25,11 @@ public class PersistenceManager {
                 throw new RuntimeException("Should never happen.");
             }
             fileSize = (int)fileSizeLong;
-            initialized = true;
         } catch( FileNotFoundException e1) {
             // File hasn't been created yet. Create it. First time this app is running on this device.
             try {
                 FileOutputStream fos = ctx.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
                 fos.close();
-                initialized = true;
             } catch(FileNotFoundException e2) {
                 Log.e(Constants.LOG_TAG, "Failed to create techan_profile.");
             } catch(IOException e2) {
@@ -40,19 +38,13 @@ public class PersistenceManager {
         } catch( IOException e1) {
             Log.e(Constants.LOG_TAG, "Failed to close file after opening it to check for its existence.");
         }
-
-        return initialized;
     }
 
-    public static void forceDelete(Context ctx) {
+    public void forceDelete() {
         ctx.deleteFile(FILE_NAME);
     }
 
-    public static boolean write(Context ctx, String s) {
-        if(!initialized) {
-            if(!initialize(ctx)) return false;
-        }
-
+    public boolean write(String s) {
         try {
             FileOutputStream fos = ctx.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
             // Get number of bytes being written to file. Always overwrites file!
@@ -72,11 +64,7 @@ public class PersistenceManager {
         }
     }
 
-    public static String read(Context ctx) {
-        if(!initialized) {
-            if(!initialize(ctx)) return null;
-        }
-
+    public String read() {
         if(fileSize == 0) {
             // Nothing in file. Just return empty string.
             return "";
