@@ -15,7 +15,7 @@ public class JSONManager {
 
     private static JSONObject getRoot(Context ctx) throws JSONException {
         if(curJSONObject == null) {
-            String s = ProfileManager.read(ctx);
+            String s = PersistenceManager.read(ctx);
             if(s.equals("")) {
                 curJSONObject = new JSONObject();
             } else {
@@ -34,7 +34,7 @@ public class JSONManager {
             jsonObject.put(symbol, new JSONObject());
 
             // Update file.
-            return  ProfileManager.write(ctx, jsonObject.toString());
+            return  PersistenceManager.write(ctx, jsonObject.toString());
         } catch(JSONException e) {
             Log.e(Constants.LOG_TAG, "Failed to add symbol to JSON object.");
             return false;
@@ -49,7 +49,7 @@ public class JSONManager {
             jsonObject.remove(symbol);
 
             // Update file.
-            return  ProfileManager.write(ctx, jsonObject.toString());
+            return  PersistenceManager.write(ctx, jsonObject.toString());
         } catch(JSONException e) {
             Log.e(Constants.LOG_TAG, "Failed to add symbol to JSON object.");
             return false;
@@ -86,7 +86,7 @@ public class JSONManager {
             }
         }
 
-        if(!ProfileManager.write(ctx, curJSONObject.toString())) {
+        if(!PersistenceManager.write(ctx, curJSONObject.toString())) {
             status = false;
         }
 

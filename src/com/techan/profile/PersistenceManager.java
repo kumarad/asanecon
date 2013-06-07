@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.io.*;
 
-public class ProfileManager {
+public class PersistenceManager {
 
     public static final String FILE_NAME = "techan_profile";
     public static int fileSize = 0;
