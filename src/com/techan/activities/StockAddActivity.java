@@ -96,7 +96,7 @@ public class StockAddActivity extends Activity {
             Util.showErrorToast(this, "Oops. Something on your device prevented profile from being updated.");
         }
 
-        testJSONManager(symbol);
+        //testJSONManager(symbol);
     }
 
     private void testJSONManager(String symbol) {
