@@ -1,4 +1,4 @@
-package com.techan.activities.helpers;
+package com.techan.activities.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,8 +20,8 @@ import com.techan.stockDownload.DownloadNewSymbolTask;
 
 import java.util.Collection;
 
-public class AddHelper {
-    public static void createDialog(final Activity parentActivity) {
+public class AddDialog {
+    public static void create(final Activity parentActivity) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
         alertDialog.setTitle("Add stock");
 

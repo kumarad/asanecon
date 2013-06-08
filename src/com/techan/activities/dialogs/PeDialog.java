@@ -1,4 +1,4 @@
-package com.techan.activities.helpers;
+package com.techan.activities.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,7 +11,7 @@ import android.widget.Switch;
 
 import com.techan.R;
 
-public class PeHelper {
+public class PeDialog {
     public static class SwitchCheckListener implements CompoundButton.OnCheckedChangeListener {
         private EditText editText;
         public SwitchCheckListener(EditText editText) {
@@ -30,9 +30,9 @@ public class PeHelper {
         }
     }
 
-    public static void createDialog(Activity parentActivity) {
+    public static void create(Activity parentActivity) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
-        alertDialog.setTitle("Set target PE value for stock");
+        alertDialog.setTitle("Target PE value for stock");
 
         // Get layout inflater
         LayoutInflater inflater = parentActivity.getLayoutInflater();

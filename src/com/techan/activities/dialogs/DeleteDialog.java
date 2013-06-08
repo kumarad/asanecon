@@ -1,4 +1,4 @@
-package com.techan.activities.helpers;
+package com.techan.activities.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,8 +10,8 @@ import com.techan.activities.StockHomeActivity;
 import com.techan.custom.Util;
 import com.techan.profile.ProfileManager;
 
-public class DeleteHelper {
-    public static void createDialog(final Activity parentActivity, final Uri stockUri, final String symbol) {
+public class DeleteDialog {
+    public static void create(final Activity parentActivity, final Uri stockUri, final String symbol) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
         alertDialog.setTitle("Deleting stock from profile");
         alertDialog.setMessage("Click yes to confirm");

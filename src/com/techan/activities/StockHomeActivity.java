@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import com.techan.R;
-import com.techan.activities.helpers.AddHelper;
+import com.techan.activities.dialogs.AddDialog;
 import com.techan.custom.StockCursorAdapter;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
@@ -117,7 +117,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.insert:
-                AddHelper.createDialog(this);
+                AddDialog.create(this);
 //                insertStock();
                 return true;
             case R.id.refresh:

@@ -51,7 +51,7 @@
                 android:layout_weight=".6"
                 android:layout_height="fill_parent"
                 android:inputType="numberDecimal"
-                android:hint="Optional"
+                android:hint="optional"
                 />
     </LinearLayout>
 
@@ -59,8 +59,8 @@
             android:layout_width="fill_parent"
             android:layout_height="50sp"
             android:weightSum="1.0"
-            android:gravity="center_vertical"
             android:layout_below="@id/buy_price_row"
+            android:id="@+id/share_count_row"
             >
 
         <TextView
@@ -68,6 +68,7 @@
                 android:layout_width="0dp"
                 android:layout_weight=".4"
                 android:layout_height="fill_parent"
+                android:gravity="center_vertical"
                 android:text="Shares:"
                 />
 
@@ -77,9 +78,16 @@
                 android:layout_weight=".6"
                 android:layout_height="fill_parent"
                 android:inputType="number"
-                android:hint="Optional"
+                android:hint="optional"
                 />
     </LinearLayout>
+
+    <TextView
+            android:id="@+id/add_divider3"
+            android:layout_width="fill_parent"
+            android:layout_height="10dip"
+            android:layout_below="@id/share_count_row"
+            />
 
 
     <!--<Button-->

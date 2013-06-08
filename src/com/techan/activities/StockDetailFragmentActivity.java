@@ -1,8 +1,5 @@
 package com.techan.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -10,24 +7,17 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.NumberPicker;
-import android.widget.Switch;
 import android.widget.TextView;
 import com.techan.R;
-import com.techan.activities.helpers.DeleteHelper;
-import com.techan.activities.helpers.PeHelper;
-import com.techan.activities.helpers.StopLossHelper;
+import com.techan.activities.dialogs.DeleteDialog;
+import com.techan.activities.dialogs.PeDialog;
+import com.techan.activities.dialogs.StopLossDialog;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
-import com.techan.profile.JSONManager;
 
 public class StockDetailFragmentActivity extends FragmentActivity {
     private Uri stockUri;
@@ -120,13 +110,13 @@ public class StockDetailFragmentActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete:
-                DeleteHelper.createDialog(this, stockUri, symbol);
+                DeleteDialog.create(this, stockUri, symbol);
                 return true;
             case R.id.set_pe_target:
-                PeHelper.createDialog(this);
+                PeDialog.create(this);
                 return true;
             case R.id.set_stop_loss:
-                StopLossHelper.createDialog(this);
+                StopLossDialog.create(this);
                 return true;
         }
 

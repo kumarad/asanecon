@@ -5,10 +5,17 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <Switch android:id="@+id/switch_sl_notify"
+            android:text="Stop Loss Notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dip" />
+
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="150sp"
             android:weightSum="1.0"
+            android:layout_below="@id/switch_sl_notify"
             android:id="@+id/edit_stop_loss_percent"
             >
 
@@ -42,11 +49,12 @@
                 android:layout_width="0dp"
                 android:layout_weight=".5"
                 android:layout_height="fill_parent"
+                android:gravity="center_vertical"
                 android:text="Buy Price:"
                 />
 
-        <TextView
-                android:id="@+id/edit_price"
+        <EditText
+                android:id="@+id/edit_buy_price"
                 android:layout_width="0dp"
                 android:layout_weight=".5"
                 android:layout_height="fill_parent"
