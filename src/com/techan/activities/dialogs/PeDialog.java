@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Switch;
 
 import com.techan.R;
+import com.techan.profile.ProfileManager;
+import com.techan.profile.SymbolProfile;
 
 public class PeDialog {
     public static class SwitchCheckListener implements CompoundButton.OnCheckedChangeListener {
@@ -30,7 +32,7 @@ public class PeDialog {
         }
     }
 
-    public static void create(Activity parentActivity) {
+    public static void create(Activity parentActivity, String symbol) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
         alertDialog.setTitle("Target PE value for stock");
 
@@ -38,25 +40,33 @@ public class PeDialog {
         LayoutInflater inflater = parentActivity.getLayoutInflater();
         View view = inflater.inflate(R.layout.set_pe_target, null);
 
-        // Handle edit text view.
-        EditText editText = ((EditText)view.findViewById(R.id.edit_pe_target));
-        //todo
-        editText.setText(Double.toString(4.5));
-        editText.setSelection(editText.length());
+        final SymbolProfile profile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), symbol);
 
         // Handle switch.
-        Switch s = (Switch) view.findViewById(R.id.switch_pe_notify);
-        s.setChecked(true);
+        final Switch s = (Switch) view.findViewById(R.id.switch_pe_notify);
+
+        // Handle edit text view.
+        final EditText editText = ((EditText)view.findViewById(R.id.edit_pe_target));
+        if(profile.peTarget != null) {
+            editText.setText(Double.toString(profile.peTarget));
+            s.setChecked(true);
+        } else {
+            SymbolProfile globalProfile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), ProfileManager.GLOBAL_ASANECON);
+            editText.setText(Double.toString(globalProfile.peTarget));
+            s.setChecked(false);
+            editText.setEnabled(false);
+        }
+        editText.setSelection(editText.length());
+
         SwitchCheckListener listener = new SwitchCheckListener(editText);
         s.setOnCheckedChangeListener(listener);
-
 
         //Pass null as parent view because its a dialog.
         alertDialog.setView(view)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        //TODO
+                        doAdd(profile, editText, s);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -68,6 +78,16 @@ public class PeDialog {
 
 
         alertDialog.create().show();
-
     }
+
+    private static void doAdd(SymbolProfile profile, EditText editText, Switch s) {
+        if(s.isChecked()) {
+            profile.peTarget = Double.parseDouble(editText.getText().toString());
+        } else {
+            profile.peTarget = null;
+        }
+
+        ProfileManager.addSymbolData(profile);
+    }
+
 }

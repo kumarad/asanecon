@@ -52,13 +52,7 @@ public class JSONManager {
     }
 
     public boolean addSymbolData(SymbolProfile profile) {
-        JSONObject symbolJson;
-        try {
-            symbolJson = jsonObject.getJSONObject(profile.symbol);
-        } catch(JSONException e) {
-            Log.e(Constants.LOG_TAG, "Failed to get json object");
-            return false;
-        }
+        JSONObject symbolJson = new JSONObject();
 
         boolean status = true;
         for(Field f : SymbolProfile.class.getFields()) {
@@ -80,6 +74,14 @@ public class JSONManager {
                 }
             }
         }
+
+        try {
+            jsonObject.put(profile.symbol, symbolJson);
+        } catch(JSONException e) {
+            Log.e(Constants.LOG_TAG, "Failed to update json object");
+            return false;
+        }
+
 
         if(!persistenceManager.write(jsonObject.toString())) {
             status = false;
@@ -119,7 +121,12 @@ public class JSONManager {
             String key = (String)subIter.next();
             try {
                 Field f = SymbolProfile.class.getField(SymbolProfile.annotationFieldNameMap.get(key));
-                Object val = symbolJson.get(key);
+                Object val;
+                if(f.getType() == Double.class) {
+                    val = symbolJson.getDouble(key);
+                } else {
+                    val = symbolJson.get(key);
+                }
                 f.set(symbolProfile, val);
             } catch(NoSuchFieldException e) {
                 // Bad. Should never happen.
@@ -127,6 +134,8 @@ public class JSONManager {
             } catch(IllegalAccessException e) {
                 // Bad. Should never happen.
                 throw new RuntimeException("JSON corrupted.");
+            } catch(IllegalArgumentException e) {
+                throw new RuntimeException(key);
             }
         }
 

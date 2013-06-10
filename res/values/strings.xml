@@ -6,4 +6,5 @@
     <string name="stock_add_button">Add</string>
     <string name="pe_target">PE Target</string>
     <string name="stop_loss">Stop Loss</string>
+    <string name="buy_price">Buy Price</string>
 </resources>

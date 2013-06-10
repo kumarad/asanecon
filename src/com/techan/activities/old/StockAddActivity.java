@@ -100,12 +100,12 @@ public class StockAddActivity extends Activity {
     }
 
     private void testJSONManager(String symbol) {
-        SymbolProfile symProfile = ProfileManager.getSymbolData(symbol);
+        SymbolProfile symProfile = ProfileManager.getSymbolData(this.getApplicationContext(), symbol);
         if(symbol.equals("IBM")) {
             symProfile.stopLossPercent = 25;
         } else if(symbol.equals("MSFT")) {
             symProfile.stopLossPercent = 10;
-            symProfile.stopLossPivot = 400.12;
+            symProfile.buyPrice = 400.12;
         }
 
         ProfileManager.addSymbolData(symProfile);

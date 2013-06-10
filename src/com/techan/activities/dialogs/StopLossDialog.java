@@ -6,56 +6,85 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.techan.R;
+import com.techan.profile.ProfileManager;
+import com.techan.profile.SymbolProfile;
 
 public class StopLossDialog {
     public static class SwitchCheckListener implements CompoundButton.OnCheckedChangeListener {
         private NumberPicker np;
-        private EditText editText;
-        public SwitchCheckListener(NumberPicker np, EditText editText) {
+        public SwitchCheckListener(NumberPicker np) {
             this.np = np;
-            this.editText = editText;
         }
 
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
             if(isChecked) {
                 // The toggle is enabled.
-                editText.setEnabled(true);
                 np.setEnabled(true);
             } else {
                 // The toggle is disabled.
-                editText.setEnabled(false);
                 np.setEnabled(false);
             }
         }
     }
 
-    public static void create(Activity parentActivity) {
+    public static void createError(AlertDialog.Builder alertDialog) {
+        // Need buyPrice to set stop loss.
+        alertDialog.setTitle("Set buy price first.");
+        alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                //Nada.
+            }
+        });
+
+        alertDialog.create().show();
+    }
+
+    public static void create(Activity parentActivity, String symbol) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
+
+        final SymbolProfile profile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), symbol);
+        if(profile.buyPrice == null) {
+            createError(alertDialog);
+            return;
+        }
+
         alertDialog.setTitle("Trailing stop loss");
 
         // Get layout inflater
         LayoutInflater inflater = parentActivity.getLayoutInflater();
         View view = inflater.inflate(R.layout.set_stop_loss, null);
 
-
-        NumberPicker np = ((NumberPicker)view.findViewById(R.id.stop_loss_np));
+        final NumberPicker np = ((NumberPicker)view.findViewById(R.id.stop_loss_np));
         np.setMaxValue(100);
         np.setMinValue(0);
-        //todo
-        np.setValue(25);
 
-        EditText editText = (EditText)view.findViewById(R.id.edit_buy_price);
+        if(profile.stopLossPercent != null) {
+            np.setValue(profile.stopLossPercent);
+        } else {
+            SymbolProfile globalProfile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), ProfileManager.GLOBAL_ASANECON);
+            np.setValue(globalProfile.stopLossPercent);
+        }
 
+        TextView buyPriceTextView = (TextView)view.findViewById(R.id.show_buy_price);
+        buyPriceTextView.setText(Double.toString(profile.buyPrice));
 
-        Switch s = (Switch) view.findViewById(R.id.switch_sl_notify);
-        s.setChecked(true);
-        SwitchCheckListener listener = new SwitchCheckListener(np, editText);
+        final Switch s = (Switch) view.findViewById(R.id.switch_sl_notify);
+
+        if(profile.stopLossPercent != null) {
+            s.setChecked(true);
+        } else {
+            s.setChecked(false);
+            np.setEnabled(false);
+        }
+
+        SwitchCheckListener listener = new SwitchCheckListener(np);
         s.setOnCheckedChangeListener(listener);
 
         //Pass null as parent view because its a dialog.
@@ -63,7 +92,7 @@ public class StopLossDialog {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        //TODO
+                        doAdd(profile, np, s);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -75,6 +104,16 @@ public class StopLossDialog {
 
 
         alertDialog.create().show();
+    }
+
+    private static void doAdd(SymbolProfile profile, NumberPicker np, Switch s) {
+        if(s.isChecked()) {
+            profile.stopLossPercent = np.getValue();
+        } else {
+            profile.stopLossPercent = null;
+        }
+
+        ProfileManager.addSymbolData(profile);
     }
 
 }

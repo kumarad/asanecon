@@ -9,6 +9,13 @@
     </item>
 
     <item
+            android:id="@+id/set_buy_price"
+            android:showAsAction="collapseActionView"
+            android:title="@string/buy_price"
+            >
+    </item>
+
+    <item
             android:id="@+id/set_pe_target"
             android:showAsAction="collapseActionView"
             android:title="@string/pe_target"

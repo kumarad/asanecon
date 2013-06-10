@@ -25,7 +25,8 @@
 
         <activity
                 android:name=".activities.StockDetailFragmentActivity"
-                android:windowSoftInputMode="stateVisible|adjustResize" >
+                android:windowSoftInputMode="stateVisible|adjustResize"
+                android:parentActivityName=".activities.StockHomeActivity">
         </activity>
 
         <!--<activity-->

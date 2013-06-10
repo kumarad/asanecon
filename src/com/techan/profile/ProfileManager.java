@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileManager {
+    public static final String GLOBAL_ASANECON = "GLOBAL_ASANECON";
+
     private static Map<String, SymbolProfile> profiles;
     private static JSONManager jsonManager = null;
 
@@ -18,6 +20,18 @@ public class ProfileManager {
             for(SymbolProfile profile : jsonManager.getSymbols()) {
                 profiles.put(profile.symbol, profile);
             }
+
+            if(profiles.get(GLOBAL_ASANECON) == null) {
+                // Add global settings.
+                addSymbol(ctx, GLOBAL_ASANECON);
+
+                SymbolProfile prof = getSymbolDataInternal(GLOBAL_ASANECON);
+                prof.stopLossPercent = SymbolProfile.GLOBAL_STOP_LOSS_PERCENT;
+                prof.peTarget = SymbolProfile.GLOBAL_PE_TARGET;
+
+                addSymbolData(prof);
+            }
+
         }
     }
 
@@ -50,11 +64,20 @@ public class ProfileManager {
         return jsonManager.addSymbolData(symbolProfile);
     }
 
-    public static SymbolProfile getSymbolData(String symbol) {
+    public static SymbolProfile getSymbolData(Context ctx, String symbol) {
+        initialize(ctx);
+
+        return getSymbolDataInternal(symbol);
+    }
+
+    private static SymbolProfile getSymbolDataInternal(String symbol) {
         return profiles.get(symbol);
     }
 
-    public static void forceDelete() {
+
+    public static void forceDelete(Context ctx) {
+        initialize(ctx);
+
         jsonManager.forceDelete();
     }
 }

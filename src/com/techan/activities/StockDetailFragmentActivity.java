@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
 import com.techan.R;
+import com.techan.activities.dialogs.BuyDialog;
 import com.techan.activities.dialogs.DeleteDialog;
 import com.techan.activities.dialogs.PeDialog;
 import com.techan.activities.dialogs.StopLossDialog;
@@ -59,6 +61,8 @@ public class StockDetailFragmentActivity extends FragmentActivity {
 
         PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.stock_pager_title_strip);
         pagerTabStrip.setTabIndicatorColor(Color.parseColor("#33b5e5"));
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     void populateGeneralView() {
@@ -112,11 +116,17 @@ public class StockDetailFragmentActivity extends FragmentActivity {
             case R.id.delete:
                 DeleteDialog.create(this, stockUri, symbol);
                 return true;
+            case R.id.set_buy_price:
+                BuyDialog.create(this,symbol);
+                return true;
             case R.id.set_pe_target:
-                PeDialog.create(this);
+                PeDialog.create(this, symbol);
                 return true;
             case R.id.set_stop_loss:
-                StopLossDialog.create(this);
+                StopLossDialog.create(this, symbol);
+                return true;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
                 return true;
         }
 

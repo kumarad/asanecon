@@ -49,12 +49,11 @@
                 android:layout_width="0dp"
                 android:layout_weight=".5"
                 android:layout_height="fill_parent"
-                android:gravity="center_vertical"
                 android:text="Buy Price:"
                 />
 
-        <EditText
-                android:id="@+id/edit_buy_price"
+        <TextView
+                android:id="@+id/show_buy_price"
                 android:layout_width="0dp"
                 android:layout_weight=".5"
                 android:layout_height="fill_parent"

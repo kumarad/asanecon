@@ -54,6 +54,8 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         // Registers a context menu to be shown for the given view.
         // getListView() gets the activity's list view widget.
         registerForContextMenu(getListView());
+
+//        ProfileManager.forceDelete(getApplicationContext());
     }
 
     private void fillData() {
