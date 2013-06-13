@@ -7,4 +7,6 @@
     <string name="pe_target">PE Target</string>
     <string name="stop_loss">Stop Loss</string>
     <string name="buy_price">Buy Price</string>
+    <string name="pe_notifications">PE Notifications</string>
+    <string name="target">Target</string>
 </resources>

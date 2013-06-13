@@ -120,19 +120,21 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         switch (item.getItemId()) {
             case R.id.insert:
                 AddDialog.create(this);
-//                insertStock();
                 return true;
             case R.id.refresh:
                 (new RefreshAllTask(this.getContentResolver())).download();
+                return true;
+            case R.id.settings:
+                settings();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-//    private void insertStock() {
-//        Intent i = new Intent(this, StockAddActivity.class);
-//        startActivityForResult(i, ACTIVITY_CREATE);
-//    }
+    private void settings() {
+        Intent i = new Intent(this, SettingsActivity.class);
+        startActivityForResult(i, ACTIVITY_CREATE);
+    }
 
     /////////////////////////////////////////////////////////////////////
     // List Item Click Response
