@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.techan.R;
 import com.techan.activities.SettingsActivity;
@@ -39,22 +40,30 @@ public class PeDialog {
         // Get global notification preference
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(parentActivity);
         boolean globalNotifications = sharedPref.getBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, true);
+        boolean globalPeNotification = sharedPref.getBoolean(SettingsActivity.PE_ENABLED_KEY, false);
+        double globalPeTarget = Double.parseDouble(sharedPref.getString(SettingsActivity.PE_TARGET_KEY, null));
+
+        final TextView warningText = (TextView)view.findViewById(R.id.pe_warning);
 
         // Handle switch.
         final Switch s = (Switch) view.findViewById(R.id.switch_pe_notify);
         if(globalNotifications && profile.peTarget != null) {
             // Global notifications are enabled and peTarget in profile is not null so its set to true.
             s.setChecked(true);
+            warningText.setVisibility(View.GONE);
+        } else if(globalNotifications && globalPeNotification) {
+            warningText.setText("Global PE Target set to: " + globalPeTarget);
         } else {
             s.setChecked(false);
             editText.setEnabled(false);
+            warningText.setVisibility(View.GONE);
         }
 
         // Set cursor to end of text.
         editText.setSelection(editText.length());
 
         // Create listener for switch changes.
-        SwitchCheckListener listener = new SwitchCheckListener(editText, globalNotifications, sharedPref.edit());
+        SwitchCheckListener listener = new SwitchCheckListener(editText, globalNotifications, sharedPref.edit(), warningText, globalPeNotification);
         s.setOnCheckedChangeListener(listener);
 
         // Create dialog.
