@@ -38,7 +38,7 @@ public class SwitchCheckListener implements CompoundButton.OnCheckedChangeListen
 
     protected void handleWarning(boolean checked) {
         if(warningView == null) return;
-        
+
         if(globalNotifications && childNotifications) {
             if(!checked)
                 warningView.setVisibility(View.VISIBLE);
