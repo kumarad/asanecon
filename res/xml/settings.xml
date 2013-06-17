@@ -2,15 +2,44 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-            android:title="Global Notifications">
+        android:title="General Settings">
+
+        <SwitchPreference
+                android:key="autoRefresh"
+                android:title="Auto Refresh"
+                android:defaultValue="false"
+                />
+
+        <ListPreference
+                android:key="refreshInterval"
+                android:title="Refresh Interval"
+                android:summary="Define how often updates will be performed in hours"
+                android:defaultValue="1"
+                android:entries="@array/refreshInterval"
+                android:entryValues="@array/refreshIntervalValues"
+                android:dependency="autoRefresh"
+                />
+
+        </PreferenceCategory>se
+
+    <PreferenceCategory
+            android:title="Notifications">
+
+        <SwitchPreference
+            android:key="allNotifications"
+            android:title="All Notifications"
+            android:defaultValue="false"
+            />
 
         <SwitchPreference
             android:key="peEnabled"
             android:title="PE Notifications"
+            android:defaultValue="false"
             />
 
         <EditTextPreference android:title="PE Target"
                             android:key="peTarget"
+                            android:defaultValue = "10"
                             android:dialogTitle="Enter PE Target"
                             android:inputType="numberDecimal"
                             />

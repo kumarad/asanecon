@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -56,6 +57,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         registerForContextMenu(getListView());
 
 //        ProfileManager.forceDelete(getApplicationContext());
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
     }
 
     private void fillData() {

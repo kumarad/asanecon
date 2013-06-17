@@ -3,35 +3,20 @@ package com.techan.activities.dialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 
 import com.techan.R;
+import com.techan.activities.SettingsActivity;
+import com.techan.custom.SwitchCheckListener;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 
 public class PeDialog {
-    public static class SwitchCheckListener implements CompoundButton.OnCheckedChangeListener {
-        private EditText editText;
-        public SwitchCheckListener(EditText editText) {
-            this.editText = editText;
-        }
-
-        @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-            if(isChecked) {
-                // The toggle is enabled.
-                editText.setEnabled(true);
-            } else {
-                // The toggle is disabled.
-                editText.setEnabled(false);
-            }
-        }
-    }
-
     public static void create(Activity parentActivity, String symbol) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
         alertDialog.setTitle("Target PE value for stock");
@@ -42,25 +27,37 @@ public class PeDialog {
 
         final SymbolProfile profile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), symbol);
 
-        // Handle switch.
-        final Switch s = (Switch) view.findViewById(R.id.switch_pe_notify);
-
         // Handle edit text view.
         final EditText editText = ((EditText)view.findViewById(R.id.edit_pe_target));
         if(profile.peTarget != null) {
             editText.setText(Double.toString(profile.peTarget));
-            s.setChecked(true);
         } else {
             SymbolProfile globalProfile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), ProfileManager.GLOBAL_ASANECON);
             editText.setText(Double.toString(globalProfile.peTarget));
+        }
+
+        // Get global notification preference
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(parentActivity);
+        boolean globalNotifications = sharedPref.getBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, true);
+
+        // Handle switch.
+        final Switch s = (Switch) view.findViewById(R.id.switch_pe_notify);
+        if(globalNotifications && profile.peTarget != null) {
+            // Global notifications are enabled and peTarget in profile is not null so its set to true.
+            s.setChecked(true);
+        } else {
             s.setChecked(false);
             editText.setEnabled(false);
         }
+
+        // Set cursor to end of text.
         editText.setSelection(editText.length());
 
-        SwitchCheckListener listener = new SwitchCheckListener(editText);
+        // Create listener for switch changes.
+        SwitchCheckListener listener = new SwitchCheckListener(editText, globalNotifications, sharedPref.edit());
         s.setOnCheckedChangeListener(listener);
 
+        // Create dialog.
         //Pass null as parent view because its a dialog.
         alertDialog.setView(view)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
@@ -75,7 +72,6 @@ public class PeDialog {
                         //Ignore
                     }
                 });
-
 
         alertDialog.create().show();
     }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="refreshInterval">
+        <item>1 hr</item>
+        <item>6 hrs</item>
+        <item>12 hrs</item>
+        <item>24 hrs</item>
+    </string-array>
+
+    <string-array name="refreshIntervalValues">
+        <item>1</item>
+        <item>6</item>
+        <item>12</item>
+        <item>24</item>
+    </string-array>
+
+</resources>

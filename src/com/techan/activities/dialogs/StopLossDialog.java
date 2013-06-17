@@ -3,6 +3,8 @@ package com.techan.activities.dialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -11,28 +13,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.techan.R;
+import com.techan.activities.SettingsActivity;
+import com.techan.custom.SwitchCheckListener;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 
 public class StopLossDialog {
-    public static class SwitchCheckListener implements CompoundButton.OnCheckedChangeListener {
-        private NumberPicker np;
-        public SwitchCheckListener(NumberPicker np) {
-            this.np = np;
-        }
-
-        @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-            if(isChecked) {
-                // The toggle is enabled.
-                np.setEnabled(true);
-            } else {
-                // The toggle is disabled.
-                np.setEnabled(false);
-            }
-        }
-    }
-
     public static void createError(AlertDialog.Builder alertDialog) {
         // Need buyPrice to set stop loss.
         alertDialog.setTitle("Set buy price first.");
@@ -48,6 +34,11 @@ public class StopLossDialog {
 
     public static void create(Activity parentActivity, String symbol) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
+        alertDialog.setTitle("Trailing stop loss");
+
+        // Get layout inflater
+        LayoutInflater inflater = parentActivity.getLayoutInflater();
+        View view = inflater.inflate(R.layout.set_stop_loss, null);
 
         final SymbolProfile profile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), symbol);
         if(profile.buyPrice == null) {
@@ -55,12 +46,7 @@ public class StopLossDialog {
             return;
         }
 
-        alertDialog.setTitle("Trailing stop loss");
-
-        // Get layout inflater
-        LayoutInflater inflater = parentActivity.getLayoutInflater();
-        View view = inflater.inflate(R.layout.set_stop_loss, null);
-
+        // Handle number picker.
         final NumberPicker np = ((NumberPicker)view.findViewById(R.id.stop_loss_np));
         np.setMaxValue(100);
         np.setMinValue(0);
@@ -72,19 +58,23 @@ public class StopLossDialog {
             np.setValue(globalProfile.stopLossPercent);
         }
 
+        // Handle price text.
         TextView buyPriceTextView = (TextView)view.findViewById(R.id.show_buy_price);
         buyPriceTextView.setText(Double.toString(profile.buyPrice));
 
-        final Switch s = (Switch) view.findViewById(R.id.switch_sl_notify);
+        // Get global notification preference
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(parentActivity);
+        boolean globalNotifications = sharedPref.getBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, true);
 
-        if(profile.stopLossPercent != null) {
+        final Switch s = (Switch) view.findViewById(R.id.switch_sl_notify);
+        if(globalNotifications && profile.stopLossPercent != null) {
             s.setChecked(true);
         } else {
             s.setChecked(false);
             np.setEnabled(false);
         }
 
-        SwitchCheckListener listener = new SwitchCheckListener(np);
+        SwitchCheckListener listener = new SwitchCheckListener(np, globalNotifications, sharedPref.edit());
         s.setOnCheckedChangeListener(listener);
 
         //Pass null as parent view because its a dialog.
