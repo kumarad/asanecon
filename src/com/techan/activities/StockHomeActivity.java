@@ -2,6 +2,8 @@ package com.techan.activities;
 
 import android.app.ListActivity;
 import android.app.LoaderManager;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -20,7 +22,11 @@ import com.techan.activities.dialogs.DeletePortfolioDialog;
 import com.techan.custom.StockCursorAdapter;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
+import com.techan.profile.ProfileManager;
+import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.RefreshAllTask;
+
+import java.util.Collection;
 
 /**
  * Cursor - access to the result of a database query.
@@ -50,6 +56,9 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         // sets the gap between each item in the list.
         this.getListView().setDividerHeight(2);
 
+        // Check to see if profile data needs to be loaded into db.
+        loadFromProfile();
+
         // Initialize a load manager and set up a cursor to display the summary for all the stocks.
         fillData();
 
@@ -59,6 +68,22 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
 
 //        ProfileManager.forceDelete(getApplicationContext());
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+    }
+
+    private void loadFromProfile() {
+        ContentResolver cr = this.getContentResolver();
+        String[] projection = {StocksTable.COLUMN_SYMBOL};
+        Cursor cursor = cr.query(StockContentProvider.CONTENT_URI, projection, null, null, null);
+        if(cursor.getCount() == 0) {
+            Collection<SymbolProfile> symbolProfiles = ProfileManager.getSymbols(getApplicationContext());
+            if(symbolProfiles.size() != 0) {
+                for(SymbolProfile symbolProfile : symbolProfiles) {
+                    ContentValues values = new ContentValues();
+                    values.put(StocksTable.COLUMN_SYMBOL, symbolProfile.symbol);
+                    cr.insert(StockContentProvider.CONTENT_URI, values);
+                }
+            }
+        }
     }
 
     private void fillData() {
