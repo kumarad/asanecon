@@ -17,6 +17,7 @@ public class SettingsActivity extends Activity {
     public static final String ALL_NOTIFICATIONS_KEY = "allNotifications";
     public static final String PE_ENABLED_KEY ="peEnabled";
     public static final String PE_TARGET_KEY = "peTarget";
+    public static final int STOP_LOSS_DEFAULT = 25;
 
     @Override
     protected void onCreate(Bundle bundle) {

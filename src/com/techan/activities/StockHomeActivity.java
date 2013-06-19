@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ListView;
 import com.techan.R;
 import com.techan.activities.dialogs.AddDialog;
+import com.techan.activities.dialogs.DeletePortfolioDialog;
 import com.techan.custom.StockCursorAdapter;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
@@ -128,6 +129,9 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
                 return true;
             case R.id.settings:
                 settings();
+                return true;
+            case R.id.deletePort:
+                DeletePortfolioDialog.create(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);

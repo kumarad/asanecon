@@ -88,4 +88,29 @@ public class PersistenceManager {
 
         return retStr;
     }
+
+    public boolean clear() {
+        if(fileSize == 0) {
+            return true;
+        }
+
+        try {
+            FileOutputStream fos = ctx.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+            byte[] bytes = "".getBytes();
+            // Update file size.
+            fileSize = 0;
+
+            // Write to file and close the stream.
+            fos.write(bytes);
+            fos.close();
+
+            return true;
+        } catch(IOException e) {
+            Log.e(Constants.LOG_TAG, "Failed to delete profile file.");
+            return false;
+        }
+
+
+
+    }
 }

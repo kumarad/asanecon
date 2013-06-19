@@ -145,4 +145,9 @@ public class JSONManager {
     public void forceDelete() {
         persistenceManager.forceDelete();
     }
+
+    public boolean deleteProfile() {
+        jsonObject = new JSONObject();
+        return persistenceManager.clear();
+    }
 }

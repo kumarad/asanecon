@@ -22,5 +22,12 @@
             >
     </item>
 
+    <item
+            android:id="@+id/deletePort"
+            android:showAsAction="collapseActionView"
+            android:title="Delete Portfolio"
+            >
+    </item>
+
 
 </menu> 

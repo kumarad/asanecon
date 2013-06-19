@@ -7,10 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileManager {
-    public static final String GLOBAL_ASANECON = "GLOBAL_ASANECON";
-    public static final Integer GLOBAL_STOP_LOSS_PERCENT = 25;
-    public static final Double GLOBAL_PE_TARGET = 10.0;
-
     public static final String STOP_LOSS_PERCENT = "STOP_LOSS_PERCENT";
     public static final String BUY_PRICE = "BUY_PRICE";
     public static final String STOCK_COUNT = "STOCK_COUNT";
@@ -27,17 +23,6 @@ public class ProfileManager {
             profiles = new HashMap<String, SymbolProfile>();
             for(SymbolProfile profile : jsonManager.getSymbols()) {
                 profiles.put(profile.symbol, profile);
-            }
-
-            if(profiles.get(GLOBAL_ASANECON) == null) {
-                // Add global settings.
-                addSymbol(ctx, GLOBAL_ASANECON);
-
-                SymbolProfile prof = getSymbolDataInternal(GLOBAL_ASANECON);
-                prof.stopLossPercent = GLOBAL_STOP_LOSS_PERCENT;
-                prof.peTarget = GLOBAL_PE_TARGET;
-
-                addSymbolData(prof);
             }
         }
     }
@@ -86,5 +71,12 @@ public class ProfileManager {
         initialize(ctx);
 
         jsonManager.forceDelete();
+    }
+
+    public static boolean deleteProfile(Context ctx) {
+        initialize(ctx);
+
+        profiles.clear();
+        return jsonManager.deleteProfile();
     }
 }

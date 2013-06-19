@@ -26,6 +26,12 @@ public class PeDialog {
         LayoutInflater inflater = parentActivity.getLayoutInflater();
         View view = inflater.inflate(R.layout.set_pe_target, null);
 
+        // Get global notification preference
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(parentActivity);
+        boolean globalNotifications = sharedPref.getBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, true);
+        boolean globalPeNotification = sharedPref.getBoolean(SettingsActivity.PE_ENABLED_KEY, false);
+        double globalPeTarget = Double.parseDouble(sharedPref.getString(SettingsActivity.PE_TARGET_KEY, null));
+
         final SymbolProfile profile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), symbol);
 
         // Handle edit text view.
@@ -33,15 +39,8 @@ public class PeDialog {
         if(profile.peTarget != null) {
             editText.setText(Double.toString(profile.peTarget));
         } else {
-            SymbolProfile globalProfile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), ProfileManager.GLOBAL_ASANECON);
-            editText.setText(Double.toString(globalProfile.peTarget));
+            editText.setText(Double.toString(globalPeTarget));
         }
-
-        // Get global notification preference
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(parentActivity);
-        boolean globalNotifications = sharedPref.getBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, true);
-        boolean globalPeNotification = sharedPref.getBoolean(SettingsActivity.PE_ENABLED_KEY, false);
-        double globalPeTarget = Double.parseDouble(sharedPref.getString(SettingsActivity.PE_TARGET_KEY, null));
 
         final TextView warningText = (TextView)view.findViewById(R.id.pe_warning);
 

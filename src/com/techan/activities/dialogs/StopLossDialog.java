@@ -40,6 +40,10 @@ public class StopLossDialog {
         LayoutInflater inflater = parentActivity.getLayoutInflater();
         View view = inflater.inflate(R.layout.set_stop_loss, null);
 
+        // Get global notification preference
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(parentActivity);
+        boolean globalNotifications = sharedPref.getBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, true);
+
         final SymbolProfile profile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), symbol);
         if(profile.buyPrice == null) {
             createError(alertDialog);
@@ -54,17 +58,12 @@ public class StopLossDialog {
         if(profile.stopLossPercent != null) {
             np.setValue(profile.stopLossPercent);
         } else {
-            SymbolProfile globalProfile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), ProfileManager.GLOBAL_ASANECON);
-            np.setValue(globalProfile.stopLossPercent);
+            np.setValue(SettingsActivity.STOP_LOSS_DEFAULT);
         }
 
         // Handle price text.
         TextView buyPriceTextView = (TextView)view.findViewById(R.id.show_buy_price);
         buyPriceTextView.setText(Double.toString(profile.buyPrice));
-
-        // Get global notification preference
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(parentActivity);
-        boolean globalNotifications = sharedPref.getBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, true);
 
         final Switch s = (Switch) view.findViewById(R.id.switch_sl_notify);
         if(globalNotifications && profile.stopLossPercent != null) {

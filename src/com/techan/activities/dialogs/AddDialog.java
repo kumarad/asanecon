@@ -55,7 +55,7 @@ public class AddDialog {
 
         if(verify(symbol, parentActivity)) {
             addToDb(symbol, parentActivity);
-            addToProfile(symbol, parentActivity, view);
+            addToProfile(symbol, parentActivity);
         }
     }
 
@@ -90,7 +90,7 @@ public class AddDialog {
         (new DownloadNewSymbolTask(parentActivity.getContentResolver(), uri, symbol)).execute();
     }
 
-    private static void addToProfile(String symbol, Activity parentActivity, View view) {
+    private static void addToProfile(String symbol, Activity parentActivity) {
         if(!ProfileManager.addSymbol(parentActivity.getApplicationContext(), symbol)) {
             // Failure adding symbol to persistent file. Let user know.
             Util.showErrorToast(parentActivity, "Oops. Something on your device prevented profile from being updated.");
