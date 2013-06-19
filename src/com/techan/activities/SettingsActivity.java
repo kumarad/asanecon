@@ -70,8 +70,18 @@ public class SettingsActivity extends Activity {
         allNotificationsPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                peSwitchPreference.setEnabled((Boolean) o);
-                peEditPreference.setEnabled((Boolean) o);
+                boolean allNotState = (Boolean)o;
+
+                peSwitchPreference.setEnabled(allNotState);
+
+                // If switching off force pe switch to off.
+                // Must do this because if someone enabled a stock specific notification will
+                // enable "all notifications" but might not want the pe notification to activate
+                // as a result..... an example would be activating a stock specific stop loss notification
+                if(!allNotState)
+                    peSwitchPreference.setChecked(allNotState);
+
+                peEditPreference.setEnabled(allNotState);
                 return true;
             }
         });

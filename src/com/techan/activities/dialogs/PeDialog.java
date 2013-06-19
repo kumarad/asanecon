@@ -52,12 +52,13 @@ public class PeDialog {
             s.setChecked(true);
             warningText.setVisibility(View.GONE);
         } else if(globalNotifications && globalPeNotification) {
-            warningText.setText("Global PE Target set to: " + globalPeTarget);
+            editText.setEnabled(false);
         } else {
             s.setChecked(false);
             editText.setEnabled(false);
             warningText.setVisibility(View.GONE);
         }
+        warningText.setText("Global PE Target set to: " + globalPeTarget);
 
         // Set cursor to end of text.
         editText.setSelection(editText.length());

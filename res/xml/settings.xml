@@ -28,12 +28,14 @@
         <SwitchPreference
             android:key="allNotifications"
             android:title="All Notifications"
+            android:summary="Activate or deactivate all notifications for this app."
             android:defaultValue="false"
             />
 
         <SwitchPreference
             android:key="peEnabled"
             android:title="PE Notifications"
+            android:summary="Sets a global PE notification. Can be overriden for individual stocks."
             android:defaultValue="false"
             />
 
