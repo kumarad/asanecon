@@ -66,8 +66,10 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         // getListView() gets the activity's list view widget.
         registerForContextMenu(getListView());
 
-//        ProfileManager.forceDelete(getApplicationContext());
+//        ProfileManager.forceDelete(this);
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+
+        SettingsActivity.handleAutoRefreshAtStartup(this);
     }
 
     private void loadFromProfile() {

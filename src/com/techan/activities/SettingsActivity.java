@@ -1,15 +1,22 @@
 package com.techan.activities;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.view.WindowManager;
 
 import com.techan.R;
+import com.techan.alarm.AlarmReceiver;
 
 public class SettingsActivity extends Activity {
     public static final String AUTO_REFRESH_KEY = "autoRefresh";
@@ -44,27 +51,50 @@ public class SettingsActivity extends Activity {
 
             addPreferencesFromResource(R.xml.settings);
 
+            final SwitchPreference refreshPref = (SwitchPreference) getPreferenceManager().findPreference(AUTO_REFRESH_KEY);
             final ListPreference refreshPreferenceList = (ListPreference)getPreferenceManager().findPreference(REFRESH_INTERVAL_KEY);
+            handleRefreshes(getActivity().getApplicationContext(), refreshPref, refreshPreferenceList);
 
-            refreshMessage(refreshPreferenceList.getValue(), refreshPreferenceList);
-
-            refreshPreferenceList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object o) {
-                    String refreshValue = (String) o;
-                    refreshMessage(refreshValue, preference);
-                    return true;
-                }
-            });
-
-
-            final SwitchPreference allNotificationsPref = (SwitchPreference)getPreferenceManager().findPreference("allNotifications");
-            final SwitchPreference peSwitchPreference = (SwitchPreference)getPreferenceManager().findPreference("peEnabled");
-            final EditTextPreference peEditPreference = (EditTextPreference)getPreferenceManager().findPreference("peTarget");
+            final SwitchPreference allNotificationsPref = (SwitchPreference)getPreferenceManager().findPreference(ALL_NOTIFICATIONS_KEY);
+            final SwitchPreference peSwitchPreference = (SwitchPreference)getPreferenceManager().findPreference(PE_ENABLED_KEY);
+            final EditTextPreference peEditPreference = (EditTextPreference)getPreferenceManager().findPreference(PE_TARGET_KEY);
 
             handleAllNotifications(peSwitchPreference, peEditPreference, allNotificationsPref);
             handlePeNotifications(peSwitchPreference, peEditPreference, allNotificationsPref);
         }
+    }
+
+    private static void handleRefreshes(final Context appContext, final SwitchPreference refreshPref, final ListPreference refreshPreferenceList) {
+        refreshMessage(refreshPreferenceList.getValue(), refreshPreferenceList);
+
+        refreshPreferenceList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                String refreshValue = (String) o;
+                refreshMessage(refreshValue, preference);
+                if(refreshPref.isChecked()) {
+                    AlarmReceiver.cancelAutoRefresh(appContext);
+                    AlarmReceiver.setAutoRefresh(appContext, Integer.parseInt(refreshValue));
+                }
+                return true;
+            }
+        });
+
+        refreshPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                if((Boolean)o) {
+                    // Turn auto refresh on.
+                    AlarmReceiver.setAutoRefresh(appContext, Integer.parseInt(refreshPreferenceList.getValue()));
+                } else {
+                    // Turn auto refresh off.
+                    AlarmReceiver.cancelAutoRefresh(appContext);
+                }
+
+                return true;
+            }
+        });
+
     }
 
     private static void handleAllNotifications(final SwitchPreference peSwitchPreference, final EditTextPreference peEditPreference, final SwitchPreference allNotificationsPref) {
@@ -122,5 +152,15 @@ public class SettingsActivity extends Activity {
                 return true;
             }
         });
+    }
+
+    public static void handleAutoRefreshAtStartup(Activity parent) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(parent);
+        boolean autoRefreshEnabled = sharedPreferences.getBoolean(AUTO_REFRESH_KEY, false);
+        if(autoRefreshEnabled) {
+            String refreshIntervalStr = sharedPreferences.getString(REFRESH_INTERVAL_KEY, null);
+            AlarmReceiver.cancelAutoRefresh(parent);
+            AlarmReceiver.setAutoRefresh(parent, Integer.parseInt(refreshIntervalStr));
+        }
     }
 }

@@ -40,5 +40,13 @@
                 android:authorities="com.techan.contentprovider" >
         </provider>
 
+        <receiver
+                android:name=".alarm.AlarmReceiver">
+        </receiver>
+
+        <service
+                android:name=".alarm.DownloaderService">
+        </service>
+
     </application>
 </manifest>
