@@ -5,10 +5,26 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
+import com.techan.activities.SettingsActivity;
+import com.techan.profile.Constants;
+
+//:~/Installs/android-studio/sdk/platform-tools$ ./adb shell am broadcast -a android.intent.action.BOOT_COMPLETED
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        if(action != null && action.equals(Intent.ACTION_BOOT_COMPLETED)) {
+            Log.d(Constants.LOG_TAG, "Boot Completed.");
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            // Ensure auto refresh is enabled for the case this is a reboot.
+            if(!sharedPreferences.getBoolean(SettingsActivity.AUTO_REFRESH_KEY, false)) {
+                return;
+            }
+        }
         Intent downloader = new Intent(context, DownloaderService.class);
         context.startService(downloader);
     }

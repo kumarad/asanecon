@@ -11,6 +11,8 @@ import com.techan.database.StocksTable;
 
 import java.util.*;
 
+// Don't need to worry about thread safety when accessing the ContentProvider
+// because the SQLiteDatabase backing the content provider is thread safe!
 public class RefreshAllTask extends AsyncTask<String, Void, List<StockData>> {
 
     final List<String> symbols = new ArrayList<String>();
