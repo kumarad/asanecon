@@ -14,4 +14,9 @@
         <item>24</item>
     </string-array>
 
+    <string-array name="comparator">
+        <item>"Less than or equal</item>
+        <item>"Greater than or equal</item>
+    </string-array>
+
 </resources>

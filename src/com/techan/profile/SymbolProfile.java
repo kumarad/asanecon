@@ -17,6 +17,9 @@ public class SymbolProfile {
     @SymbolProfileMember(memberName = ProfileManager.TARGET_PRICE)
     public Double targetPrice = null;
 
+    @SymbolProfileMember(memberName = ProfileManager.TARGET_PRICE_COMPARATOR)
+    public Boolean lessThanEqual = null;
+
     @SymbolProfileMember(memberName = ProfileManager.STOCK_COUNT)
     public Integer stockCount = null;
 
