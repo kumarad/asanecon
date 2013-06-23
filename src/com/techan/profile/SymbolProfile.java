@@ -14,6 +14,9 @@ public class SymbolProfile {
     @SymbolProfileMember(memberName = ProfileManager.BUY_PRICE)
     public Double buyPrice = null;
 
+    @SymbolProfileMember(memberName = ProfileManager.TARGET_PRICE)
+    public Double targetPrice = null;
+
     @SymbolProfileMember(memberName = ProfileManager.STOCK_COUNT)
     public Integer stockCount = null;
 

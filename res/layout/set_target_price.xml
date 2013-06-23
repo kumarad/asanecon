@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/target_divider"
+            android:layout_width="fill_parent"
+            android:layout_height="10dip"
+            />
+
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50sp"
+            android:weightSum="1.0"
+            android:layout_below="@id/target_divider"
+            android:id="@+id/target_price_row"
+            >
+
+        <TextView
+                android:id="@+id/target_price"
+                android:layout_width="0dp"
+                android:layout_weight=".4"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:text="Target Price:"
+                />
+
+        <EditText
+                android:id="@+id/set_target_price"
+                android:layout_width="0dp"
+                android:layout_weight=".6"
+                android:layout_height="fill_parent"
+                android:inputType="numberDecimal"
+                />
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/target_divider2"
+            android:layout_width="fill_parent"
+            android:layout_height="10dip"
+            android:layout_below="@id/target_price_row"
+            />
+
+</RelativeLayout>

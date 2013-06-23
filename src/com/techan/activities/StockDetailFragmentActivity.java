@@ -18,6 +18,7 @@ import com.techan.activities.dialogs.BuyDialog;
 import com.techan.activities.dialogs.DeleteDialog;
 import com.techan.activities.dialogs.PeDialog;
 import com.techan.activities.dialogs.StopLossDialog;
+import com.techan.activities.dialogs.TargetDialog;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
 
@@ -118,6 +119,9 @@ public class StockDetailFragmentActivity extends FragmentActivity {
                 return true;
             case R.id.set_buy_price:
                 BuyDialog.create(this,symbol);
+                return true;
+            case R.id.set_target_price:
+                TargetDialog.create(this, symbol);
                 return true;
             case R.id.set_pe_target:
                 PeDialog.create(this, symbol);

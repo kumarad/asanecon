@@ -11,34 +11,26 @@ import com.techan.R;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 
-public class BuyDialog {
-
+public class TargetDialog {
     public static void create(final Activity parentActivity, final String symbol) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
-        alertDialog.setTitle("Add purchase info");
+        alertDialog.setTitle("Set target price");
 
         // Get layout inflater
         LayoutInflater inflater = parentActivity.getLayoutInflater();
-        final View view = inflater.inflate(R.layout.set_buy_price, null);
+        final View view = inflater.inflate(R.layout.set_target_price, null);
 
         final SymbolProfile profile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), symbol);
-        final EditText buyPriceText = (EditText)view.findViewById(R.id.set_buy_price);
-        if(profile.buyPrice != null) {
-            buyPriceText.setText(Double.toString(profile.buyPrice));
-        }
-
-        final EditText shareCountText = (EditText)view.findViewById(R.id.set_share_count);
-        if(profile.stockCount != null) {
-            shareCountText.setText(Integer.toString(profile.stockCount));
-        } else {
-            shareCountText.setHint("optional");
+        final EditText targetText = (EditText)view.findViewById(R.id.set_target_price);
+        if(profile.targetPrice != null) {
+            targetText.setText(Double.toString(profile.targetPrice));
         }
 
         alertDialog.setView(view);
         alertDialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                doAdd(profile, buyPriceText, shareCountText);
+                doAdd(profile, targetText);
             }
         });
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -52,18 +44,13 @@ public class BuyDialog {
 
     }
 
-    private static void doAdd(SymbolProfile profile, EditText buyPriceText, EditText shareCountText) {
-        String buyPriceStr = buyPriceText.getText().toString();
-        if(!buyPriceStr.equals("")) {
-            profile.buyPrice = Double.parseDouble(buyPriceStr);
+    private static void doAdd(SymbolProfile profile, EditText targetText) {
+        String targetStr = targetText.getText().toString();
+        if(!targetStr.equals("")) {
+            profile.targetPrice = Double.parseDouble(targetStr);
         }
 
-        String shareCountStr = shareCountText.getText().toString();
-        if(!shareCountStr.equals("")) {
-            profile.stockCount = Integer.parseInt(shareCountStr);
-        }
-
-        if(profile.buyPrice != null || profile.stockCount != null) {
+        if(profile.targetPrice != null) {
             ProfileManager.addSymbolData(profile);
         }
     }
