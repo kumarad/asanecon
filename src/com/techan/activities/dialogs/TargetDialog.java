@@ -70,10 +70,11 @@ public class TargetDialog {
         if(!targetStr.equals("")) {
             profile.targetPrice = Double.parseDouble(targetStr);
             profile.lessThanEqual = compListener.lessThanEqual;
+        } else {
+            profile.targetPrice = null;
+            profile.lessThanEqual = null;
         }
 
-        if(profile.targetPrice != null) {
-            ProfileManager.addSymbolData(profile);
-        }
+        ProfileManager.addSymbolData(profile);
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.techan.R;
+import com.techan.custom.Util;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 
@@ -38,7 +39,7 @@ public class BuyDialog {
         alertDialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                doAdd(profile, buyPriceText, shareCountText);
+                doAdd(parentActivity, profile, buyPriceText, shareCountText);
             }
         });
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -52,19 +53,26 @@ public class BuyDialog {
 
     }
 
-    private static void doAdd(SymbolProfile profile, EditText buyPriceText, EditText shareCountText) {
+    private static void doAdd(Activity activity, SymbolProfile profile, EditText buyPriceText, EditText shareCountText) {
         String buyPriceStr = buyPriceText.getText().toString();
+        String shareCountStr = shareCountText.getText().toString();
         if(!buyPriceStr.equals("")) {
             profile.buyPrice = Double.parseDouble(buyPriceStr);
+
+            if(!shareCountStr.equals("")) {
+                profile.stockCount = Integer.parseInt(shareCountStr);
+            } else {
+                profile.stockCount = null;
+            }
+        } else {
+            if(!shareCountStr.equals("")) {
+                Util.showErrorToast(activity, "Share price ignored without buy price.");
+            }
+
+            profile.buyPrice = null;
+            profile.stockCount = null;
         }
 
-        String shareCountStr = shareCountText.getText().toString();
-        if(!shareCountStr.equals("")) {
-            profile.stockCount = Integer.parseInt(shareCountStr);
-        }
-
-        if(profile.buyPrice != null || profile.stockCount != null) {
-            ProfileManager.addSymbolData(profile);
-        }
+        ProfileManager.addSymbolData(profile);
     }
 }
