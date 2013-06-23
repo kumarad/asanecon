@@ -21,6 +21,8 @@ import com.techan.activities.dialogs.StopLossDialog;
 import com.techan.activities.dialogs.TargetDialog;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
+import com.techan.database.StocksTable;
+import com.techan.profile.Constants;
 
 public class StockDetailFragmentActivity extends FragmentActivity {
     private Uri stockUri;
@@ -51,7 +53,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         stockCursor.moveToFirst();
 
         TextView symbolView = (TextView) this.findViewById(R.id.lastUpdate);
-        String lastUpdateStr = stockCursor.getString(15);
+        String lastUpdateStr = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_LAST_UPDATE));
         symbolView.setText(lastUpdateStr);
 
         populateGeneralView();
@@ -61,41 +63,44 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         viewPager.setAdapter(stockPagerAdapter);
 
         PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.stock_pager_title_strip);
-        pagerTabStrip.setTabIndicatorColor(Color.parseColor("#33b5e5"));
+        pagerTabStrip.setTabIndicatorColor(Color.parseColor(Constants.ANDROID_BLUE));
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     void populateGeneralView() {
         TextView symbolView = (TextView) this.findViewById(R.id.detailNameSymbol);
-        symbol = stockCursor.getString(1);
-        String name = stockCursor.getString(16);
+        symbol = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
+        String name = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_NAME));
         symbolView.setText(name);
         symbolView.append(" ("+symbol+")");
 
         TextView priceValView = (TextView) this.findViewById(R.id.detailPriceVal);
-        priceValView.setText(Util.parseDouble(stockCursor, 2));
+        Double price = Util.roundTwoDecimals(stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE)));
+        priceValView.setText(Double.toString(price));
 
         TextView changeView = (TextView) this.findViewById(R.id.detailPriceChange);
-        double change = stockCursor.getDouble(11);
+        double change = Util.roundTwoDecimals(stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_CHANGE)));
+        double changePercent = Util.roundTwoDecimals((Math.abs(change)*100.0)/price);
         if(change < 0) {
             changeView.setTextColor(Color.RED);
         } else if(change > 0) {
             changeView.setTextColor(Color.GREEN);
         }
-        changeView.setText("(");
-        changeView.append(Double.toString(change));
-        changeView.append(")");
+        changeView.setText(Double.toString(change));
+        changeView.append("(");
+        changeView.append(Double.toString(changePercent));
+        changeView.append("%)");
 
         TextView lowView = (TextView) this.findViewById(R.id.detailLow);
         lowView.setText("Low: ");
         TextView lowValView = (TextView) this.findViewById(R.id.detailLowVal);
-        lowValView.setText(Util.parseDouble(stockCursor, 3));
+        lowValView.setText(Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_LOW)));
 
         TextView highView = (TextView) this.findViewById(R.id.detailHigh);
         highView.setText("High: ");
         TextView highValView = (TextView) this.findViewById(R.id.detailHighVal);
-        highValView.setText(Util.parseDouble(stockCursor, 4));
+        highValView.setText(Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_HIGH)));
     }
 
     /////////////////////////////////////////////////////////////////////

@@ -3,8 +3,8 @@ package com.techan.database;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StocksTable {
     // Database table
@@ -28,25 +28,26 @@ public class StocksTable {
     public static final String COLUMN_NAME = "name";
 
 
-    public static Set<String> stocksColumns = new HashSet<String>();
+    public static Map<String, Integer> stockColumns = new HashMap<String, Integer>();
     static {
-        stocksColumns.add(COLUMN_ID);
-        stocksColumns.add(COLUMN_SYMBOL);
-        stocksColumns.add(COLUMN_PRICE);
-        stocksColumns.add(COLUMN_LOW);
-        stocksColumns.add(COLUMN_HIGH);
-        stocksColumns.add(COLUMN_PE);
-        stocksColumns.add(COLUMN_PEG);
-        stocksColumns.add(COLUMN_MOV_AVG_50);
-        stocksColumns.add(COLUMN_MOV_AVG_200);
-        stocksColumns.add(COLUMN_TRADING_VOLUME);
-        stocksColumns.add(COLUMN_AVG_TRADING_VOLUME);
-        stocksColumns.add(COLUMN_CHANGE);
-        stocksColumns.add(COLUMN_UP_TREND_COUNT);
-        stocksColumns.add(COLUMN_60_DAY_HIGH);
-        stocksColumns.add(COLUMN_90_DAY_LOW);
-        stocksColumns.add(COLUMN_LAST_UPDATE);
-        stocksColumns.add(COLUMN_NAME);
+        int i = 0;
+        stockColumns.put(COLUMN_ID, i++);
+        stockColumns.put(COLUMN_SYMBOL, i++);
+        stockColumns.put(COLUMN_PRICE, i++);
+        stockColumns.put(COLUMN_LOW, i++);
+        stockColumns.put(COLUMN_HIGH, i++);
+        stockColumns.put(COLUMN_PE, i++);
+        stockColumns.put(COLUMN_PEG, i++);
+        stockColumns.put(COLUMN_MOV_AVG_50, i++);
+        stockColumns.put(COLUMN_MOV_AVG_200, i++);
+        stockColumns.put(COLUMN_TRADING_VOLUME, i++);
+        stockColumns.put(COLUMN_AVG_TRADING_VOLUME, i++);
+        stockColumns.put(COLUMN_CHANGE, i++);
+        stockColumns.put(COLUMN_UP_TREND_COUNT, i++);
+        stockColumns.put(COLUMN_60_DAY_HIGH, i++);
+        stockColumns.put(COLUMN_90_DAY_LOW, i++);
+        stockColumns.put(COLUMN_LAST_UPDATE, i++);
+        stockColumns.put(COLUMN_NAME, i++);
     }
 
     // Database creation SQL statement

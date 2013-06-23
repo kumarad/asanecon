@@ -175,10 +175,12 @@ public class StockContentProvider  extends ContentProvider {
     private void checkColumns(String[] projection) {
         if(projection != null) {
             Set<String> requested = new HashSet<String>(Arrays.asList(projection));
-            if(!StocksTable.stocksColumns.containsAll(requested)) {
-                throw new IllegalArgumentException("Unknown columns in projection");
-            }
+            for(String col : requested) {
+                if(!StocksTable.stockColumns.containsKey(col)) {
+                    throw new IllegalArgumentException("Unknown columns in projection: " + col);
+                }
 
+            }
         }
     }
 }

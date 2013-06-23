@@ -9,6 +9,7 @@ import com.techan.activities.fragments.StockPeFragment;
 import com.techan.activities.fragments.StockTrendFragment;
 import com.techan.activities.fragments.StockVolumeFragment;
 import com.techan.custom.Util;
+import com.techan.database.StocksTable;
 
 // Returns a fragment corresponding to one of the sections/tabs/pages.
 public class StockPagerAdapter extends FragmentPagerAdapter {
@@ -25,8 +26,8 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = new StockPeFragment();
         Bundle args = new Bundle();
 
-        args.putString(StockPeFragment.PE_VAL, Util.parseDouble(stockCursor, 5));
-        args.putString(StockPeFragment.PEG_VAL, Util.parseDouble(stockCursor, 6));
+        args.putString(StockPeFragment.PE_VAL, Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_PE)));
+        args.putString(StockPeFragment.PEG_VAL, Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_PEG)));
         fragment.setArguments(args);
 
         return fragment;
@@ -36,7 +37,7 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = new StockVolumeFragment();
         Bundle args = new Bundle();
 
-        double volDouble = stockCursor.getDouble(9);
+        double volDouble = stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_TRADING_VOLUME));
         String volString;
         if(volDouble != 0) {
             volString = Long.toString((long) volDouble);
@@ -44,7 +45,7 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
             volString = "N/A";
         }
 
-        double avgVolDouble = stockCursor.getDouble(10);
+        double avgVolDouble = stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_AVG_TRADING_VOLUME));
         String avgVolString;
         if(avgVolDouble != 0) {
             avgVolString = Long.toString((long) avgVolDouble);
@@ -63,11 +64,11 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = new StockTrendFragment();
         Bundle args = new Bundle();
 
-        args.putString(StockTrendFragment.MOV_50_VAL, Util.parseDouble(stockCursor, 7));
-        args.putString(StockTrendFragment.MOV_200_VAL, Util.parseDouble(stockCursor, 8));
-        args.putInt(StockTrendFragment.DAY_COUNT, (int)stockCursor.getDouble(12));
-        args.putString(StockTrendFragment.HIGH_60_DAY, Util.parseDouble(stockCursor, 13));
-        args.putString(StockTrendFragment.LOW_90_DAY, Util.parseDouble(stockCursor, 14));
+        args.putString(StockTrendFragment.MOV_50_VAL, Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_MOV_AVG_50)));
+        args.putString(StockTrendFragment.MOV_200_VAL, Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_MOV_AVG_200)));
+        args.putInt(StockTrendFragment.DAY_COUNT, (int)stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_UP_TREND_COUNT)));
+        args.putString(StockTrendFragment.HIGH_60_DAY, Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_60_DAY_HIGH)));
+        args.putString(StockTrendFragment.LOW_90_DAY, Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_90_DAY_LOW)));
 
         fragment.setArguments(args);
         return fragment;

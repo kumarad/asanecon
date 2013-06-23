@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -59,6 +60,11 @@ public class Util {
         } catch(NumberFormatException e) {
             return 0.0;
         }
+    }
+
+    public static double roundTwoDecimals(double d) {
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Double.valueOf(twoDForm.format(d));
     }
 
     public static String parseDouble(Cursor c, int index) {
