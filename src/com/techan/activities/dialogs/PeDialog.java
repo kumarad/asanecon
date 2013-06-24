@@ -63,7 +63,7 @@ public class PeDialog {
         editText.setSelection(editText.length());
 
         // Create listener for switch changes.
-        SwitchCheckListener listener = new SwitchCheckListener(editText, globalNotifications, sharedPref.edit(), warningText, globalPeNotification);
+        final SwitchCheckListener listener = new SwitchCheckListener(editText, globalNotifications, sharedPref.edit(), warningText, globalPeNotification);
         s.setOnCheckedChangeListener(listener);
 
         // Create dialog.
@@ -72,7 +72,7 @@ public class PeDialog {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        doAdd(profile, editText, s);
+                        doAdd(profile, editText, s, listener);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -85,7 +85,7 @@ public class PeDialog {
         alertDialog.create().show();
     }
 
-    private static void doAdd(SymbolProfile profile, EditText editText, Switch s) {
+    private static void doAdd(SymbolProfile profile, EditText editText, Switch s, SwitchCheckListener listener) {
         if(s.isChecked()) {
             profile.peTarget = Double.parseDouble(editText.getText().toString());
         } else {
@@ -93,6 +93,8 @@ public class PeDialog {
         }
 
         ProfileManager.addSymbolData(profile);
+
+        listener.commit();
     }
 
 }

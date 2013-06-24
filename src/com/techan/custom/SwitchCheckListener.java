@@ -32,7 +32,6 @@ public class SwitchCheckListener implements CompoundButton.OnCheckedChangeListen
     protected void handleGlobalPreferences(boolean checked) {
         if(!globalNotifications) {
             settingsEditor.putBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, checked);
-            settingsEditor.commit();
         }
     }
 
@@ -62,4 +61,7 @@ public class SwitchCheckListener implements CompoundButton.OnCheckedChangeListen
         handleGlobalPreferences(isChecked);
     }
 
+    public void commit() {
+        settingsEditor.commit();
+    }
 }

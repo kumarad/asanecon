@@ -73,7 +73,7 @@ public class StopLossDialog {
             np.setEnabled(false);
         }
 
-        SwitchCheckListener listener = new SwitchCheckListener(np, globalNotifications, sharedPref.edit());
+        final SwitchCheckListener listener = new SwitchCheckListener(np, globalNotifications, sharedPref.edit());
         s.setOnCheckedChangeListener(listener);
 
         //Pass null as parent view because its a dialog.
@@ -81,7 +81,7 @@ public class StopLossDialog {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        doAdd(profile, np, s);
+                        doAdd(profile, np, s, listener);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -95,7 +95,7 @@ public class StopLossDialog {
         alertDialog.create().show();
     }
 
-    private static void doAdd(SymbolProfile profile, NumberPicker np, Switch s) {
+    private static void doAdd(SymbolProfile profile, NumberPicker np, Switch s, SwitchCheckListener listener) {
         if(s.isChecked()) {
             profile.stopLossPercent = np.getValue();
         } else {
@@ -103,6 +103,8 @@ public class StopLossDialog {
         }
 
         ProfileManager.addSymbolData(profile);
+
+        listener.commit();
     }
 
 }
