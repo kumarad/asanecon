@@ -13,7 +13,7 @@ public class DownloaderService extends Service {
     private static long last = 0;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        new RefreshAllTask(this.getContentResolver()).download();
+        new RefreshAllTask(this.getContentResolver(), true).download(getApplicationContext());
 
         long cur = System.currentTimeMillis()/1000;
         long delta = (cur - last);

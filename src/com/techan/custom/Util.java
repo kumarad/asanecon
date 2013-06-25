@@ -1,11 +1,14 @@
 package com.techan.custom;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.widget.ProgressBar;
@@ -103,5 +106,18 @@ public class Util {
         Toast.makeText(activity, error, Toast.LENGTH_LONG).show();
     }
 
+    public static ConnectionStatus isOnline(Context ctx) {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        NetworkInfo wifiNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if(wifiNetworkInfo != null && wifiNetworkInfo.isConnected())
+            return ConnectionStatus.ONLINE_WIFI;
+
+        NetworkInfo onlineNetworkInfo = connMgr.getActiveNetworkInfo();
+        if(onlineNetworkInfo != null && onlineNetworkInfo.isConnected())
+            return ConnectionStatus.ONLINE_NON_WIFI;
+
+        return ConnectionStatus.OFFLINE;
+    }
 }

@@ -2,10 +2,16 @@ package com.techan.stockDownload;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+
+import com.techan.activities.SettingsActivity;
 import com.techan.contentProvider.StockContentProvider;
+import com.techan.custom.ConnectionStatus;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
 
@@ -24,10 +30,12 @@ public class RefreshAllTask extends AsyncTask<String, Void, List<StockData>> {
     final List<Double> lows_90Day = new ArrayList<Double>();
 
     final ContentResolver contentResolver;
+    final boolean auto;
 
     // Assumes being used for refresh of all symbols.
-    public RefreshAllTask(ContentResolver contentResolver) {
+    public RefreshAllTask(ContentResolver contentResolver, boolean auto) {
         this.contentResolver = contentResolver;
+        this.auto = auto;
 
         String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_LAST_UPDATE, StocksTable.COLUMN_UP_TREND_COUNT, StocksTable.COLUMN_60_DAY_HIGH, StocksTable.COLUMN_90_DAY_LOW};
         Cursor cursor = contentResolver.query(StockContentProvider.CONTENT_URI, projection, null, null, null);
@@ -97,7 +105,22 @@ public class RefreshAllTask extends AsyncTask<String, Void, List<StockData>> {
         }
     }
 
-    public void download() {
+    public void download(Context ctx) {
+        if(auto) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
+            boolean refreshWifiOnly = sharedPref.getBoolean(SettingsActivity.REFRESH_WIFI_ONLY_KEY, false);
+            ConnectionStatus connStatus = Util.isOnline(ctx);
+            if(connStatus == ConnectionStatus.OFFLINE) {
+                return;
+            }
+
+            // We are online!
+
+            if(refreshWifiOnly && connStatus != ConnectionStatus.ONLINE_WIFI) {
+                return;
+            }
+        }
+
         if(symbols.size() != 0) {
             execute();
         }

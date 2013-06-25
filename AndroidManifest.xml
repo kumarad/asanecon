@@ -24,6 +24,12 @@
                 android:name=".activities.SettingsActivity"
                 android:windowSoftInputMode="stateVisible|adjustResize"
                 android:parentActivityName=".activities.StockHomeActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </activity>
 
         <activity
@@ -46,6 +52,5 @@
         <service
                 android:name=".alarm.DownloaderService">
         </service>
-
     </application>
 </manifest>

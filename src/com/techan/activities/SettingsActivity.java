@@ -1,12 +1,10 @@
 package com.techan.activities;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -21,6 +19,7 @@ import com.techan.alarm.AlarmReceiver;
 public class SettingsActivity extends Activity {
     public static final String AUTO_REFRESH_KEY = "autoRefresh";
     public static final String REFRESH_INTERVAL_KEY ="refreshInterval";
+    public static final String REFRESH_WIFI_ONLY_KEY = "refreshWifiOnly";
     public static final String ALL_NOTIFICATIONS_KEY = "allNotifications";
     public static final String PE_ENABLED_KEY ="peEnabled";
     public static final String PE_TARGET_KEY = "peTarget";
@@ -53,7 +52,8 @@ public class SettingsActivity extends Activity {
 
             final SwitchPreference refreshPref = (SwitchPreference) getPreferenceManager().findPreference(AUTO_REFRESH_KEY);
             final ListPreference refreshPreferenceList = (ListPreference)getPreferenceManager().findPreference(REFRESH_INTERVAL_KEY);
-            handleRefreshes(getActivity().getApplicationContext(), refreshPref, refreshPreferenceList);
+            final CheckBoxPreference refreshWifiOnlyCheckBox = (CheckBoxPreference)getPreferenceManager().findPreference(REFRESH_WIFI_ONLY_KEY);
+            handleRefreshes(getActivity().getApplicationContext(), refreshPref, refreshPreferenceList, refreshWifiOnlyCheckBox);
 
             final SwitchPreference allNotificationsPref = (SwitchPreference)getPreferenceManager().findPreference(ALL_NOTIFICATIONS_KEY);
             final SwitchPreference peSwitchPreference = (SwitchPreference)getPreferenceManager().findPreference(PE_ENABLED_KEY);
@@ -64,7 +64,8 @@ public class SettingsActivity extends Activity {
         }
     }
 
-    private static void handleRefreshes(final Context appContext, final SwitchPreference refreshPref, final ListPreference refreshPreferenceList) {
+    private static void handleRefreshes(final Context appContext, final SwitchPreference refreshPref,
+                                        final ListPreference refreshPreferenceList, final CheckBoxPreference refreshWifiOnlyCheckBox) {
         refreshMessage(refreshPreferenceList.getValue(), refreshPreferenceList);
 
         refreshPreferenceList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

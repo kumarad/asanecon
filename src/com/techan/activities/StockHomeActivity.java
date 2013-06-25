@@ -100,7 +100,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         setListAdapter(adapter);
 
         // Update from the network.
-        (new RefreshAllTask(this.getContentResolver())).download();
+        (new RefreshAllTask(this.getContentResolver(), false)).download(getApplicationContext());
     }
 
     /////////////////////
@@ -152,7 +152,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
                 AddDialog.create(this);
                 return true;
             case R.id.refresh:
-                (new RefreshAllTask(this.getContentResolver())).download();
+                (new RefreshAllTask(this.getContentResolver(), false)).download(getApplicationContext());
                 return true;
             case R.id.settings:
                 settings();

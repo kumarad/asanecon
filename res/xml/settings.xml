@@ -20,6 +20,15 @@
                 android:dependency="autoRefresh"
                 />
 
+        <CheckBoxPreference
+                android:key="refreshWifiOnly"
+                android:title="Refresh on wifi"
+                android:summary="Only refresh when connected to a wifi network"
+                android:checked="false"
+                android:dependency="autoRefresh"
+                >
+        </CheckBoxPreference>
+
         </PreferenceCategory>
 
     <PreferenceCategory
