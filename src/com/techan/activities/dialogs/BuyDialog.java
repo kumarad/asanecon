@@ -8,13 +8,14 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.techan.R;
+import com.techan.activities.StockPagerAdapter;
 import com.techan.custom.Util;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 
 public class BuyDialog {
 
-    public static void create(final Activity parentActivity, final String symbol) {
+    public static void create(final Activity parentActivity, final String symbol, final StockPagerAdapter stockPagerAdapter) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
         alertDialog.setTitle("Add purchase info");
 
@@ -39,7 +40,7 @@ public class BuyDialog {
         alertDialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                doAdd(parentActivity, profile, buyPriceText, shareCountText);
+                doAdd(parentActivity, profile, buyPriceText, shareCountText, stockPagerAdapter);
             }
         });
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -53,7 +54,7 @@ public class BuyDialog {
 
     }
 
-    private static void doAdd(Activity activity, SymbolProfile profile, EditText buyPriceText, EditText shareCountText) {
+    private static void doAdd(Activity activity, SymbolProfile profile, EditText buyPriceText, EditText shareCountText, StockPagerAdapter stockPagerAdapter) {
         String buyPriceStr = buyPriceText.getText().toString();
         String shareCountStr = shareCountText.getText().toString();
         if(!buyPriceStr.equals("")) {
@@ -74,5 +75,6 @@ public class BuyDialog {
         }
 
         ProfileManager.addSymbolData(profile);
+        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.stockCount);
     }
 }

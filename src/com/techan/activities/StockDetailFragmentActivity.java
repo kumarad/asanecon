@@ -58,7 +58,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
 
         populateGeneralView();
 
-        stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockCursor);
+        stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockCursor, getApplicationContext());
         viewPager = (ViewPager)findViewById(R.id.stock_pager);
         viewPager.setAdapter(stockPagerAdapter);
 
@@ -123,7 +123,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
                 DeleteDialog.create(this, stockUri, symbol);
                 return true;
             case R.id.set_buy_price:
-                BuyDialog.create(this,symbol);
+                BuyDialog.create(this,symbol, stockPagerAdapter);
                 return true;
             case R.id.set_target_price:
                 TargetDialog.create(this, symbol);

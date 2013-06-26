@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+    <TextView
+            android:id="@+id/costWarning"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            />
+
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:id="@+id/costRow"
+            android:layout_below="@id/costWarning"
+            >
+
+        <TextView
+                android:id="@+id/detailCost"
+                android:layout_width="0dp"
+                android:layout_weight=".2"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                />
+
+        <TextView
+                android:id="@+id/detailCostVal"
+                android:layout_width="0dp"
+                android:layout_weight=".8"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/costRow"
+            android:id="@+id/countRow"
+            >
+
+        <TextView
+                android:id="@+id/detailCount"
+                android:layout_width="0dp"
+                android:layout_weight=".2"
+                android:layout_height="fill_parent"
+                />
+
+        <TextView
+                android:id="@+id/detailCountVal"
+                android:layout_width="0dp"
+                android:layout_weight=".8"
+                android:layout_height="fill_parent"
+                />
+    </LinearLayout>
+</RelativeLayout>

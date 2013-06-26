@@ -1,25 +1,73 @@
 package com.techan.activities;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
+
+import com.techan.activities.fragments.StockCostBasisFragment;
 import com.techan.activities.fragments.StockPeFragment;
 import com.techan.activities.fragments.StockTrendFragment;
 import com.techan.activities.fragments.StockVolumeFragment;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
+import com.techan.profile.ProfileManager;
+import com.techan.profile.SymbolProfile;
+
+import java.util.HashMap;
+import java.util.Map;
 
 // Returns a fragment corresponding to one of the sections/tabs/pages.
 public class StockPagerAdapter extends FragmentPagerAdapter {
-    public static final int FRAGMENT_COUNT = 3;
+    public static final int FRAGMENT_COUNT = 4;
+    public static final String COST_BASIS = "Cost Basis";
+    public static final int COST_BASIS_INDEX = 0;
+    public static final String PE = "PE";
+    public static final int PE_INDEX = 1;
+    public static final String VOL = "Volume";
+    public static final int VOL_INDEX = 2;
+    public static final String TREND = "Trends";
+    public static final int TREND_INDEX = 3;
 
+    private String[] fragmentTypes = new String[FRAGMENT_COUNT];
+    private Map<String, Fragment> fragments = new HashMap<String,Fragment>();
     private Cursor stockCursor;
+    private Context ctx;
 
-    public StockPagerAdapter(FragmentManager fm, Cursor stockCursor) {
+    public StockPagerAdapter(FragmentManager fm, Cursor stockCursor, Context ctx) {
         super(fm);
         this.stockCursor = stockCursor;
+        this.ctx = ctx;
+    }
+
+    @Override
+    public Object instantiateItem (ViewGroup container, int position) {
+        Fragment fragment = (Fragment)super.instantiateItem(container, position);
+        fragments.put(fragmentTypes[position], fragment);
+        return fragment;
+    }
+
+    protected Fragment createCostBasisFragment() {
+        Fragment fragment = new StockCostBasisFragment();
+        Bundle args = new Bundle();
+
+        String symbol = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
+        SymbolProfile profile = ProfileManager.getSymbolData(ctx, symbol);
+        if(profile.buyPrice != null)
+            args.putDouble(StockCostBasisFragment.COST_VAL, profile.buyPrice);
+        if(profile.stockCount != null)
+            args.putInt(StockCostBasisFragment.COUNT_VAL, profile.stockCount);
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public void updateCostBasisFragment(final Double buyPrice, final Integer stockCount) {
+        StockCostBasisFragment fragment = (StockCostBasisFragment)fragments.get(COST_BASIS);
+        fragment.update(buyPrice, stockCount);
     }
 
     protected Fragment createPeFragment() {
@@ -78,10 +126,12 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch(position) {
             case 0:
-                return createPeFragment();
+                return createCostBasisFragment();
             case 1:
-                return createVolFragment();
+                return createPeFragment();
             case 2:
+                return createVolFragment();
+            case 3:
                 return createTrendFragment();
         }
 
@@ -97,11 +147,13 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch(position) {
             case 0:
-                return "PE";
+                return (fragmentTypes[position] = COST_BASIS);
             case 1:
-                return "VOL";
+                return (fragmentTypes[position] = PE);
             case 2:
-                return "TR";
+                return (fragmentTypes[position] = VOL);
+            case 3:
+                return (fragmentTypes[position] = TREND);
         }
 
         return null;
