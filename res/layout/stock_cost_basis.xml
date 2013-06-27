@@ -10,13 +10,49 @@
             android:layout_height="fill_parent"
             />
 
+    <TextView
+            android:id="@+id/costBasisVal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            />
+
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50sp"
+            android:weightSum="1.0"
+            android:layout_below="@id/costBasisVal"
+            android:id="@+id/costBasisChangeRow"
+            >
+
+        <TextView
+                android:id="@+id/costBasisChange"
+                android:layout_width="0dp"
+                android:layout_weight=".3"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                />
+
+        <TextView
+                android:id="@+id/costBasisChangeVal"
+                android:layout_width="0dp"
+                android:layout_weight=".7"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:gravity="right"
+                />
+
+    </LinearLayout>
 
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
             android:id="@+id/costRow"
-            android:layout_below="@id/costWarning"
+            android:layout_below="@id/costBasisChangeRow"
             >
 
         <TextView

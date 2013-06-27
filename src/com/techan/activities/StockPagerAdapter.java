@@ -2,12 +2,15 @@ package com.techan.activities;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.techan.R;
 import com.techan.activities.fragments.StockCostBasisFragment;
 import com.techan.activities.fragments.StockPeFragment;
 import com.techan.activities.fragments.StockTrendFragment;
@@ -60,6 +63,10 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
             args.putDouble(StockCostBasisFragment.COST_VAL, profile.buyPrice);
         if(profile.stockCount != null)
             args.putInt(StockCostBasisFragment.COUNT_VAL, profile.stockCount);
+
+
+        Double price = Util.roundTwoDecimals(stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE)));
+        args.putDouble(StockCostBasisFragment.CUR_PRICE, price);
 
         fragment.setArguments(args);
         return fragment;

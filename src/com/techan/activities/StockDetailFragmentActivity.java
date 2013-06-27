@@ -81,16 +81,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
 
         TextView changeView = (TextView) this.findViewById(R.id.detailPriceChange);
         double change = Util.roundTwoDecimals(stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_CHANGE)));
-        double changePercent = Util.roundTwoDecimals((Math.abs(change)*100.0)/price);
-        if(change < 0) {
-            changeView.setTextColor(Color.RED);
-        } else if(change > 0) {
-            changeView.setTextColor(Color.GREEN);
-        }
-        changeView.setText(Double.toString(change));
-        changeView.append("(");
-        changeView.append(Double.toString(changePercent));
-        changeView.append("%)");
+        Util.showChange(changeView, change, price, null);
 
         TextView lowView = (TextView) this.findViewById(R.id.detailLow);
         lowView.setText("Low: ");
@@ -123,7 +114,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
                 DeleteDialog.create(this, stockUri, symbol);
                 return true;
             case R.id.set_buy_price:
-                BuyDialog.create(this,symbol, stockPagerAdapter);
+                BuyDialog.create(this, symbol, stockPagerAdapter);
                 return true;
             case R.id.set_target_price:
                 TargetDialog.create(this, symbol);

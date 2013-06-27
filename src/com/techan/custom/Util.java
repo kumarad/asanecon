@@ -12,6 +12,7 @@ import android.net.NetworkInfo;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -119,5 +120,22 @@ public class Util {
             return ConnectionStatus.ONLINE_NON_WIFI;
 
         return ConnectionStatus.OFFLINE;
+    }
+
+    public static void showChange(TextView textView, double change, double original, TextView labelView) {
+        if(change < 0) {
+            textView.setTextColor(Color.RED);
+            if(labelView != null) labelView.setText("Loss:");
+        } else if(change > 0) {
+            textView.setTextColor(Color.GREEN);
+            if(labelView != null) labelView.setText("Gain:");
+        }
+
+        textView.setText(Double.toString(Util.roundTwoDecimals(change)));
+
+        double changePercent = Util.roundTwoDecimals((Math.abs(change)*100.0)/original);
+        textView.append(" (");
+        textView.append(Double.toString(changePercent));
+        textView.append("%)");
     }
 }
