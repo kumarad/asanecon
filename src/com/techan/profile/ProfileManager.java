@@ -9,6 +9,7 @@ import java.util.Map;
 public class ProfileManager {
     public static final String STOP_LOSS_PERCENT = "STOP_LOSS_PERCENT";
     public static final String BUY_PRICE = "BUY_PRICE";
+    public static final String HIGHEST_PRICE = "HIGHEST_PRICE";
     public static final String TARGET_PRICE = "TARGET_PRICE";
     public static final String TARGET_PRICE_COMPARATOR = "TARGET_PRICE_COMPARATOR";
     public static final String STOCK_COUNT = "STOCK_COUNT";

@@ -155,7 +155,7 @@ public class SettingsActivity extends Activity {
         });
     }
 
-    public static void handleAutoRefreshAtStartup(Activity parent) {
+    public static void activateAutoRefresh(Activity parent) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(parent);
         boolean autoRefreshEnabled = sharedPreferences.getBoolean(AUTO_REFRESH_KEY, false);
         if(autoRefreshEnabled) {

@@ -12,8 +12,8 @@ public class StocksTable {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_SYMBOL = "sym";
     public static final String COLUMN_PRICE = "price";
-    public static final String COLUMN_LOW = "low";
-    public static final String COLUMN_HIGH = "high";
+    public static final String COLUMN_DAYS_LOW = "daysLow";
+    public static final String COLUMN_DAYS_HIGH = "daysHigh";
     public static final String COLUMN_PE = "pe";
     public static final String COLUMN_PEG = "peg";
     public static final String COLUMN_MOV_AVG_50 = "movAvg50";
@@ -34,8 +34,8 @@ public class StocksTable {
         stockColumns.put(COLUMN_ID, i++);
         stockColumns.put(COLUMN_SYMBOL, i++);
         stockColumns.put(COLUMN_PRICE, i++);
-        stockColumns.put(COLUMN_LOW, i++);
-        stockColumns.put(COLUMN_HIGH, i++);
+        stockColumns.put(COLUMN_DAYS_LOW, i++);
+        stockColumns.put(COLUMN_DAYS_HIGH, i++);
         stockColumns.put(COLUMN_PE, i++);
         stockColumns.put(COLUMN_PEG, i++);
         stockColumns.put(COLUMN_MOV_AVG_50, i++);
@@ -55,8 +55,8 @@ public class StocksTable {
             COLUMN_ID + " integer primary key autoincrement, " +
             COLUMN_SYMBOL + " text unique not null, " +
             COLUMN_PRICE + " real default 0, " +
-            COLUMN_LOW + " real default 0, " +
-            COLUMN_HIGH + " real default 0, " +
+            COLUMN_DAYS_LOW + " real default 0, " +
+            COLUMN_DAYS_HIGH + " real default 0, " +
             COLUMN_PE + " real default 0, " +
             COLUMN_PEG + " real default 0, " +
             COLUMN_MOV_AVG_50 + " real default 0, " +

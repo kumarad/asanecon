@@ -86,12 +86,12 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         TextView lowView = (TextView) this.findViewById(R.id.detailLow);
         lowView.setText("Low: ");
         TextView lowValView = (TextView) this.findViewById(R.id.detailLowVal);
-        lowValView.setText(Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_LOW)));
+        lowValView.setText(Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_DAYS_LOW)));
 
         TextView highView = (TextView) this.findViewById(R.id.detailHigh);
         highView.setText("High: ");
         TextView highValView = (TextView) this.findViewById(R.id.detailHighVal);
-        highValView.setText(Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_HIGH)));
+        highValView.setText(Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_DAYS_HIGH)));
     }
 
     /////////////////////////////////////////////////////////////////////

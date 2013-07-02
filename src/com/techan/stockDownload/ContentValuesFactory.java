@@ -5,7 +5,7 @@ import com.techan.database.StocksTable;
 
 public class ContentValuesFactory {
 
-    public static ContentValues createContentValues(StockData stockData, boolean includeHighLows) {
+    public static ContentValues createContentValues(StockData stockData) {
         ContentValues values = new ContentValues();
 
         values.put(StocksTable.COLUMN_PRICE, stockData.price);
@@ -26,10 +26,8 @@ public class ContentValuesFactory {
             values.put(StocksTable.COLUMN_90_DAY_LOW, curTrends.low90Day);
         }
 
-        if(includeHighLows) {
-            values.put(StocksTable.COLUMN_LOW, stockData.daysLow);
-            values.put(StocksTable.COLUMN_HIGH, stockData.daysHigh);
-        }
+        values.put(StocksTable.COLUMN_DAYS_LOW, stockData.daysLow);
+        values.put(StocksTable.COLUMN_DAYS_HIGH, stockData.daysHigh);
 
         return values;
     }

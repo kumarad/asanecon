@@ -44,7 +44,7 @@ public class DownloadNewSymbolTask extends AsyncTask<String, Void, StockData> {
 
         StockData stockData = dataList.get(0);
 
-        // Download trend data if needed.
+        // Download trend data.
         DownloadHistory.download(stockData, curCal);
 
         return stockData;
@@ -57,7 +57,7 @@ public class DownloadNewSymbolTask extends AsyncTask<String, Void, StockData> {
             return;
         }
 
-        ContentValues values = ContentValuesFactory.createContentValues(stockData, true);
+        ContentValues values = ContentValuesFactory.createContentValues(stockData);
         contentResolver.update(uri, values, null, null);
     }
 

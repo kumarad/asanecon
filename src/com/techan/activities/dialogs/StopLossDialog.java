@@ -42,7 +42,7 @@ public class StopLossDialog {
 
         // Get global notification preference
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(parentActivity);
-        boolean globalNotifications = sharedPref.getBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, true);
+        boolean globalNotifications = sharedPref.getBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, false);
 
         final SymbolProfile profile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), symbol);
         if(profile.buyPrice == null) {
@@ -73,7 +73,7 @@ public class StopLossDialog {
             np.setEnabled(false);
         }
 
-        final SwitchCheckListener listener = new SwitchCheckListener(np, globalNotifications, sharedPref.edit());
+        final SwitchCheckListener listener = new SwitchCheckListener(parentActivity, np, globalNotifications, sharedPref.edit(), true, sharedPref);
         s.setOnCheckedChangeListener(listener);
 
         //Pass null as parent view because its a dialog.
@@ -101,6 +101,9 @@ public class StopLossDialog {
         } else {
             profile.stopLossPercent = null;
         }
+
+        // Either way set highestPrice to buyPrice. So that highestPrices is tracked from when stop loss notifications are activated.
+        profile.highestPrice = profile.buyPrice;
 
         ProfileManager.addSymbolData(profile);
 

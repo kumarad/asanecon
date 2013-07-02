@@ -59,7 +59,7 @@ public class BuyDialog {
         String shareCountStr = shareCountText.getText().toString();
         if(!buyPriceStr.equals("")) {
             profile.buyPrice = Double.parseDouble(buyPriceStr);
-
+            profile.highestPrice = profile.buyPrice;
             if(!shareCountStr.equals("")) {
                 profile.stockCount = Integer.parseInt(shareCountStr);
             } else {
@@ -71,6 +71,7 @@ public class BuyDialog {
             }
 
             profile.buyPrice = null;
+            profile.highestPrice = null;
             profile.stockCount = null;
         }
 

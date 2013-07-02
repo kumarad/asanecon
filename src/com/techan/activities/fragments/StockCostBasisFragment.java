@@ -21,15 +21,16 @@ public class StockCostBasisFragment extends Fragment {
     LinearLayout costBasisChangeLayout;
     TextView costBasisChangeView;
     TextView costBasisChangeValView;
-    TextView costView;
+    LinearLayout costRow;
     TextView costValView;
-    TextView countView;
     TextView countValView;
 
     private double curPrice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        //todo check to see if auto refresh has been disabled - impacts stop loss!!
         View rootView = inflater.inflate(R.layout.stock_cost_basis, container, false);
         Bundle args = getArguments();
 
@@ -40,14 +41,12 @@ public class StockCostBasisFragment extends Fragment {
         costBasisChangeLayout = (LinearLayout)rootView.findViewById(R.id.costBasisChangeRow);
         costBasisChangeView = (TextView)rootView.findViewById(R.id.costBasisChange);
         costBasisChangeValView = (TextView)rootView.findViewById(R.id.costBasisChangeVal);
-        costView = (TextView) rootView.findViewById(R.id.detailCost);
+
+        costRow = (LinearLayout)rootView.findViewById(R.id.costRow);
         costValView = (TextView) rootView.findViewById(R.id.detailCostVal);
-        countView = (TextView) rootView.findViewById(R.id.detailCount);
         countValView = (TextView) rootView.findViewById(R.id.detailCountVal);
 
         warningView.setText("Set cost basis.");
-        costView.setText("Cost: ");
-        countView.setText("Count: ");
 
         Double costVal = args.getDouble(COST_VAL);
         if(costVal == 0) {
@@ -94,18 +93,16 @@ public class StockCostBasisFragment extends Fragment {
 
         hideCostBasisViews();
 
-        costView.setVisibility(View.GONE);
+        costRow.setVisibility(View.GONE);
         costValView.setVisibility(View.GONE);
-        countView.setVisibility(View.GONE);
         countValView.setVisibility(View.GONE);
     }
 
     private void clearWarning() {
         warningView.setVisibility(View.GONE);
 
-        costView.setVisibility(View.VISIBLE);
+        costRow.setVisibility(View.VISIBLE);
         costValView.setVisibility(View.VISIBLE);
-        countView.setVisibility(View.VISIBLE);
         countValView.setVisibility(View.VISIBLE);
     }
 

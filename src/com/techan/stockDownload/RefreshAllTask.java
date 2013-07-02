@@ -14,6 +14,8 @@ import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.ConnectionStatus;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
+import com.techan.profile.ProfileManager;
+import com.techan.profile.SymbolProfile;
 
 import java.util.*;
 
@@ -32,8 +34,12 @@ public class RefreshAllTask extends AsyncTask<String, Void, List<StockData>> {
     final ContentResolver contentResolver;
     final boolean auto;
 
+
+    final Context ctx;
+
     // Assumes being used for refresh of all symbols.
-    public RefreshAllTask(ContentResolver contentResolver, boolean auto) {
+    public RefreshAllTask(Context ctx, ContentResolver contentResolver, boolean auto) {
+        this.ctx = ctx;
         this.contentResolver = contentResolver;
         this.auto = auto;
 
@@ -89,23 +95,41 @@ public class RefreshAllTask extends AsyncTask<String, Void, List<StockData>> {
 
         int i = 0;
         for(StockData data : dataList) {
-            ContentValues values = ContentValuesFactory.createContentValues(data, false);
+            ContentValues values = ContentValuesFactory.createContentValues(data);
 
-            String[] selection = {StocksTable.COLUMN_LOW, StocksTable.COLUMN_HIGH};
-            Cursor cursor = contentResolver.query(uris.get(i),selection, null, null, null);
-            cursor.moveToFirst();
-            if(cursor.getInt(0) == 0 || data.daysLow < cursor.getInt(0))
-                values.put(StocksTable.COLUMN_LOW,data.daysLow);
-
-            if(data.daysHigh > cursor.getInt(1))
-                values.put(StocksTable.COLUMN_HIGH, data.daysHigh);
+            // Update the highest price seen for this stock.
+            // We assume auto refresh is on otherwise might miss days and screw up stop loss math.
+            // Only start tracking highest price if stopLossPercent is set indicating notification is wanted.
+            // --- This ensures we start tracking from when stop loss notifications are enabled!
+            SymbolProfile profile = ProfileManager.getSymbolData(ctx,data.symbol);
+            if(profile.stopLossPercent != null) {
+                if(!PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean(SettingsActivity.AUTO_REFRESH_KEY, false)) {
+                    // Auto refresh has been disabled. Disable stop loss notifications.
+                    profile.stopLossPercent = null;
+                    ProfileManager.addSymbolData(profile);
+                } else {
+                    if(data.daysHigh > profile.highestPrice) {
+                        profile.highestPrice = data.daysHigh;
+                        ProfileManager.addSymbolData(profile);
+                    }
+                }
+            }
+//            String[] selection = {StocksTable.COLUMN_DAYS_LOW, StocksTable.COLUMN_DAYS_HIGH};
+//            Cursor cursor = contentResolver.query(uris.get(i),selection, null, null, null);
+//            cursor.moveToFirst();
+//            if(cursor.getInt(0) == 0 || data.daysLow < cursor.getInt(0))
+//                values.put(StocksTable.COLUMN_DAYS_LOW,data.daysLow);
+//
+//            if(data.daysHigh > cursor.getInt(1))
+//                values.put(StocksTable.COLUMN_DAYS_HIGH, data.daysHigh);
+//
 
             contentResolver.update(uris.get(i), values, null, null);
             ++i;
         }
     }
 
-    public void download(Context ctx) {
+    public void download() {
         if(auto) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
             boolean refreshWifiOnly = sharedPref.getBoolean(SettingsActivity.REFRESH_WIFI_ONLY_KEY, false);

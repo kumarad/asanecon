@@ -69,7 +69,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
 //        ProfileManager.forceDelete(this);
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
-        SettingsActivity.handleAutoRefreshAtStartup(this);
+        SettingsActivity.activateAutoRefresh(this);
     }
 
     private void loadFromProfile() {
@@ -100,7 +100,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         setListAdapter(adapter);
 
         // Update from the network.
-        (new RefreshAllTask(this.getContentResolver(), false)).download(getApplicationContext());
+        (new RefreshAllTask(getApplicationContext(), this.getContentResolver(), false)).download();
     }
 
     /////////////////////
@@ -152,7 +152,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
                 AddDialog.create(this);
                 return true;
             case R.id.refresh:
-                (new RefreshAllTask(this.getContentResolver(), false)).download(getApplicationContext());
+                (new RefreshAllTask(getApplicationContext(), this.getContentResolver(), false)).download();
                 return true;
             case R.id.settings:
                 settings();
