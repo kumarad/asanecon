@@ -24,7 +24,8 @@ import com.techan.contentProvider.StockContentProvider;
 import com.techan.database.StocksTable;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
-import com.techan.stockDownload.RefreshAllTask;
+import com.techan.stockDownload.ContentValuesFactory;
+import com.techan.stockDownload.RefreshTask;
 
 import java.util.Collection;
 
@@ -80,8 +81,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
             Collection<SymbolProfile> symbolProfiles = ProfileManager.getSymbols(getApplicationContext());
             if(symbolProfiles.size() != 0) {
                 for(SymbolProfile symbolProfile : symbolProfiles) {
-                    ContentValues values = new ContentValues();
-                    values.put(StocksTable.COLUMN_SYMBOL, symbolProfile.symbol);
+                    ContentValues values = ContentValuesFactory.createValuesForRecovery(symbolProfile);
                     cr.insert(StockContentProvider.CONTENT_URI, values);
                 }
             }
@@ -100,7 +100,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         setListAdapter(adapter);
 
         // Update from the network.
-        (new RefreshAllTask(getApplicationContext(), this.getContentResolver(), false)).download();
+        (new RefreshTask(getApplicationContext(), this.getContentResolver(), false)).download();
     }
 
     /////////////////////
@@ -152,7 +152,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
                 AddDialog.create(this);
                 return true;
             case R.id.refresh:
-                (new RefreshAllTask(getApplicationContext(), this.getContentResolver(), false)).download();
+                (new RefreshTask(getApplicationContext(), this.getContentResolver(), false)).download();
                 return true;
             case R.id.settings:
                 settings();

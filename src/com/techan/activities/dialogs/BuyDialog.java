@@ -55,11 +55,22 @@ public class BuyDialog {
     }
 
     private static void doAdd(Activity activity, SymbolProfile profile, EditText buyPriceText, EditText shareCountText, StockPagerAdapter stockPagerAdapter) {
+        boolean showStopLossToast = false;
         String buyPriceStr = buyPriceText.getText().toString();
         String shareCountStr = shareCountText.getText().toString();
         if(!buyPriceStr.equals("")) {
-            profile.buyPrice = Double.parseDouble(buyPriceStr);
-            profile.highestPrice = profile.buyPrice;
+            double newBuyPrice = Double.parseDouble(buyPriceStr);
+            if(profile.buyPrice != null && newBuyPrice != profile.buyPrice) {
+                if(profile.stopLossPercent != null) {
+                    showStopLossToast = true;
+                }
+
+                // If buy price is being updated clear stop loss info.
+                profile.clearStopLossInfo();
+            }
+
+            profile.buyPrice = newBuyPrice;
+
             if(!shareCountStr.equals("")) {
                 profile.stockCount = Integer.parseInt(shareCountStr);
             } else {
@@ -71,11 +82,15 @@ public class BuyDialog {
             }
 
             profile.buyPrice = null;
-            profile.highestPrice = null;
             profile.stockCount = null;
+            profile.clearStopLossInfo();
         }
 
         ProfileManager.addSymbolData(profile);
         stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.stockCount);
+
+        if(showStopLossToast) {
+            Util.showErrorToast(activity, "Stop loss information has been reset. Please update.");
+        }
     }
 }

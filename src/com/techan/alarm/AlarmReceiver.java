@@ -47,6 +47,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // refreshValueHrs * 60 (minutes) * 60 (seconds) * 1000 (ms)
         int interval = refreshValueHrs * 60 * 60 * 1000;
 //        int interval;
+//        interval = 1000 * 30 * 1;
 //        if(refreshValueHrs == 1) {
 //            interval = 1000 * 30 * 1;
 //        } else {

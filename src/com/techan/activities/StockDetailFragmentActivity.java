@@ -56,6 +56,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         String lastUpdateStr = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_LAST_UPDATE));
         symbolView.setText(lastUpdateStr);
 
+        symbol = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
         populateGeneralView();
 
         stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockCursor, getApplicationContext());
@@ -70,7 +71,6 @@ public class StockDetailFragmentActivity extends FragmentActivity {
 
     void populateGeneralView() {
         TextView symbolView = (TextView) this.findViewById(R.id.detailNameSymbol);
-        symbol = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
         String name = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_NAME));
         symbolView.setText(name);
         symbolView.append(" ("+symbol+")");
@@ -123,7 +123,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
                 PeDialog.create(this, symbol);
                 return true;
             case R.id.set_stop_loss:
-                StopLossDialog.create(this, symbol);
+                StopLossDialog.create(this, symbol, stockUri);
                 return true;
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);

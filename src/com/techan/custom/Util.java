@@ -80,26 +80,59 @@ public class Util {
         return Double.toString(d);
     }
 
-    public static SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static SimpleDateFormat FORMATER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public static String getCalStrFromNoTimeStr(String date) {
+        return date + " 00:00:00";
+    }
+
+    public static String getDate(Calendar cal) {
+        String str = cal.get(Calendar.YEAR) + "-";
+        str += (cal.get(Calendar.MONTH) + 1) + "-";
+        str += (cal.get(Calendar.DAY_OF_MONTH) + 1);
+        return str;
+    }
+
+    public static String getDateStrForDb(Calendar cal) {
+        Date curDate = cal.getTime();
+        return Util.FORMATER.format(curDate);
+    }
+
+    public static Calendar getCal(final String lastUpdate) {
+        try {
+            Date date = FORMATER.parse(lastUpdate);
+            Calendar cal = new GregorianCalendar();
+            cal.setTime(date);
+            return cal;
+        } catch(ParseException e) {
+            throw new RuntimeException("Exception parsing date from db.", e);
+        }
+    }
+
     public static boolean isDateSame(String lastUpdate, Calendar curCal) {
         if(lastUpdate != null) {
             // Stock has been updated before.
-            try {
-                Date dbDate = formater.parse(lastUpdate);
-                Calendar dbCal = new GregorianCalendar();
-                dbCal.setTime(dbDate);
-                if(dbCal.get(Calendar.DAY_OF_MONTH) == curCal.get(Calendar.DAY_OF_MONTH) &&
-                        dbCal.get(Calendar.MONTH) == curCal.get(Calendar.MONTH) &&
-                        dbCal.get(Calendar.YEAR) == curCal.get(Calendar.YEAR)) {
-                    // Stock already updated today once.
-                    return true;
-                }
-            } catch(ParseException e) {
-                throw new RuntimeException("Exception parsing date from db.", e);
+            Calendar dbCal = getCal(lastUpdate);
+            if(dbCal.get(Calendar.DAY_OF_MONTH) == curCal.get(Calendar.DAY_OF_MONTH) &&
+                    dbCal.get(Calendar.MONTH) == curCal.get(Calendar.MONTH) &&
+                    dbCal.get(Calendar.YEAR) == curCal.get(Calendar.YEAR)) {
+                // Stock already updated today once.
+                return true;
             }
         }
 
         return false;
+    }
+
+    public static int dateDiff(Calendar someCal, Calendar curCal) {
+        int days = 0;
+        Calendar clonedCal = (Calendar)someCal.clone();
+        while(clonedCal.before(curCal)) {
+            clonedCal.add(Calendar.DAY_OF_MONTH, 1);
+            days++;
+        }
+
+        return days;
     }
 
     // Provides feedback in a small pop up black window.

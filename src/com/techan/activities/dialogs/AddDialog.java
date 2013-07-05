@@ -16,7 +16,7 @@ import com.techan.custom.Util;
 import com.techan.database.StocksTable;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
-import com.techan.stockDownload.DownloadNewSymbolTask;
+import com.techan.stockDownload.RefreshTask;
 
 import java.util.Collection;
 
@@ -54,8 +54,7 @@ public class AddDialog {
         String symbol = addText.getText().toString().toUpperCase();
 
         if(verify(symbol, parentActivity)) {
-            addToDb(symbol, parentActivity);
-            addToProfile(symbol, parentActivity);
+            addInternal(symbol, parentActivity);
         }
     }
 
@@ -82,21 +81,20 @@ public class AddDialog {
         return true;
     }
 
-    private static void addToDb(String symbol, Activity parentActivity) {
-        ContentValues values = new ContentValues();
-        values.put(StocksTable.COLUMN_SYMBOL, symbol);
-        Uri addedUri = parentActivity.getContentResolver().insert(StockContentProvider.CONTENT_URI, values);
-        Uri uri = Uri.parse(StockContentProvider.BASE_URI_STR + addedUri);
-        (new DownloadNewSymbolTask(parentActivity.getContentResolver(), uri, symbol)).execute();
-    }
-
-    private static void addToProfile(String symbol, Activity parentActivity) {
+    private static void addInternal(String symbol, Activity parentActivity) {
+        // RefreshTask expects symbol profile to exist! So make sure to add to profile manager first.
         if(!ProfileManager.addSymbol(parentActivity.getApplicationContext(), symbol)) {
             // Failure adding symbol to persistent file. Let user know.
             Util.showErrorToast(parentActivity, "Oops. Something on your device prevented profile from being updated.");
         }
 
         //testJSONManager(symbol, parentActivity);
+
+        ContentValues values = new ContentValues();
+        values.put(StocksTable.COLUMN_SYMBOL, symbol);
+        Uri addedUri = parentActivity.getContentResolver().insert(StockContentProvider.CONTENT_URI, values);
+        Uri uri = Uri.parse(StockContentProvider.BASE_URI_STR + addedUri);
+        (new RefreshTask(parentActivity, parentActivity.getContentResolver(), uri, symbol, true)).execute();
     }
 
     private static void testJSONManager(String symbol, Activity parentActivity) {

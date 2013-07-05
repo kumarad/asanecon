@@ -37,7 +37,6 @@
         <SwitchPreference
             android:key="allNotifications"
             android:title="Notifications"
-            android:summary="Enable/disable notifications"
             android:defaultValue="false"
             />
 

@@ -19,6 +19,7 @@ public class DownloadQuote {
     static String TAG_PREFIX = "&f=";
     static String SYMBOL_SEPERATOR = "+";
 
+    // If error getting info for stock, will end up with no entry in StockData list for the stock.
     public static List<StockData> download(List<String> symbols, String dateStr) {
         // Generate url
         String url = URL_PREFIX;
@@ -72,8 +73,10 @@ public class DownloadQuote {
             }
         } catch(IOException e) {
             getRequest.abort();
+            stockDataList.clear();
         } catch(Exception e) {
             e.printStackTrace();
+            stockDataList.clear();
         } finally {
             if(client != null) {
                 client.close();

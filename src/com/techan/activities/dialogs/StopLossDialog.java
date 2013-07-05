@@ -2,21 +2,24 @@ package com.techan.activities.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.techan.R;
 import com.techan.activities.SettingsActivity;
-import com.techan.custom.SwitchCheckListener;
+import com.techan.custom.SwitchCheckRefreshListener;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
+import com.techan.stockDownload.ContentValuesFactory;
 
 public class StopLossDialog {
     public static void createError(AlertDialog.Builder alertDialog) {
@@ -32,7 +35,7 @@ public class StopLossDialog {
         alertDialog.create().show();
     }
 
-    public static void create(Activity parentActivity, String symbol) {
+    public static void create(final Activity parentActivity, String symbol, final Uri stockUri) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
         alertDialog.setTitle("Trailing stop loss");
 
@@ -73,7 +76,12 @@ public class StopLossDialog {
             np.setEnabled(false);
         }
 
-        final SwitchCheckListener listener = new SwitchCheckListener(parentActivity, np, globalNotifications, sharedPref.edit(), true, sharedPref);
+        // Handle warning.
+        final TextView warningText = (TextView)view.findViewById(R.id.sl_warning);
+        warningText.setText("Enable auto refresh for timely notifications");
+        warningText.setVisibility(View.GONE);
+
+        final SwitchCheckRefreshListener listener = new SwitchCheckRefreshListener(np, globalNotifications, sharedPref.edit(), warningText, parentActivity, sharedPref, false);
         s.setOnCheckedChangeListener(listener);
 
         //Pass null as parent view because its a dialog.
@@ -81,7 +89,7 @@ public class StopLossDialog {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        doAdd(profile, np, s, listener);
+                        doAdd(parentActivity, stockUri, profile, np, s, listener);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -95,19 +103,25 @@ public class StopLossDialog {
         alertDialog.create().show();
     }
 
-    private static void doAdd(SymbolProfile profile, NumberPicker np, Switch s, SwitchCheckListener listener) {
+    private static void doAdd(Activity parentActivity, Uri stockUri, SymbolProfile profile, NumberPicker np, Switch s, SwitchCheckRefreshListener listener) {
         if(s.isChecked()) {
-            profile.stopLossPercent = np.getValue();
+            Integer stopLossPercent = np.getValue();
+            // Either way set highestPrice to buyPrice. So that highestPrices is tracked from when stop loss notifications are activated.
+            // TODO let the user change the buy price for stop loss??
+            // TODO let user specify trailing vs non trailing
+            profile.setStopLossInfo(stopLossPercent, true);
         } else {
-            profile.stopLossPercent = null;
+            profile.clearStopLossInfo();
         }
 
-        // Either way set highestPrice to buyPrice. So that highestPrices is tracked from when stop loss notifications are activated.
-        profile.highestPrice = profile.buyPrice;
-
+        // Update profile manager.
         ProfileManager.addSymbolData(profile);
+
+        // Update db with stop loss information.
+        ContentResolver cr = parentActivity.getContentResolver();
+        ContentValues values = ContentValuesFactory.createSlAddValues(profile.buyPrice);
+        cr.update(stockUri, values, null, null);
 
         listener.commit();
     }
-
 }

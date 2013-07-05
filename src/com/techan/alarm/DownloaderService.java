@@ -6,14 +6,14 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.techan.profile.Constants;
-import com.techan.stockDownload.RefreshAllTask;
+import com.techan.stockDownload.RefreshTask;
 
 public class DownloaderService extends Service {
 
     private static long last = 0;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        new RefreshAllTask(getApplicationContext(), this.getContentResolver(), true).download();
+        new RefreshTask(getApplicationContext(), this.getContentResolver(), true).download();
 
         long cur = System.currentTimeMillis()/1000;
         long delta = (cur - last);
