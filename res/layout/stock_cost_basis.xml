@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:saund="http://schemas.android.com/apk/res/com.techan"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
@@ -88,5 +89,24 @@
                 android:layout_gravity="right"
                 android:layout_marginLeft="15dp"/>
     </LinearLayout>
+
+    <RelativeLayout android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/stopLossView"
+                    android:layout_below="@id/costRow">
+
+    <com.techan.progressbar.SaundProgressBar
+            android:id="@+id/slprogressbar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dip"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip"
+            saund:offset="3dip"
+            saund:textSize="7sp"
+            style="@style/Widget.ProgressBar.StopLossProgressBar"
+            />
+
+     </RelativeLayout>
 
 </RelativeLayout>

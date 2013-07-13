@@ -58,15 +58,4 @@
                 android:layout_height="fill_parent"
                 />
     </LinearLayout>
-
-    <com.techan.custom.ReverseProgressBar
-            android:layout_below="@id/pegRow"
-            android:id="@+id/stopLoss"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_marginRight="5dp"
-            />
-
-
 </RelativeLayout>

@@ -25,9 +25,6 @@ public class StockPeFragment extends Fragment {
         TextView peValView = (TextView) rootView.findViewById(R.id.detailPeVal);
         peValView.setText(args.getString(PE_VAL));
 
-        ProgressBar stopLossR = (ProgressBar) rootView.findViewById(R.id.stopLoss);
-        Util.createBar(this, stopLossR, "#E52B50", 10);
-
         TextView pegView = (TextView) rootView.findViewById(R.id.detailPeg);
         pegView.setText("PEG: ");
         TextView pegValView = (TextView) rootView.findViewById(R.id.detailPegVal);

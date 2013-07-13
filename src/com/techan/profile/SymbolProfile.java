@@ -1,9 +1,6 @@
 package com.techan.profile;
 
-import android.content.Context;
-
 import com.techan.custom.Util;
-import com.techan.stockDownload.StockTrends;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -31,6 +28,7 @@ public class SymbolProfile {
 
     @SymbolProfileMember(memberName = ProfileManager.STOP_LOSS_TRAILING)
     public Boolean stopLossTrailing = null;
+
 
     ///////////////////////////////////////////////////////////
     @SymbolProfileMember(memberName = ProfileManager.TARGET_PRICE)

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:saund="http://schemas.android.com/apk/res/com.techan"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
@@ -65,14 +66,27 @@
                 />
 
 
-        <com.techan.custom.TextProgressBar
-                android:layout_below="@id/upTrendCountRow"
+        <!--<com.techan.custom.TextProgressBar-->
+                <!--android:layout_below="@id/upTrendCountRow"-->
+                <!--android:id="@+id/upTrendBar"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight=".6"-->
+                <!--style="@android:style/Widget.ProgressBar.Horizontal"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:layout_marginRight="5dp"-->
+                <!--/>-->
+
+        <com.techan.progressbar.SaundProgressBar
                 android:id="@+id/upTrendBar"
                 android:layout_width="0dp"
                 android:layout_weight=".6"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dip"
+                android:paddingLeft="15dip"
+                android:paddingRight="15dip"
+                saund:offset="3dip"
+                saund:textSize="7sp"
+                style="@style/Widget.ProgressBar.RegularProgressBar"
                 />
 
     </LinearLayout>

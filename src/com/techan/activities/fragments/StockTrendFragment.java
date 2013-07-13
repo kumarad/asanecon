@@ -1,5 +1,7 @@
 package com.techan.activities.fragments;
 
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 import com.techan.R;
 import com.techan.custom.TextProgressBar;
 import com.techan.custom.Util;
+import com.techan.progressbar.SaundProgressBar;
 
 public class StockTrendFragment extends Fragment {
     public static final String MOV_50_VAL = "MOV_50_VAL";
@@ -38,9 +41,23 @@ public class StockTrendFragment extends Fragment {
         int dayCount = args.getInt(DAY_COUNT);
         if(dayCount > 10)
             dayCount = 10;
-        TextProgressBar upTrendBar = (TextProgressBar) rootView.findViewById(R.id.upTrendBar);
-        Util.createBar(this, upTrendBar, "#93d500", dayCount*10);
-        upTrendBar.setText(Integer.toString(dayCount) + "/10 Days");
+        SaundProgressBar regularProgressBar = (SaundProgressBar) rootView.findViewById(R.id.upTrendBar);
+        Drawable indicator = getResources().getDrawable(R.drawable.progress_indicator_b2);
+        Rect bounds = new Rect(0, 0, indicator.getIntrinsicWidth() + 5, indicator.getIntrinsicHeight());
+        indicator.setBounds(bounds);
+        regularProgressBar.setProgressIndicator(indicator);
+        regularProgressBar.setTextFormatter(new SaundProgressBar.Formatter() {
+            @Override
+            public String getText(int progress) {
+                return Integer.toString(progress/10) + " days";
+            }
+        });
+        regularProgressBar.setProgress(dayCount*10);
+
+//
+//        TextProgressBar upTrendBar = (TextProgressBar) rootView.findViewById(R.id.upTrendBar);
+//        Util.createBar(this, upTrendBar, "#93d500", dayCount*10);
+//        upTrendBar.setText(Integer.toString(dayCount) + "/10 Days");
 
 
         TextView high60DayView = (TextView) rootView.findViewById(R.id.high60Day);
