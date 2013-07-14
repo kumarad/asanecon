@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -16,7 +17,9 @@ import android.widget.TextView;
 
 import com.techan.R;
 import com.techan.activities.SettingsActivity;
+import com.techan.activities.StockPagerAdapter;
 import com.techan.custom.SwitchCheckRefreshListener;
+import com.techan.database.StocksTable;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.ContentValuesFactory;
@@ -35,7 +38,7 @@ public class StopLossDialog {
         alertDialog.create().show();
     }
 
-    public static void create(final Activity parentActivity, String symbol, final Uri stockUri) {
+    public static void create(final Activity parentActivity, String symbol, final Uri stockUri, final StockPagerAdapter stockPagerAdapter) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
         alertDialog.setTitle("Trailing stop loss");
 
@@ -89,7 +92,7 @@ public class StopLossDialog {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        doAdd(parentActivity, stockUri, profile, np, s, listener);
+                        doAdd(parentActivity, stockUri, profile, np, s, listener, stockPagerAdapter);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -103,7 +106,7 @@ public class StopLossDialog {
         alertDialog.create().show();
     }
 
-    private static void doAdd(Activity parentActivity, Uri stockUri, SymbolProfile profile, NumberPicker np, Switch s, SwitchCheckRefreshListener listener) {
+    private static void doAdd(Activity parentActivity, Uri stockUri, SymbolProfile profile, NumberPicker np, Switch s, SwitchCheckRefreshListener listener, StockPagerAdapter stockPagerAdapter) {
         if(s.isChecked()) {
             Integer stopLossPercent = np.getValue();
             // Either way set highestPrice to buyPrice. So that highestPrices is tracked from when stop loss notifications are activated.
@@ -119,8 +122,13 @@ public class StopLossDialog {
 
         // Update db with stop loss information.
         ContentResolver cr = parentActivity.getContentResolver();
-        ContentValues values = ContentValuesFactory.createSlAddValues(profile.buyPrice);
+        Cursor cursor = cr.query(stockUri, null, null, null, null);
+        cursor.moveToFirst();
+        Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
+        ContentValues values = ContentValuesFactory.createSlAddValues(curPrice, profile.buyPrice);
         cr.update(stockUri, values, null, null);
+
+        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.stockCount, profile.stopLossPercent);
 
         listener.commit();
     }

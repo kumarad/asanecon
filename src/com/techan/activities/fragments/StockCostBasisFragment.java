@@ -19,6 +19,8 @@ public class StockCostBasisFragment extends Fragment {
     public static final String COST_VAL = "COST_VAL";
     public static final String COUNT_VAL = "COUNT_VAL";
     public static final String CUR_PRICE = "CUR_PRICE";
+    public static final String HIGH_PRICE = "HIGH_PRICE";
+    public static final String SL_PERCENT = "SL_PERCENT";
 
     TextView warningView;
     TextView costBasisView;
@@ -30,16 +32,12 @@ public class StockCostBasisFragment extends Fragment {
     TextView countValView;
     RelativeLayout stopLossView;
 
-    private double curPrice;
+    SaundProgressBar regularProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        //todo check to see if auto refresh has been disabled - impacts stop loss!!
         View rootView = inflater.inflate(R.layout.stock_cost_basis, container, false);
         Bundle args = getArguments();
-
-        curPrice = args.getDouble(CUR_PRICE);
 
         warningView = (TextView)rootView.findViewById(R.id.costWarning);
         costBasisView = (TextView)rootView.findViewById(R.id.costBasisVal);
@@ -55,37 +53,48 @@ public class StockCostBasisFragment extends Fragment {
 
         warningView.setText("Set cost basis.");
 
-        Double costVal = args.getDouble(COST_VAL);
-        if(costVal == 0) {
-            setWarning();
-            return rootView;
-        } else {
+        regularProgressBar = (SaundProgressBar) rootView.findViewById(R.id.slprogressbar);
+        Drawable indicator = getResources().getDrawable(R.drawable.progress_indicator_b2);
+        Rect bounds = new Rect(0, 0, indicator.getIntrinsicWidth() + 5, indicator.getIntrinsicHeight());
+        indicator.setBounds(bounds);
+        regularProgressBar.setProgressIndicator(indicator);
+
+        update(args.getDouble(CUR_PRICE), args.getDouble(COST_VAL), args.getInt(COUNT_VAL), args.getInt(SL_PERCENT), args.getDouble(HIGH_PRICE));
+
+        return rootView;
+    }
+
+    public void update(final Double curPrice, final Double buyPrice, final Integer stockCount, final Integer slPercent, final Double highPrice) {
+        if(buyPrice != null && buyPrice != 0) {
+            costValView.setText(Double.toString(buyPrice));
             clearWarning();
+        } else {
+            setWarning();
+            return;
         }
 
-        costValView.setText(Double.toString(costVal));
-
-        Integer countVal = args.getInt(COUNT_VAL);
-        if(countVal != 0) {
-            countValView.setText(Integer.toString(countVal));
-            showCostBasis(costVal, countVal);
+        if(stockCount != null && stockCount != 0) {
+            countValView.setText(Integer.toString(stockCount));
+            showCostBasisViews();
+            updateCostBasis(curPrice, buyPrice, stockCount);
         } else {
             countValView.setText("Not set");
             hideCostBasisViews();
         }
 
-
-        SaundProgressBar regularProgressBar = (SaundProgressBar) rootView.findViewById(R.id.slprogressbar);
-        Drawable indicator = getResources().getDrawable(R.drawable.progress_indicator_b2);
-        Rect bounds = new Rect(0, 0, indicator.getIntrinsicWidth() + 5, indicator.getIntrinsicHeight());
-
-        indicator.setBounds(bounds);
-
-        regularProgressBar.setProgressIndicator(indicator);
-        regularProgressBar.setProgress(20);
-
-        return rootView;
+        if(slPercent != null && slPercent != 0) {
+            stopLossView.setVisibility(View.VISIBLE);
+            int progress = 0;
+            double low = highPrice - ((((double)slPercent)*highPrice)/100.00);
+            if(curPrice > low && curPrice <= highPrice) {
+                progress = (int)(((curPrice - low)*100.00)/(highPrice - low));
+            } // else lower. Can't be higher!
+            regularProgressBar.setValue("$" + Double.toString(curPrice), progress);
+        } else {
+            stopLossView.setVisibility(View.GONE);
+        }
     }
+
 
     private void hideCostBasisViews() {
         costBasisView.setVisibility(View.GONE);
@@ -97,7 +106,7 @@ public class StockCostBasisFragment extends Fragment {
         costBasisChangeLayout.setVisibility(View.VISIBLE);
     }
 
-    private void showCostBasis(double cost, int count) {
+    private void updateCostBasis(double curPrice, double cost, int count) {
         double oldBasis = cost * count;
         double curBasis = curPrice * count;
         double change = curBasis - oldBasis;
@@ -123,24 +132,5 @@ public class StockCostBasisFragment extends Fragment {
         costValView.setVisibility(View.VISIBLE);
         countValView.setVisibility(View.VISIBLE);
         stopLossView.setVisibility(View.VISIBLE);
-    }
-
-    public void update(final Double buyPrice, final Integer stockCount) {
-        if(buyPrice != null) {
-            costValView.setText(Double.toString(buyPrice));
-            clearWarning();
-        } else {
-            setWarning();
-            return;
-        }
-
-        if(stockCount != null) {
-            countValView.setText(Integer.toString(stockCount));
-            showCostBasisViews();
-            showCostBasis(buyPrice, stockCount);
-        } else {
-            countValView.setText("Not set");
-            hideCostBasisViews();
-        }
     }
 }

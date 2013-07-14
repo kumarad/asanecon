@@ -16,12 +16,12 @@ limitations under the License.
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
             android:id="@android:id/background"
-            android:drawable="@drawable/progressbar_bargreen"
+            android:drawable="@drawable/progressbar_barred"
             />
 
     <item
             android:id="@+id/progress"
-            android:drawable="@drawable/progressbar_barred"
+            android:drawable="@drawable/progressbar_bargreen"
             >
     </item>
 

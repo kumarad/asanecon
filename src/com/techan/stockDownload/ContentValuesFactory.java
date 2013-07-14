@@ -44,10 +44,10 @@ public class ContentValuesFactory {
         return values;
     }
 
-    public static ContentValues createSlAddValues(double buyPrice) {
+    public static ContentValues createSlAddValues(double curPrice, double buyPrice) {
         ContentValues values = new ContentValues();
-        values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, buyPrice);
-        values.put(StocksTable.COLUMN_SL_LOWEST_PRICE, buyPrice);
+        values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, (curPrice > buyPrice ? curPrice : buyPrice));
+        values.put(StocksTable.COLUMN_SL_LOWEST_PRICE, (curPrice < buyPrice ? curPrice : buyPrice));
         values.put(StocksTable.COLUMN_SL_LOWEST_PRICE_DATE, Util.getDateStrForDb(Calendar.getInstance()));
         return values;
     }

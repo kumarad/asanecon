@@ -78,7 +78,7 @@ public class BuyDialog {
             }
         } else {
             if(!shareCountStr.equals("")) {
-                Util.showErrorToast(activity, "Share price ignored without buy price.");
+                Util.showErrorToast(activity, "Share count ignored without buy price.");
             }
 
             profile.buyPrice = null;
@@ -87,7 +87,10 @@ public class BuyDialog {
         }
 
         ProfileManager.addSymbolData(profile);
-        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.stockCount);
+
+        // If adding buy price or updating it stop loss info is reset.
+        // If it remains the same will just update stop loss progress bar if needed.
+        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.stockCount, profile.stopLossPercent);
 
         if(showStopLossToast) {
             Util.showErrorToast(activity, "Stop loss information has been reset. Please update.");

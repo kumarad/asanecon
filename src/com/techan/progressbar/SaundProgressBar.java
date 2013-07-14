@@ -256,11 +256,27 @@ public class SaundProgressBar extends ProgressBar {
 
             m_indicator.draw(canvas);
 
-            canvas.drawText(m_formatter != null ? m_formatter.getText(getProgress()) : Math.round(getScale(getProgress())*100.0f) + "%", getIndicatorWidth()/2, getIndicatorHeight()/2 + 1, m_textPaint);
+            if(val != null) {
+                canvas.drawText(val, getIndicatorWidth()/2, getIndicatorHeight()/2 + 1, m_textPaint);
+            } else {
+                canvas.drawText(m_formatter != null ? m_formatter.getText(getProgress()) : Math.round(getScale(getProgress())*100.0f) + "%", getIndicatorWidth()/2, getIndicatorHeight()/2 + 1, m_textPaint);
+            }
 
             // restore canvas to original
             canvas.restore();
         }
+    }
+
+    private String val;
+    public synchronized void setValue(String val, int progress) {
+        this.val = val;
+
+        super.setProgress(progress);
+
+        // the setProgress super will not change the details of the progress bar
+        // anymore so we need to force an update to redraw the progress bar
+        invalidate();
+
     }
 
     @Override

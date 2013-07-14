@@ -59,7 +59,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         symbol = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
         populateGeneralView();
 
-        stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockCursor, getApplicationContext());
+        stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockUri, getApplicationContext());
         viewPager = (ViewPager)findViewById(R.id.stock_pager);
         viewPager.setAdapter(stockPagerAdapter);
 
@@ -123,7 +123,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
                 PeDialog.create(this, symbol);
                 return true;
             case R.id.set_stop_loss:
-                StopLossDialog.create(this, symbol, stockUri);
+                StopLossDialog.create(this, symbol, stockUri, stockPagerAdapter);
                 return true;
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
