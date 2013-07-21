@@ -142,13 +142,13 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch(position) {
             case 0:
-                return createCostBasisFragment();
-            case 1:
-                return createPeFragment();
-            case 2:
-                return createVolFragment();
-            case 3:
                 return createTrendFragment();
+            case 1:
+                return createCostBasisFragment();
+            case 2:
+                return createPeFragment();
+            case 3:
+                return createVolFragment();
         }
 
         return null;
@@ -163,13 +163,13 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch(position) {
             case 0:
-                return (fragmentTypes[position] = COST_BASIS);
-            case 1:
-                return (fragmentTypes[position] = PE);
-            case 2:
-                return (fragmentTypes[position] = VOL);
-            case 3:
                 return (fragmentTypes[position] = TREND);
+            case 1:
+                return (fragmentTypes[position] = COST_BASIS);
+            case 2:
+                return (fragmentTypes[position] = PE);
+            case 3:
+                return (fragmentTypes[position] = VOL);
         }
 
         return null;
