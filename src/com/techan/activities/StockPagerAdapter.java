@@ -127,11 +127,12 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = new StockTrendFragment();
         Bundle args = new Bundle();
 
-        args.putString(StockTrendFragment.MOV_50_VAL, Util.parseDouble(createCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_MOV_AVG_50)));
-        args.putString(StockTrendFragment.MOV_200_VAL, Util.parseDouble(createCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_MOV_AVG_200)));
+        args.putDouble(StockTrendFragment.CUR_PRICE, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE)));
+        args.putDouble(StockTrendFragment.MOV_50_VAL, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_MOV_AVG_50)));
+        args.putDouble(StockTrendFragment.MOV_200_VAL, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_MOV_AVG_200)));
         args.putInt(StockTrendFragment.DAY_COUNT, (int)createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_UP_TREND_COUNT)));
-        args.putString(StockTrendFragment.HIGH_60_DAY, Util.parseDouble(createCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_60_DAY_HIGH)));
-        args.putString(StockTrendFragment.LOW_90_DAY, Util.parseDouble(createCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_90_DAY_LOW)));
+        args.putDouble(StockTrendFragment.HIGH_60_DAY, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_60_DAY_HIGH)));
+        args.putDouble(StockTrendFragment.LOW_90_DAY, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_90_DAY_LOW)));
 
         fragment.setArguments(args);
         return fragment;

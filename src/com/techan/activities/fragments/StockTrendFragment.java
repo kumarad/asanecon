@@ -1,5 +1,6 @@
 package com.techan.activities.fragments;
 
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -8,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.androidplot.xy.XYPlot;
 import com.techan.R;
-import com.techan.custom.TextProgressBar;
-import com.techan.custom.Util;
+import com.techan.custom.TrendPlot;
 import com.techan.progressbar.SaundProgressBar;
 
 public class StockTrendFragment extends Fragment {
+    public static final String CUR_PRICE = "CUR_PRICE";
     public static final String MOV_50_VAL = "MOV_50_VAL";
     public static final String MOV_200_VAL = "MOV_200_VAL";
     public static final String DAY_COUNT = "DAY_COUNT";
@@ -25,15 +28,48 @@ public class StockTrendFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.stock_trend, container, false);
         Bundle args = getArguments();
 
-        TextView mov50View = (TextView) rootView.findViewById(R.id.detailMovAvg50);
-        mov50View.setText("50d movAvg: ");
-        TextView mov50ValView = (TextView) rootView.findViewById(R.id.detailMovAvg50Val);
-        mov50ValView.setText(args.getString(MOV_50_VAL));
+        double curPrice = args.getDouble(CUR_PRICE);
+        double high60Day = args.getDouble(HIGH_60_DAY);
+        double low90Day = args.getDouble(LOW_90_DAY);
+        double mov50Avg = args.getDouble(MOV_50_VAL);
+        double mov200Avg = args.getDouble(MOV_200_VAL);
 
-        TextView mov200View = (TextView) rootView.findViewById(R.id.detailMovAvg200);
-        mov200View.setText("200d movAvg: ");
-        TextView mov200ValView = (TextView) rootView.findViewById(R.id.detailMovAvg200Val);
-        mov200ValView.append(args.getString(MOV_200_VAL));
+        // High/Low
+        XYPlot plot = (XYPlot) rootView.findViewById(R.id.highLowPlot);
+        TrendPlot highLowPlot = new TrendPlot(plot, curPrice, high60Day, TrendPlot.GREEN_LINE_COLOR, low90Day, TrendPlot.RED_LINE_COLOR);
+        highLowPlot.plot();
+
+        TextView high60DayKeyView = (TextView) rootView.findViewById(R.id.high60DayKey);
+        high60DayKeyView.setTextColor(highLowPlot.getLine1Color());
+        TextView high60DayView = (TextView) rootView.findViewById(R.id.high60Day);
+        high60DayView.setText("60 Day High = " + Double.toString(high60Day));
+
+        TextView low90DayKeyView = (TextView) rootView.findViewById(R.id.low90DayKey);
+        low90DayKeyView.setTextColor(highLowPlot.getLine2Color());
+        TextView low90DayView = (TextView) rootView.findViewById(R.id.low90Day);
+        low90DayView.setText("90 Day Low = " + Double.toString(low90Day));
+
+        TextView highLowCurKey = (TextView) rootView.findViewById(R.id.highLowCurKey);
+        highLowCurKey.setBackgroundColor(highLowPlot.getBarColor());
+
+        // Averages.
+        plot = (XYPlot) rootView.findViewById(R.id.avgPlot);
+        TrendPlot avgPlot = new TrendPlot(plot, curPrice, mov200Avg, TrendPlot.GREEN_LINE_COLOR, mov50Avg, TrendPlot.BLUE_LINE_COLOR);
+        avgPlot.plot();
+
+        TextView mov50AvgKeyView = (TextView) rootView.findViewById(R.id.movAvg50Key);
+        mov50AvgKeyView.setTextColor(avgPlot.getLine2Color());
+        TextView mov50AvgView = (TextView) rootView.findViewById(R.id.movAvg50);
+        mov50AvgView.setText("50 Day Moving Avg. = " + Double.toString(mov50Avg));
+
+        TextView mov200AvgKeyView = (TextView) rootView.findViewById(R.id.movAvg200Key);
+        mov200AvgKeyView.setTextColor(avgPlot.getLine1Color());
+        TextView mov200AvgView = (TextView) rootView.findViewById(R.id.movAvg200);
+        mov200AvgView.setText("200 Day Moving Avg. = " + Double.toString(mov200Avg));
+
+        TextView avgCurKey = (TextView) rootView.findViewById(R.id.avgCurKey);
+        avgCurKey.setBackgroundColor(avgPlot.getBarColor());
+
 
         TextView upTrendCountView = (TextView) rootView.findViewById(R.id.upTrendCount);
         upTrendCountView.setText("Up Trend: ");
@@ -53,22 +89,6 @@ public class StockTrendFragment extends Fragment {
             }
         });
         regularProgressBar.setProgress(dayCount*10);
-
-//
-//        TextProgressBar upTrendBar = (TextProgressBar) rootView.findViewById(R.id.upTrendBar);
-//        Util.createBar(this, upTrendBar, "#93d500", dayCount*10);
-//        upTrendBar.setText(Integer.toString(dayCount) + "/10 Days");
-
-
-        TextView high60DayView = (TextView) rootView.findViewById(R.id.high60Day);
-        high60DayView.setText("High(60): ");
-        TextView high60DayValView = (TextView) rootView.findViewById(R.id.high60DayVal);
-        high60DayValView.setText(args.getString(HIGH_60_DAY));
-
-        TextView low90DayView = (TextView) rootView.findViewById(R.id.low90Day);
-        low90DayView.setText("Low(90): ");
-        TextView low90DayValView = (TextView) rootView.findViewById(R.id.low90DayVal);
-        low90DayValView.setText(args.getString(LOW_90_DAY));
 
         return rootView;
     }

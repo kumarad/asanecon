@@ -171,4 +171,27 @@ public class Util {
         textView.append(Double.toString(changePercent));
         textView.append("%)");
     }
+
+    public static double findMax(double... vals) {
+        double max = Double.MIN_VALUE;
+        for(double d : vals) {
+            if(d > max) {
+                max = d;
+            }
+        }
+
+        return max;
+    }
+
+    public static double findMin(double... vals) {
+        double min = Double.MAX_VALUE;
+        for(double d : vals) {
+            if(d < min) {
+                min = d;
+            }
+        }
+
+        return min;
+    }
+
 }
