@@ -95,13 +95,14 @@ public class TrendPlot {
         plot.setRangeBoundaries(baseYValue, topYValue, BoundaryMode.FIXED);
 
         // Make the 0 for Y axis disappear.
-        plot.getGraphWidget().setRangeOriginLabelPaint(null);
+        //plot.getGraphWidget().setRangeOriginLabelPaint(null);
         // Make the y axis numbers disappear
         plot.getGraphWidget().setRangeLabelPaint(null);
         // Make the y axis disappear
         //plot.getGraphWidget().setDomainOriginLinePaint(null);
 
-        plot.getLayoutManager().remove(plot.getRangeLabelWidget());
+        //plot.getLayoutManager().remove(plot.getRangeLabelWidget());
+        plot.setRangeLabel("$");
     }
 
     private void setupXAxis() {
@@ -120,10 +121,10 @@ public class TrendPlot {
 
     private void setupLayout() {
         //Makes stuff outside grid transparent.
-        plot.getBackgroundPaint().setColor(Color.TRANSPARENT);
+        //plot.getBackgroundPaint().setColor(Color.TRANSPARENT);
 
-        plot.setBorderStyle(XYPlot.BorderStyle.NONE, null, null);
-        //plot.setBorderStyle(XYPlot.BorderStyle.ROUNDED, new Float(5), new Float(5));
+        //plot.setBorderStyle(XYPlot.BorderStyle.NONE, null, null);
+        plot.setBorderStyle(XYPlot.BorderStyle.ROUNDED, new Float(10), new Float(10));
 
         // Make stuff for graph transparent.
         // Makes the grid background transparent.
@@ -136,7 +137,7 @@ public class TrendPlot {
 
         //Margins
         plot.setPlotMargins(0, 0, 0, 0);
-        plot.setPlotPadding(0, 0, 0, 0);
+        plot.setPlotPadding(0, 0, 30, 0);
         plot.setGridPadding(0, 10, 5, 0);
     }
 
@@ -151,7 +152,7 @@ public class TrendPlot {
 
         // Bar width.
         BarRenderer barRenderer = (BarRenderer)plot.getRenderer(BarRenderer.class);
-        barRenderer.setBarWidth(50);
+        barRenderer.setBarWidth(20);
     }
 
     private void constructLine(double val, int color) {

@@ -1,6 +1,5 @@
 package com.techan.activities.fragments;
 
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -91,5 +90,9 @@ public class StockTrendFragment extends Fragment {
         regularProgressBar.setProgress(dayCount*10);
 
         return rootView;
+    }
+
+    public void update() {
+
     }
 }
