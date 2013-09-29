@@ -52,12 +52,20 @@ public class ContentValuesFactory {
         return values;
     }
 
+    public static ContentValues createSlUpdateValues(double buyPrice, String buyDate) {
+        ContentValues values = new ContentValues();
+        values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, buyPrice);
+        values.put(StocksTable.COLUMN_SL_LOWEST_PRICE, buyPrice);
+        values.put(StocksTable.COLUMN_SL_LOWEST_PRICE_DATE, buyDate);
+        return values;
+    }
+
     public static ContentValues createValuesForRecovery(SymbolProfile profile) {
         ContentValues values = new ContentValues();
         values.put(StocksTable.COLUMN_SYMBOL, profile.symbol);
         values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, profile.buyPrice);
         values.put(StocksTable.COLUMN_SL_LOWEST_PRICE, profile.buyPrice);
-        values.put(StocksTable.COLUMN_LAST_UPDATE, profile.stopLossBuyDate);
+        values.put(StocksTable.COLUMN_LAST_UPDATE, profile.buyDate);
         return values;
     }
 

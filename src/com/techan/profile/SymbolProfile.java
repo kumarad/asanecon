@@ -1,10 +1,7 @@
 package com.techan.profile;
 
-import com.techan.custom.Util;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,13 +15,12 @@ public class SymbolProfile {
     @SymbolProfileMember(memberName = ProfileManager.STOCK_COUNT)
     public Integer stockCount = null;
 
+    @SymbolProfileMember(memberName = ProfileManager.BUY_DATE)
+    public String buyDate = null;
 
     ///////////////////////////////////////////////////////////
     @SymbolProfileMember(memberName = ProfileManager.STOP_LOSS_PERCENT)
     public Integer stopLossPercent = null;
-
-    @SymbolProfileMember(memberName = ProfileManager.STOP_LOSS_BUY_DATE)
-    public String stopLossBuyDate = null;
 
     @SymbolProfileMember(memberName = ProfileManager.STOP_LOSS_TRAILING)
     public Boolean stopLossTrailing = null;
@@ -59,13 +55,11 @@ public class SymbolProfile {
 
     public void setStopLossInfo(Integer stopLossPercent, boolean trailing) {
         this.stopLossPercent = stopLossPercent;
-        this.stopLossBuyDate = Util.getDateStrForDb(Calendar.getInstance());
         this.stopLossTrailing = trailing;
     }
 
     public void clearStopLossInfo() {
         stopLossPercent = null;
-        stopLossBuyDate = null;
         stopLossTrailing = null;
     }
 }

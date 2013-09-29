@@ -128,7 +128,7 @@ public class StopLossDialog {
         ContentValues values = ContentValuesFactory.createSlAddValues(curPrice, profile.buyPrice);
         cr.update(stockUri, values, null, null);
 
-        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.stockCount, profile.stopLossPercent);
+        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.buyDate, profile.stockCount, profile.stopLossPercent);
 
         listener.commit();
     }
