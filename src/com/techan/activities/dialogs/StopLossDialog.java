@@ -128,6 +128,8 @@ public class StopLossDialog {
         ContentValues values = ContentValuesFactory.createSlAddValues(curPrice, profile.buyPrice);
         cr.update(stockUri, values, null, null);
 
+        //todo if not current date need to refresh to figure out stop loss info!!!!!!!
+
         stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.buyDate, profile.stockCount, profile.stopLossPercent);
 
         listener.commit();

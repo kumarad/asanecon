@@ -78,7 +78,7 @@ public class BuyDialog {
         boolean showStopLossToast = false;
         String buyPriceStr = buyPriceText.getText().toString();
         String shareCountStr = shareCountText.getText().toString();
-        String buyDateStr = Util.getCalStr(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+        String buyDateStr = Util.getCalStr(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth());
         if(!buyPriceStr.equals("")) {
             // Buy price is being set.
             double newBuyPrice = Double.parseDouble(buyPriceStr);
