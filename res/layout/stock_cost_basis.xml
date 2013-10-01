@@ -90,10 +90,36 @@
                 android:layout_marginLeft="15dp"/>
     </LinearLayout>
 
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:id="@+id/buyDateRow"
+            android:layout_below="@id/costRow"
+            >
+
+        <TextView
+                android:id="@+id/buyDate"
+                android:layout_width="0dp"
+                android:layout_weight=".25"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:text="Buy Date: "
+                />
+
+        <TextView
+                android:id="@+id/buyDateVal"
+                android:layout_width="0dp"
+                android:layout_weight=".75"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                />
+    </LinearLayout>
+
     <RelativeLayout android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:id="@+id/stopLossView"
-                    android:layout_below="@id/costRow">
+                    android:layout_below="@id/buyDateRow">
 
     <com.techan.progressbar.SaundProgressBar
             android:id="@+id/slprogressbar"

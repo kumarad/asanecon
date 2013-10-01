@@ -114,6 +114,15 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
         curDateStr = Util.getDateStrForDb(curCal);
     }
 
+    private PostRefreshAction action = null;
+    public void addAction(PostRefreshAction action)  {
+        if(this.action == null) {
+            this.action = action;
+        } else {
+            throw new RuntimeException("Only one action supported at a time.");
+        }
+    }
+
     // Download stock data for the symbol.
     @Override
     protected List<StockData> doInBackground(String... params) {
@@ -155,8 +164,14 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
             ContentValues values = ContentValuesFactory.createContentValues(data, (info.stopLossPercent != null));
             contentResolver.update(info.uri, values, null, null);
         }
+
+        if(action != null) {
+            action.execute();
+            action = null;
+        }
     }
 
+    // Used when we should only be doing stuff on the wiki network. Auto refresh etc uses this.
     public void download() {
         if(autoRefresh) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);

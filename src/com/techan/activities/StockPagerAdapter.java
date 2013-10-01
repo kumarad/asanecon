@@ -58,8 +58,11 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
 
         String symbol = createCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
         SymbolProfile profile = ProfileManager.getSymbolData(ctx, symbol);
-        if(profile.buyPrice != null)
+        if(profile.buyPrice != null) {
             args.putDouble(StockCostBasisFragment.COST_VAL, profile.buyPrice);
+            args.putString(StockCostBasisFragment.BUY_DATE, profile.buyDate);
+        }
+
         if(profile.stockCount != null)
             args.putInt(StockCostBasisFragment.COUNT_VAL, profile.stockCount);
 
@@ -76,14 +79,14 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         return fragment;
     }
 
-    public void updateCostBasisFragment(final Double buyPrice, final Integer stockCount, final Integer slPercent) {
+    public void updateCostBasisFragment(final Double buyPrice, final String buyDate, final Integer stockCount, final Integer slPercent) {
         StockCostBasisFragment fragment = (StockCostBasisFragment)fragments.get(COST_BASIS);
 
         Cursor cursor = ctx.getContentResolver().query(stockUri, null, null, null, null);
         cursor.moveToFirst();
         Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
         Double highPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_SL_HIGEST_PRICE));
-        fragment.update(curPrice, buyPrice, stockCount, slPercent, highPrice);
+        fragment.update(curPrice, buyPrice, buyDate, stockCount, slPercent, highPrice);
     }
 
     protected Fragment createPeFragment() {

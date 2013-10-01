@@ -17,19 +17,27 @@ import com.techan.progressbar.SaundProgressBar;
 
 public class StockCostBasisFragment extends Fragment {
     public static final String COST_VAL = "COST_VAL";
+    public static final String BUY_DATE = "BUY_DATE";
     public static final String COUNT_VAL = "COUNT_VAL";
     public static final String CUR_PRICE = "CUR_PRICE";
     public static final String HIGH_PRICE = "HIGH_PRICE";
     public static final String SL_PERCENT = "SL_PERCENT";
 
     TextView warningView;
+
     TextView costBasisView;
-    LinearLayout costBasisChangeLayout;
+
+    LinearLayout costBasisChangeRow;
     TextView costBasisChangeView;
     TextView costBasisChangeValView;
+
     LinearLayout costRow;
     TextView costValView;
     TextView countValView;
+
+    LinearLayout buyDateRow;
+    TextView buyDateValView;
+
     RelativeLayout stopLossView;
 
     SaundProgressBar regularProgressBar;
@@ -41,13 +49,16 @@ public class StockCostBasisFragment extends Fragment {
 
         warningView = (TextView)rootView.findViewById(R.id.costWarning);
         costBasisView = (TextView)rootView.findViewById(R.id.costBasisVal);
-        costBasisChangeLayout = (LinearLayout)rootView.findViewById(R.id.costBasisChangeRow);
+        costBasisChangeRow = (LinearLayout)rootView.findViewById(R.id.costBasisChangeRow);
         costBasisChangeView = (TextView)rootView.findViewById(R.id.costBasisChange);
         costBasisChangeValView = (TextView)rootView.findViewById(R.id.costBasisChangeVal);
 
         costRow = (LinearLayout)rootView.findViewById(R.id.costRow);
         costValView = (TextView) rootView.findViewById(R.id.detailCostVal);
         countValView = (TextView) rootView.findViewById(R.id.detailCountVal);
+
+        buyDateRow = (LinearLayout)rootView.findViewById(R.id.buyDateRow);
+        buyDateValView = (TextView)rootView.findViewById(R.id.buyDateVal);
 
         stopLossView = (RelativeLayout)rootView.findViewById(R.id.stopLossView);
 
@@ -59,14 +70,15 @@ public class StockCostBasisFragment extends Fragment {
         indicator.setBounds(bounds);
         regularProgressBar.setProgressIndicator(indicator);
 
-        update(args.getDouble(CUR_PRICE), args.getDouble(COST_VAL), args.getInt(COUNT_VAL), args.getInt(SL_PERCENT), args.getDouble(HIGH_PRICE));
+        update(args.getDouble(CUR_PRICE), args.getDouble(COST_VAL), args.getString(BUY_DATE), args.getInt(COUNT_VAL), args.getInt(SL_PERCENT), args.getDouble(HIGH_PRICE));
 
         return rootView;
     }
 
-    public void update(final Double curPrice, final Double buyPrice, final Integer stockCount, final Integer slPercent, final Double highPrice) {
+    public void update(final Double curPrice, final Double buyPrice, final String buyDate, final Integer stockCount, final Integer slPercent, final Double highPrice) {
         if(buyPrice != null && buyPrice != 0) {
             costValView.setText(Double.toString(buyPrice));
+            buyDateValView.setText(buyDate);
             clearWarning();
         } else {
             setWarning();
@@ -98,12 +110,12 @@ public class StockCostBasisFragment extends Fragment {
 
     private void hideCostBasisViews() {
         costBasisView.setVisibility(View.GONE);
-        costBasisChangeLayout.setVisibility(View.GONE);
+        costBasisChangeRow.setVisibility(View.GONE);
     }
 
     private void showCostBasisViews() {
         costBasisView.setVisibility(View.VISIBLE);
-        costBasisChangeLayout.setVisibility(View.VISIBLE);
+        costBasisChangeRow.setVisibility(View.VISIBLE);
     }
 
     private void updateCostBasis(double curPrice, double cost, int count) {
@@ -120,8 +132,9 @@ public class StockCostBasisFragment extends Fragment {
         hideCostBasisViews();
 
         costRow.setVisibility(View.GONE);
-        costValView.setVisibility(View.GONE);
-        countValView.setVisibility(View.GONE);
+//        costValView.setVisibility(View.GONE);
+//        countValView.setVisibility(View.GONE);
+        buyDateRow.setVisibility(View.GONE);
         stopLossView.setVisibility(View.GONE);
     }
 
@@ -129,8 +142,9 @@ public class StockCostBasisFragment extends Fragment {
         warningView.setVisibility(View.GONE);
 
         costRow.setVisibility(View.VISIBLE);
-        costValView.setVisibility(View.VISIBLE);
-        countValView.setVisibility(View.VISIBLE);
+//        costValView.setVisibility(View.VISIBLE);
+//        countValView.setVisibility(View.VISIBLE);
+        buyDateRow.setVisibility(View.VISIBLE);
         stopLossView.setVisibility(View.VISIBLE);
     }
 }

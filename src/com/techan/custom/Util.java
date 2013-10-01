@@ -86,6 +86,10 @@ public class Util {
         return date + " 00:00:00";
     }
 
+    public static String getCalStr(int year, int month, int day) {
+        return getCalStrFromNoTimeStr(year + "-" + month + "-" + day);
+    }
+
     public static String getDate(Calendar cal) {
         String str = cal.get(Calendar.YEAR) + "-";
         str += (cal.get(Calendar.MONTH) + 1) + "-";
