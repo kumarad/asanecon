@@ -93,6 +93,6 @@ public class StockTrendFragment extends Fragment {
     }
 
     public void update() {
-
+        //plot.clear() will allow you to redraw the whole thing!
     }
 }
