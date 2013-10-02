@@ -97,6 +97,20 @@ public class Util {
         return str;
     }
 
+    public static Calendar getCurCalWithZeroTime() {
+        Calendar curCal = (Calendar)Calendar.getInstance().clone();
+        curCal.set(Calendar.HOUR_OF_DAY,0);
+        curCal.set(Calendar.MINUTE,0);
+        curCal.set(Calendar.SECOND,0);
+        curCal.set(Calendar.MILLISECOND,0);
+
+        return curCal;
+    }
+
+    public static String getDateFromDateTimeStr(String dateTime) {
+        return dateTime.split(" ")[0];
+    }
+
     public static String getDateStrForDb(Calendar cal) {
         Date curDate = cal.getTime();
         return Util.FORMATER.format(curDate);
@@ -137,6 +151,14 @@ public class Util {
         }
 
         return days;
+    }
+
+    public static boolean isDateLess(Calendar isLowerCal, Calendar otherCal) {
+        if(isLowerCal.before(otherCal)) {
+            return true;
+        }
+
+        return false;
     }
 
     // Provides feedback in a small pop up black window.

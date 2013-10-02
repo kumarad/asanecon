@@ -44,7 +44,7 @@ public class ContentValuesFactory {
         return values;
     }
 
-    public static ContentValues createSlAddValues(double curPrice, double buyPrice) {
+    public static ContentValues createSlAddValuesSameDate(double curPrice, double buyPrice) {
         ContentValues values = new ContentValues();
         values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, (curPrice > buyPrice ? curPrice : buyPrice));
         values.put(StocksTable.COLUMN_SL_LOWEST_PRICE, (curPrice < buyPrice ? curPrice : buyPrice));
@@ -52,11 +52,15 @@ public class ContentValuesFactory {
         return values;
     }
 
-    public static ContentValues createSlUpdateValues(double buyPrice, String buyDate) {
+    public static ContentValues createSlAddValuesDiffDate(double buyPrice, String buyDate) {
         ContentValues values = new ContentValues();
         values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, buyPrice);
         values.put(StocksTable.COLUMN_SL_LOWEST_PRICE, buyPrice);
         values.put(StocksTable.COLUMN_SL_LOWEST_PRICE_DATE, buyDate);
+
+        // Need to set last updated to an earlier date to ensure RefreshTask doesn't
+        // think its already updated.
+        values.put(StocksTable.COLUMN_LAST_UPDATE, buyDate);
         return values;
     }
 

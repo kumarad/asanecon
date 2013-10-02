@@ -174,6 +174,7 @@ public class DownloadHistory {
 
     public static void download(StockData data, Calendar curCalDate, final String lastSLUpdate, double historicalHigh, double historicalLow) {
         if(lastSLUpdate != null) {
+            // If SL information needs to be calculated from a period longer than 90 days ago lowestCalInfo will be set to that date.
             LowestCalInfo lowestCalInfo = lowestDate(curCalDate, lastSLUpdate);
             String url = generateUrlForRange(data.symbol, curCalDate, lowestCalInfo.lowestCal);
             HistoryInfo historyInfo = new HistoryInfo(historicalHigh, historicalLow);

@@ -78,7 +78,7 @@ public class StockCostBasisFragment extends Fragment {
     public void update(final Double curPrice, final Double buyPrice, final String buyDate, final Integer stockCount, final Integer slPercent, final Double highPrice) {
         if(buyPrice != null && buyPrice != 0) {
             costValView.setText(Double.toString(buyPrice));
-            buyDateValView.setText(buyDate.split(" ")[0]);
+            buyDateValView.setText(Util.getDateFromDateTimeStr(buyDate));
             clearWarning();
         } else {
             setWarning();

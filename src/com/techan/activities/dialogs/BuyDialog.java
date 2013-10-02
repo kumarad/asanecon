@@ -95,6 +95,7 @@ public class BuyDialog {
             } // else buy price is being set for the first time. Means stop loss info doesn't exist yet.
             profile.buyPrice = newBuyPrice;
 
+            //todo ensure date is todays date or earlier. If its not just set to today ?
             if(profile.buyDate != null) {
                 if(!buyDateStr.equals(profile.buyDate)) {
                     // Buy date is being updated.

@@ -19,10 +19,15 @@ import com.techan.R;
 import com.techan.activities.SettingsActivity;
 import com.techan.activities.StockPagerAdapter;
 import com.techan.custom.SwitchCheckRefreshListener;
+import com.techan.custom.Util;
 import com.techan.database.StocksTable;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.ContentValuesFactory;
+import com.techan.stockDownload.RefreshTask;
+import com.techan.stockDownload.actions.CostBasisPostRefreshAction;
+
+import java.util.Calendar;
 
 public class StopLossDialog {
     public static void createError(AlertDialog.Builder alertDialog) {
@@ -107,6 +112,7 @@ public class StopLossDialog {
     }
 
     private static void doAdd(Activity parentActivity, Uri stockUri, SymbolProfile profile, NumberPicker np, Switch s, SwitchCheckRefreshListener listener, StockPagerAdapter stockPagerAdapter) {
+        boolean cleared = false;
         if(s.isChecked()) {
             Integer stopLossPercent = np.getValue();
             // Either way set highestPrice to buyPrice. So that highestPrices is tracked from when stop loss notifications are activated.
@@ -115,22 +121,36 @@ public class StopLossDialog {
             profile.setStopLossInfo(stopLossPercent, true);
         } else {
             profile.clearStopLossInfo();
+            cleared = true;
         }
 
         // Update profile manager.
         ProfileManager.addSymbolData(profile);
 
-        // Update db with stop loss information.
-        ContentResolver cr = parentActivity.getContentResolver();
-        Cursor cursor = cr.query(stockUri, null, null, null, null);
-        cursor.moveToFirst();
-        Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
-        ContentValues values = ContentValuesFactory.createSlAddValues(curPrice, profile.buyPrice);
-        cr.update(stockUri, values, null, null);
+        if(!cleared) {
+            // Update db with stop loss information.
+            ContentResolver cr = parentActivity.getContentResolver();
+            Cursor cursor = cr.query(stockUri, null, null, null, null);
+            cursor.moveToFirst();
+            Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
 
-        //todo if not current date need to refresh to figure out stop loss info!!!!!!!
+            if(Util.isDateLess(Util.getCal(profile.buyDate), Util.getCurCalWithZeroTime())) {
+                ContentValues values = ContentValuesFactory.createSlAddValuesDiffDate(profile.buyPrice, profile.buyDate);
+                cr.update(stockUri, values, null, null);
 
-        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.buyDate, profile.stockCount, profile.stopLossPercent);
+                // Need to refresh historical data for this stock.
+                RefreshTask rt = new RefreshTask(parentActivity, parentActivity.getContentResolver(), stockUri, profile.symbol, false);
+                rt.addAction(new CostBasisPostRefreshAction(stockPagerAdapter, profile));
+                rt.execute();
+            } else {
+                ContentValues values = ContentValuesFactory.createSlAddValuesSameDate(curPrice, profile.buyPrice);
+                cr.update(stockUri, values, null, null);
+
+                stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.buyDate, profile.stockCount, profile.stopLossPercent);
+            }
+        } else {
+            stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.buyDate, profile.stockCount, profile.stopLossPercent);
+        }
 
         listener.commit();
     }
