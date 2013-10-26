@@ -27,9 +27,9 @@ import com.techan.R;
  *
  */
 public class SaundProgressBar extends ProgressBar {
-    private Drawable m_indicator;
-    private int m_offset = 5;
-    private TextPaint m_textPaint;
+    protected Drawable m_indicator;
+    protected int m_offset = 5;
+    protected TextPaint m_textPaint;
     private Formatter m_formatter;
 
     public SaundProgressBar(Context context) {
@@ -180,7 +180,7 @@ public class SaundProgressBar extends ProgressBar {
         }
     }
 
-    private int getIndicatorWidth() {
+    protected int getIndicatorWidth() {
         if (m_indicator == null) {
             return 0;
         }
@@ -191,7 +191,7 @@ public class SaundProgressBar extends ProgressBar {
         return width;
     }
 
-    private int getIndicatorHeight() {
+    protected int getIndicatorHeight() {
         if (m_indicator == null) {
             return 0;
         }
@@ -264,6 +264,8 @@ public class SaundProgressBar extends ProgressBar {
 
             // restore canvas to original
             canvas.restore();
+
+            handleOtherIndicators(canvas, dx);
         }
     }
 
@@ -352,5 +354,9 @@ public class SaundProgressBar extends ProgressBar {
      */
     public interface Formatter {
         public String getText(int progress);
+    }
+
+    protected void handleOtherIndicators(Canvas canvas, int dx) {
+        //Children should implement.
     }
 }

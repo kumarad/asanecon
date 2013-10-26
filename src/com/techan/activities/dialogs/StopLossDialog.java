@@ -116,7 +116,6 @@ public class StopLossDialog {
         if(s.isChecked()) {
             Integer stopLossPercent = np.getValue();
             // Either way set highestPrice to buyPrice. So that highestPrices is tracked from when stop loss notifications are activated.
-            // TODO let the user change the buy price for stop loss??
             // TODO let user specify trailing vs non trailing
             profile.setStopLossInfo(stopLossPercent, true);
         } else {

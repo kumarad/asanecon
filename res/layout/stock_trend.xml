@@ -171,6 +171,29 @@
                 />
     </RelativeLayout>
 
+
+    <!--<LinearLayout-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/avgPlotRow"-->
+            <!--android:id="@+id/avgBarRow"-->
+            <!-->-->
+
+        <!--<com.techan.progressbar.LimitProgressBar-->
+                <!--android:id="@+id/avgBar"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="15dp"-->
+                <!--android:paddingLeft="15dp"-->
+                <!--android:paddingRight="15dp"-->
+                <!--saund:offset="3dp"-->
+                <!--saund:textSize="7sp"-->
+                <!--style="@style/Widget.ProgressBar.RegularProgressBar"-->
+                <!--/>-->
+
+    <!--</LinearLayout>-->
+
+
     <View
             android:id="@+id/div2"
             android:layout_below="@id/avgPlotRow"

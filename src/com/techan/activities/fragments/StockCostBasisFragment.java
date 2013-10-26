@@ -132,8 +132,6 @@ public class StockCostBasisFragment extends Fragment {
         hideCostBasisViews();
 
         costRow.setVisibility(View.GONE);
-//        costValView.setVisibility(View.GONE);
-//        countValView.setVisibility(View.GONE);
         buyDateRow.setVisibility(View.GONE);
         stopLossView.setVisibility(View.GONE);
     }
@@ -142,8 +140,6 @@ public class StockCostBasisFragment extends Fragment {
         warningView.setVisibility(View.GONE);
 
         costRow.setVisibility(View.VISIBLE);
-//        costValView.setVisibility(View.VISIBLE);
-//        countValView.setVisibility(View.VISIBLE);
         buyDateRow.setVisibility(View.VISIBLE);
         stopLossView.setVisibility(View.VISIBLE);
     }

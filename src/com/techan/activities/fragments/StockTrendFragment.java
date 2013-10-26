@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.androidplot.xy.XYPlot;
 import com.techan.R;
 import com.techan.custom.TrendPlot;
+import com.techan.progressbar.LimitProgressBar;
 import com.techan.progressbar.SaundProgressBar;
 
 public class StockTrendFragment extends Fragment {
@@ -69,6 +70,9 @@ public class StockTrendFragment extends Fragment {
         TextView avgCurKey = (TextView) rootView.findViewById(R.id.avgCurKey);
         avgCurKey.setBackgroundColor(avgPlot.getBarColor());
 
+
+//        LimitProgressBar avgProgressBar = (LimitProgressBar) rootView.findViewById(R.id.avgBar);
+//        avgProgressBar.setValue(curPrice, mov200Avg, "200d", mov50Avg, "50d");
 
         TextView upTrendCountView = (TextView) rootView.findViewById(R.id.upTrendCount);
         upTrendCountView.setText("Up Trend: ");
