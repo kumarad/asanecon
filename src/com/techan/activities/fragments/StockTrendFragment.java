@@ -35,44 +35,53 @@ public class StockTrendFragment extends Fragment {
         double mov200Avg = args.getDouble(MOV_200_VAL);
 
         // High/Low
-        XYPlot plot = (XYPlot) rootView.findViewById(R.id.highLowPlot);
-        TrendPlot highLowPlot = new TrendPlot(plot, curPrice, high60Day, TrendPlot.GREEN_LINE_COLOR, low90Day, TrendPlot.RED_LINE_COLOR);
-        highLowPlot.plot();
+//        XYPlot plot = (XYPlot) rootView.findViewById(R.id.highLowPlot);
+//        TrendPlot highLowPlot = new TrendPlot(plot, curPrice, high60Day, TrendPlot.GREEN_LINE_COLOR, low90Day, TrendPlot.RED_LINE_COLOR);
+//        highLowPlot.plot();
 
-        TextView high60DayKeyView = (TextView) rootView.findViewById(R.id.high60DayKey);
-        high60DayKeyView.setTextColor(highLowPlot.getLine1Color());
         TextView high60DayView = (TextView) rootView.findViewById(R.id.high60Day);
-        high60DayView.setText("60 Day High = " + Double.toString(high60Day));
+        high60DayView.setText("60 day high: " + Double.toString(high60Day));
 
-        TextView low90DayKeyView = (TextView) rootView.findViewById(R.id.low90DayKey);
-        low90DayKeyView.setTextColor(highLowPlot.getLine2Color());
         TextView low90DayView = (TextView) rootView.findViewById(R.id.low90Day);
-        low90DayView.setText("90 Day Low = " + Double.toString(low90Day));
+        low90DayView.setText("90 day low: " + Double.toString(low90Day));
 
-        TextView highLowCurKey = (TextView) rootView.findViewById(R.id.highLowCurKey);
-        highLowCurKey.setBackgroundColor(highLowPlot.getBarColor());
+        LimitProgressBar highLowBar = (LimitProgressBar) rootView.findViewById(R.id.highLowBar);
+        highLowBar.setValue(curPrice, high60Day, "High", low90Day, "Low");
 
-        // Averages.
-        plot = (XYPlot) rootView.findViewById(R.id.avgPlot);
-        TrendPlot avgPlot = new TrendPlot(plot, curPrice, mov200Avg, TrendPlot.GREEN_LINE_COLOR, mov50Avg, TrendPlot.BLUE_LINE_COLOR);
-        avgPlot.plot();
+        TextView highLowAlertView = (TextView) rootView.findViewById(R.id.highLowAlert);
+        if(curPrice > high60Day) {
+            highLowAlertView.setText("Breakout");
+        } else if(curPrice < low90Day) {
+            highLowAlertView.setText("Downside");
+        } else {
+            highLowAlertView.setVisibility(View.INVISIBLE);
+        }
 
-        TextView mov50AvgKeyView = (TextView) rootView.findViewById(R.id.movAvg50Key);
-        mov50AvgKeyView.setTextColor(avgPlot.getLine2Color());
+
         TextView mov50AvgView = (TextView) rootView.findViewById(R.id.movAvg50);
-        mov50AvgView.setText("50 Day Moving Avg. = " + Double.toString(mov50Avg));
+        mov50AvgView.setText("50 day moving average: " + Double.toString(mov50Avg));
 
-        TextView mov200AvgKeyView = (TextView) rootView.findViewById(R.id.movAvg200Key);
-        mov200AvgKeyView.setTextColor(avgPlot.getLine1Color());
         TextView mov200AvgView = (TextView) rootView.findViewById(R.id.movAvg200);
-        mov200AvgView.setText("200 Day Moving Avg. = " + Double.toString(mov200Avg));
+        mov200AvgView.setText("200 day moving average: " + Double.toString(mov200Avg));
 
-        TextView avgCurKey = (TextView) rootView.findViewById(R.id.avgCurKey);
-        avgCurKey.setBackgroundColor(avgPlot.getBarColor());
+        LimitProgressBar movAvgBar = (LimitProgressBar) rootView.findViewById(R.id.movAvgBar);
+        movAvgBar.setValue(curPrice, mov200Avg, "200 day", mov50Avg, "50 day");
 
+        TextView mov50AvgAlertView = (TextView) rootView.findViewById(R.id.movAvg50Alert);
+        if(curPrice < mov50Avg) {
+            mov50AvgAlertView.setText("Down Price Action");
+        } else {
+            mov50AvgAlertView.setVisibility(View.INVISIBLE);
+        }
 
-//        LimitProgressBar avgProgressBar = (LimitProgressBar) rootView.findViewById(R.id.avgBar);
-//        avgProgressBar.setValue(curPrice, mov200Avg, "200d", mov50Avg, "50d");
+        TextView mov200AvgAlertView = (TextView) rootView.findViewById(R.id.mov200AvgAlert);
+        if(curPrice < mov200Avg) {
+            mov200AvgAlertView.setText("Bear Trend");
+        } else if(curPrice > mov200Avg) {
+            mov200AvgAlertView.setText("Bull Trend");
+        } else {
+            mov200AvgAlertView.setVisibility(View.INVISIBLE);
+        }
 
         TextView upTrendCountView = (TextView) rootView.findViewById(R.id.upTrendCount);
         upTrendCountView.setText("Up Trend: ");

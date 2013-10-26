@@ -7,169 +7,161 @@
 
     <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="110dp"
+            android:layout_height="wrap_content"
             android:id="@+id/highLowPlotRow"
             >
 
-        <com.androidplot.xy.XYPlot
-                android:id="@+id/highLowPlot"
-                android:layout_width="70dp"
-                android:layout_height="fill_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                title="Test"/>
-
-        <TextView
-                android:id="@+id/low90DayKey"
-                android:layout_width="wrap_content"
+        <com.techan.progressbar.LimitProgressBar
+                android:id="@+id/highLowBar"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="/"
-                android:textStyle="bold"
-                android:layout_toRightOf="@id/highLowPlot"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                saund:offset="3dp"
+                saund:textSize="7sp"
+                style="@style/Widget.ProgressBar.RegularProgressBar"
+                android:layout_marginBottom="5dp"
                 />
 
-        <TextView
-                android:id="@+id/low90Day"
-                android:layout_width="wrap_content"
+        <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/low90DayKey"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="10dp"
-                />
+                android:weightSum="1.0"
+                android:id="@+id/lowAlertRow"
+                android:layout_below="@id/highLowBar"
+                >
 
-        <TextView
-                android:id="@+id/high60DayKey"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/"
-                android:textStyle="bold"
-                android:layout_toRightOf="@id/highLowPlot"
-                android:layout_above="@id/low90Day"
-                android:layout_marginLeft="10dp"
-                />
+            <TextView
+                    android:id="@+id/low90Day"
+                    android:layout_width="0dp"
+                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    />
+
+            <TextView
+                    android:id="@+id/highLowAlert"
+                    android:layout_width="0dp"
+                    android:layout_weight=".2"
+                    android:layout_height="10dp"
+                    android:gravity="center"
+                    android:layout_marginRight="3dp"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="8sp"
+                    android:background="@drawable/rounded_edges"
+                    />
+
+        </LinearLayout>
+
+        <!--<com.androidplot.xy.XYPlot-->
+                <!--android:id="@+id/highLowPlot"-->
+                <!--android:layout_width="70dp"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--title="Test"/>-->
 
         <TextView
                 android:id="@+id/high60Day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/high60DayKey"
-                android:layout_above="@id/low90Day"
-                android:layout_marginLeft="10dp"
-                />
-
-
-        <TextView
-                android:id="@+id/highLowCurKey"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:layout_toRightOf="@id/highLowPlot"
-                android:layout_above="@id/high60Day"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="5dp"
-                />
-
-        <TextView
-                android:id="@+id/highLowCur"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Current Price"
-                android:layout_toRightOf="@id/highLowCurKey"
-                android:layout_above="@id/high60Day"
-                android:layout_marginLeft="10dp"
+                android:layout_below="@id/lowAlertRow"
+                android:layout_marginLeft="3dp"
                 />
     </RelativeLayout>
 
     <View
             android:id="@+id/div1"
             android:layout_below="@id/highLowPlotRow"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height=".3dp"
             android:background="@android:color/darker_gray" />
 
     <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="110dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/div1"
-            android:id="@+id/avgPlotRow"
+            android:id="@+id/avgBarRow"
             >
 
-        <com.androidplot.xy.XYPlot
-                android:id="@+id/avgPlot"
-                android:layout_width="70dp"
-                android:layout_height="fill_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                title="Test"/>
-
-        <TextView
-                android:id="@+id/movAvg200Key"
-                android:layout_width="wrap_content"
+        <com.techan.progressbar.LimitProgressBar
+                android:id="@+id/movAvgBar"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="/"
-                android:textStyle="bold"
-                android:layout_toRightOf="@id/avgPlot"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="10dp"
-                />
-
-        <TextView
-                android:id="@+id/movAvg200"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/movAvg200Key"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="10dp"
-                />
-
-        <TextView
-                android:id="@+id/movAvg50Key"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/"
-                android:textStyle="bold"
-                android:layout_toRightOf="@id/avgPlot"
-                android:layout_above="@id/movAvg200"
-                android:layout_marginLeft="10dp"
-                />
-
-        <TextView
-                android:id="@+id/movAvg50"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/movAvg50Key"
-                android:layout_above="@id/movAvg200"
-                android:layout_marginLeft="10dp"
-                />
-
-        <TextView
-                android:id="@+id/avgCurKey"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:layout_toRightOf="@id/avgPlot"
-                android:layout_above="@id/movAvg50"
-                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                saund:offset="3dp"
+                saund:textSize="7sp"
+                style="@style/Widget.ProgressBar.RegularProgressBar"
                 android:layout_marginBottom="5dp"
                 />
 
-        <TextView
-                android:id="@+id/avgCur"
-                android:layout_width="wrap_content"
+        <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Current Price"
-                android:layout_toRightOf="@id/avgCurKey"
-                android:layout_above="@id/movAvg50"
-                android:layout_marginLeft="10dp"
-                />
+                android:weightSum="1.0"
+                android:id="@+id/mov50AvgAlertRow"
+                android:layout_below="@id/movAvgBar"
+                >
+
+            <TextView
+                    android:id="@+id/movAvg50"
+                    android:layout_width="0dp"
+                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    />
+
+            <TextView
+                    android:id="@+id/movAvg50Alert"
+                    android:layout_width="0dp"
+                    android:layout_weight=".2"
+                    android:layout_height="10dp"
+                    android:gravity="center"
+                    android:layout_marginRight="3dp"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="8sp"
+                    android:background="@drawable/rounded_edges"
+                    />
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1.0"
+                android:id="@+id/mov200AvgAlertRow"
+                android:layout_below="@id/mov50AvgAlertRow"
+                >
+
+            <TextView
+                    android:id="@+id/movAvg200"
+                    android:layout_width="0dp"
+                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    />
+
+            <TextView
+                    android:id="@+id/mov200AvgAlert"
+                    android:layout_width="0dp"
+                    android:layout_weight=".2"
+                    android:layout_height="10dp"
+                    android:gravity="center"
+                    android:layout_marginRight="3dp"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="8sp"
+                    android:background="@drawable/rounded_edges"
+                    />
+
+        </LinearLayout>
     </RelativeLayout>
+
 
 
     <!--<LinearLayout-->
@@ -196,8 +188,9 @@
 
     <View
             android:id="@+id/div2"
-            android:layout_below="@id/avgPlotRow"
-            android:layout_marginTop="5dp"
+            android:layout_below="@id/avgBarRow"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height=".3dp"
             android:background="@android:color/darker_gray" />
@@ -214,7 +207,7 @@
         <TextView
                 android:id="@+id/upTrendCount"
                 android:layout_width="0dp"
-                android:layout_weight=".4"
+                android:layout_weight=".2"
                 android:layout_height="fill_parent"
                 android:gravity="bottom"
                 />
@@ -224,7 +217,7 @@
                 android:layout_width="0dp"
                 android:layout_weight=".6"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 saund:offset="3dp"
