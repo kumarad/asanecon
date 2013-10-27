@@ -22,6 +22,7 @@ public class StockTrendFragment extends Fragment {
     public static final String DAY_COUNT = "DAY_COUNT";
     public static final String HIGH_60_DAY = "HIGH_60_DAY";
     public static final String LOW_90_DAY = "LOW_90_DAY";
+    public static final String PEG = "PEG";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class StockTrendFragment extends Fragment {
         double low90Day = args.getDouble(LOW_90_DAY);
         double mov50Avg = args.getDouble(MOV_50_VAL);
         double mov200Avg = args.getDouble(MOV_200_VAL);
+        double peg = args.getDouble(PEG);
 
         // High/Low
 //        XYPlot plot = (XYPlot) rootView.findViewById(R.id.highLowPlot);
@@ -109,6 +111,20 @@ public class StockTrendFragment extends Fragment {
             }
         });
         regularProgressBar.setProgress(dayCount*10);
+
+        TextView pegView = (TextView) rootView.findViewById(R.id.pegDetail);
+        if(peg > 0)
+            pegView.setText("PEG: " + Double.toString(peg));
+        else
+            pegView.setText("PEG: -");
+
+        TextView pegAlertView = (TextView) rootView.findViewById(R.id.pegAlert);
+        if(peg > 2) {
+            pegAlertView.setText("High valuation");
+        } else {
+            pegAlertView.setVisibility(View.INVISIBLE);
+        }
+
 
         return rootView;
     }

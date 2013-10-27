@@ -2,8 +2,6 @@ package com.techan.activities;
 
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -21,7 +19,6 @@ import com.techan.activities.dialogs.DeleteDialog;
 import com.techan.activities.dialogs.PeDialog;
 import com.techan.activities.dialogs.StopLossDialog;
 import com.techan.activities.dialogs.TargetDialog;
-import com.techan.activities.fragments.StockPeFragment;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;

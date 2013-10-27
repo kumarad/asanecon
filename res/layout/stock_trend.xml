@@ -229,7 +229,6 @@
             android:id="@+id/upTrendBar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             saund:offset="3dp"
@@ -237,5 +236,44 @@
             style="@style/Widget.ProgressBar.RegularProgressBar"
             android:layout_below="@id/upTrendCountRow"
             />
+
+
+    <View
+            android:id="@+id/div3"
+            android:layout_below="@id/upTrendBar"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height=".3dp"
+            android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/div3"
+            android:id="@+id/pegRow"
+            >
+
+        <TextView
+                android:id="@+id/pegDetail"
+                android:layout_width="0dp"
+                android:layout_weight=".7"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                />
+
+        <TextView
+                android:id="@+id/pegAlert"
+                android:layout_width="0dp"
+                android:layout_weight=".2"
+                android:layout_height="10dp"
+                android:gravity="center"
+                android:layout_marginRight="3dp"
+                android:textColor="#FFFFFFFF"
+                android:textSize="8sp"
+                android:background="@drawable/rounded_edges"
+                />
+    </LinearLayout>
+
 
 </RelativeLayout>
