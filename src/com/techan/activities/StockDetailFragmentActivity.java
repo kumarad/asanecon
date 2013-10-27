@@ -21,6 +21,7 @@ import com.techan.activities.dialogs.DeleteDialog;
 import com.techan.activities.dialogs.PeDialog;
 import com.techan.activities.dialogs.StopLossDialog;
 import com.techan.activities.dialogs.TargetDialog;
+import com.techan.activities.fragments.StockPeFragment;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
@@ -99,6 +100,23 @@ public class StockDetailFragmentActivity extends FragmentActivity {
 
         TextView highView = (TextView) this.findViewById(R.id.detailHigh);
         highView.setText(Double.toString(high));
+
+
+        double pe = stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PE));
+        TextView peView = (TextView) this.findViewById(R.id.detailPe);
+        if(pe != 0) {
+            peView.setText("PE: " + Double.toString(pe));
+        } else {
+            peView.setText("PE: -");
+        }
+
+        double div = stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_DIV));
+        TextView divView = (TextView) this.findViewById(R.id.detailDiv);
+        if(div != 0) {
+            divView.setText("Div: " + Double.toString(div));
+        } else {
+            divView.setText("Div: -");
+        }
     }
 
     /////////////////////////////////////////////////////////////////////

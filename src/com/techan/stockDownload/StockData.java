@@ -7,6 +7,7 @@ public class StockData {
     public static String DAYS_HIGH = "h";
     public static String PE = "r";
     public static String PEG = "r5";
+    public static String DIV = "d";
     public static String MOV_AVG_50 = "m3";
     public static String MOV_AVG_200 = "m4";
     public static String TRADING_VOLUME = "v";
@@ -20,6 +21,7 @@ public class StockData {
                                 DAYS_HIGH +
                                 PE +
                                 PEG +
+                                DIV +
                                 MOV_AVG_50 +
                                 MOV_AVG_200 +
                                 TRADING_VOLUME +
@@ -34,6 +36,7 @@ public class StockData {
     public Double daysHigh;
     public Double pe;
     public Double peg;
+    public Double div;
     public Double moveAvg50;
     public Double moveAvg200;
     public Double tradingVol;

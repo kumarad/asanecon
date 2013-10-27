@@ -16,6 +16,7 @@ public class StocksTable {
     public static final String COLUMN_DAYS_HIGH = "daysHigh";
     public static final String COLUMN_PE = "pe";
     public static final String COLUMN_PEG = "peg";
+    public static final String COLUMN_DIV = "div";
     public static final String COLUMN_MOV_AVG_50 = "movAvg50";
     public static final String COLUMN_MOV_AVG_200 = "movAvg200";
     public static final String COLUMN_TRADING_VOLUME = "tradeVol";
@@ -41,6 +42,7 @@ public class StocksTable {
         stockColumns.put(COLUMN_DAYS_HIGH, i++);
         stockColumns.put(COLUMN_PE, i++);
         stockColumns.put(COLUMN_PEG, i++);
+        stockColumns.put(COLUMN_DIV, i++);
         stockColumns.put(COLUMN_MOV_AVG_50, i++);
         stockColumns.put(COLUMN_MOV_AVG_200, i++);
         stockColumns.put(COLUMN_TRADING_VOLUME, i++);
@@ -65,6 +67,7 @@ public class StocksTable {
             COLUMN_DAYS_HIGH + " real default 0, " +
             COLUMN_PE + " real default 0, " +
             COLUMN_PEG + " real default 0, " +
+            COLUMN_DIV + " real default 0, " +
             COLUMN_MOV_AVG_50 + " real default 0, " +
             COLUMN_MOV_AVG_200 + " real default 0, " +
             COLUMN_TRADING_VOLUME + " real default 0, " +

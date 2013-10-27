@@ -16,6 +16,7 @@ public class ContentValuesFactory {
         values.put(StocksTable.COLUMN_PRICE, stockData.price);
         values.put(StocksTable.COLUMN_PE, stockData.pe);
         values.put(StocksTable.COLUMN_PEG, stockData.peg);
+        values.put(StocksTable.COLUMN_DIV, stockData.div);
         values.put(StocksTable.COLUMN_MOV_AVG_50, stockData.moveAvg50);
         values.put(StocksTable.COLUMN_MOV_AVG_200, stockData.moveAvg200);
         values.put(StocksTable.COLUMN_TRADING_VOLUME, stockData.tradingVol);
