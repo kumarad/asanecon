@@ -89,6 +89,14 @@ public class StockTrendFragment extends Fragment {
         int dayCount = args.getInt(DAY_COUNT);
         if(dayCount > 10)
             dayCount = 10;
+
+        TextView upTrendAlertView = (TextView) rootView.findViewById(R.id.upTrendAlert);
+        if(dayCount > 5) {
+            upTrendAlertView.setText("Breakout");
+        } else {
+            upTrendAlertView.setVisibility(View.INVISIBLE);
+        }
+
         SaundProgressBar regularProgressBar = (SaundProgressBar) rootView.findViewById(R.id.upTrendBar);
         Drawable indicator = getResources().getDrawable(R.drawable.progress_indicator_b2);
         Rect bounds = new Rect(0, 0, indicator.getIntrinsicWidth() + 5, indicator.getIntrinsicHeight());
