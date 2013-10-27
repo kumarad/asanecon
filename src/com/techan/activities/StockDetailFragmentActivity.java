@@ -2,6 +2,8 @@ package com.techan.activities;
 
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -23,6 +25,7 @@ import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
 import com.techan.profile.Constants;
+import com.techan.progressbar.SaundProgressBar;
 
 public class StockDetailFragmentActivity extends FragmentActivity {
     private Uri stockUri;
@@ -83,15 +86,19 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         double change = Util.roundTwoDecimals(stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_CHANGE)));
         Util.showChange(changeView, change, price, null);
 
+        double low = stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_DAYS_LOW));
+        double high = stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_DAYS_HIGH));
+
         TextView lowView = (TextView) this.findViewById(R.id.detailLow);
-        lowView.setText("Low: ");
-        TextView lowValView = (TextView) this.findViewById(R.id.detailLowVal);
-        lowValView.setText(Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_DAYS_LOW)));
+        lowView.setText(Double.toString(low));
+
+        double progress = ((price-low)/(high-low)) * 100;
+        SaundProgressBar regularProgressBar = (SaundProgressBar) this.findViewById(R.id.lowHighBar);
+        regularProgressBar.setProgress((int)progress);
+        regularProgressBar.setProgressDrawable(getResources().getDrawable(R.drawable.blue_progressbar));
 
         TextView highView = (TextView) this.findViewById(R.id.detailHigh);
-        highView.setText("High: ");
-        TextView highValView = (TextView) this.findViewById(R.id.detailHighVal);
-        highValView.setText(Util.parseDouble(stockCursor, StocksTable.stockColumns.get(StocksTable.COLUMN_DAYS_HIGH)));
+        highView.setText(Double.toString(high));
     }
 
     /////////////////////////////////////////////////////////////////////
