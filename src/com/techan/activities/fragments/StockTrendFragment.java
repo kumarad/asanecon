@@ -23,6 +23,9 @@ public class StockTrendFragment extends Fragment {
     public static final String HIGH_60_DAY = "HIGH_60_DAY";
     public static final String LOW_90_DAY = "LOW_90_DAY";
     public static final String PEG = "PEG";
+    public static final String VOLUME = "VOLUME";
+    public static final String AVG_VOLUME = "AVG_VOLUME";
+    public static final String CHANGE = "CHANGE";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +38,9 @@ public class StockTrendFragment extends Fragment {
         double mov50Avg = args.getDouble(MOV_50_VAL);
         double mov200Avg = args.getDouble(MOV_200_VAL);
         double peg = args.getDouble(PEG);
+        double vol = args.getDouble(VOLUME);
+        double avgVol = args.getDouble(AVG_VOLUME);
+        double change = args.getDouble(CHANGE);
 
         // High/Low
 //        XYPlot plot = (XYPlot) rootView.findViewById(R.id.highLowPlot);
@@ -125,6 +131,31 @@ public class StockTrendFragment extends Fragment {
             pegAlertView.setVisibility(View.INVISIBLE);
         }
 
+        TextView volView = (TextView) rootView.findViewById(R.id.volDetail);
+        if(vol > 0) {
+            volView.setText("Volume : " + Long.toString((long)vol));
+        } else {
+            volView.setText("Volume : -");
+        }
+
+        TextView avgVolView = (TextView) rootView.findViewById(R.id.avgVolDetail);
+        if(avgVol > 0) {
+            avgVolView.setText("Average: " + Long.toString((long)avgVol));
+        } else {
+            avgVolView.setText("Average: -");
+        }
+
+        LimitProgressBar volBar = (LimitProgressBar) rootView.findViewById(R.id.avgBar);
+        volBar.setValue(vol, "Vol", avgVol, "Avg");
+
+        TextView volAlertView = (TextView) rootView.findViewById(R.id.volAlert);
+        if((vol > avgVol && change < 0) || (vol < avgVol && change > 0)) {
+            volAlertView.setText("Distribution");
+        } else if((vol >avgVol && change > 0) || (vol < avgVol && change < 0)) {
+            volAlertView.setText("Accumulation");
+        } else {
+            volAlertView.setVisibility(View.INVISIBLE);
+        }
 
         return rootView;
     }

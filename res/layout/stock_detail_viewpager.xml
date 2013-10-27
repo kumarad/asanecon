@@ -129,7 +129,7 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/stock_pager"
             android:layout_width="match_parent"
-            android:layout_height="300sp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/peDivRow">
 
         <android.support.v4.view.PagerTabStrip

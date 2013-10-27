@@ -125,6 +125,9 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         args.putDouble(StockTrendFragment.HIGH_60_DAY, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_60_DAY_HIGH)));
         args.putDouble(StockTrendFragment.LOW_90_DAY, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_90_DAY_LOW)));
         args.putDouble(StockTrendFragment.PEG, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PEG)));
+        args.putDouble(StockTrendFragment.VOLUME ,createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_TRADING_VOLUME)));
+        args.putDouble(StockTrendFragment.AVG_VOLUME, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_AVG_TRADING_VOLUME)));
+        args.putDouble(StockTrendFragment.CHANGE, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_CHANGE)));
 
         fragment.setArguments(args);
         return fragment;

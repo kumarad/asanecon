@@ -15,7 +15,7 @@
                 android:id="@+id/highLowBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 saund:offset="3dp"
@@ -92,7 +92,7 @@
                 android:id="@+id/movAvgBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 saund:offset="3dp"
@@ -242,6 +242,66 @@
             android:id="@+id/div3"
             android:layout_below="@id/upTrendBar"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height=".3dp"
+            android:background="@android:color/darker_gray" />
+
+
+    <com.techan.progressbar.LimitProgressBar
+            android:id="@+id/avgBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            saund:offset="3dp"
+            saund:textSize="7sp"
+            style="@style/Widget.ProgressBar.RegularProgressBar"
+            android:layout_below="@id/div3"
+            />
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1.0"
+            android:layout_below="@id/avgBar"
+            android:id="@+id/volRow"
+            >
+
+        <TextView
+                android:id="@+id/volDetail"
+                android:layout_width="0dp"
+                android:layout_weight=".7"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                />
+
+        <TextView
+                android:id="@+id/volAlert"
+                android:layout_width="0dp"
+                android:layout_weight=".2"
+                android:layout_height="10dp"
+                android:gravity="center"
+                android:layout_marginRight="3dp"
+                android:textColor="#FFFFFFFF"
+                android:textSize="8sp"
+                android:background="@drawable/rounded_edges"
+                />
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/avgVolDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_below="@id/volRow"
+            />
+
+    <View
+            android:id="@+id/div4"
+            android:layout_below="@id/avgVolDetail"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height=".3dp"
             android:background="@android:color/darker_gray" />
@@ -250,7 +310,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:weightSum="1.0"
-            android:layout_below="@id/div3"
+            android:layout_below="@id/div4"
             android:id="@+id/pegRow"
             >
 
@@ -274,6 +334,5 @@
                 android:background="@drawable/rounded_edges"
                 />
     </LinearLayout>
-
 
 </RelativeLayout>

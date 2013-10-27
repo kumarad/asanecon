@@ -71,6 +71,34 @@ public class LimitProgressBar extends SaundProgressBar {
         setValue(Double.toString(val), valProgress);
     }
 
+    public synchronized void setValue(double val, String valStr, double firstLimit, String firstLimitStr) {
+        this.secondLimitDrawable = null;
+        this.firstLimitStr = firstLimitStr;
+
+        if(val  < firstLimit) {
+            setProgressDrawable(getResources().getDrawable(R.drawable.red_progressbar));
+        } else {
+            setProgressDrawable(getResources().getDrawable(R.drawable.green_progressbar));
+        }
+
+        // Take firstLimit and make it the middle.
+        int start = (int)firstLimit/2;
+        int end = start*2;
+
+        int valInt = (int)val;
+        if(val < start) {
+            start = valInt - 10000;
+        } else if(val > end) {
+            end = valInt + 10000;
+        }
+
+        int rangeProgress = end - start;
+
+        firstLimitProgress = (((firstLimit - start)/rangeProgress) * 100);
+
+        int valProgress = (int)(((val - start)/rangeProgress) * 100);
+        setValue(valStr, valProgress);
+    }
 
     @Override
     protected synchronized void handleOtherIndicators(Canvas canvas, int dx) {
