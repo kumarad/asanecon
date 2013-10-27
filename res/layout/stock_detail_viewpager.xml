@@ -82,7 +82,7 @@
                 android:id="@+id/lowHighBar"
                 android:layout_width="0dp"
                 android:layout_weight=".3"
-                android:layout_height="wrap_content"
+                android:layout_height="8dp"
                 android:layout_marginTop="6dp"
                 style="@style/Widget.ProgressBar.RegularProgressBar"
                 />

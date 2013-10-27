@@ -66,9 +66,12 @@ public class DownloadQuote {
                 stockData.dateStr = dateStr;
 
                 int nameLength = rowData.length - 12;
+                StringBuilder nameBuilder = new StringBuilder();
+                nameBuilder.append("");
                 for(int i = 0; i < nameLength; ++i) {
-                    stockData.name = rowData[12 + i];
+                    nameBuilder.append(rowData[12+i]);
                 }
+                stockData.name = nameBuilder.toString();
 
                 stockDataList.add(stockData);
             }

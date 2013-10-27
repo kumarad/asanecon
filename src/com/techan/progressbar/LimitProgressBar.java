@@ -100,6 +100,11 @@ public class LimitProgressBar extends SaundProgressBar {
         setValue(valStr, valProgress);
     }
 
+    public synchronized void clearLimits() {
+        this.firstLimitDrawable = null;
+        this.secondLimitDrawable = null;
+    }
+
     @Override
     protected synchronized void handleOtherIndicators(Canvas canvas, int dx) {
         int progress = getProgress();
