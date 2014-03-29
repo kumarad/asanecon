@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="General Settings">
+
+        <SwitchPreference
+                android:key="autoRefresh"
+                android:title="Auto Refresh"
+                android:defaultValue="false"
+                />
+
+        <ListPreference
+                android:key="refreshInterval"
+                android:title="Refresh Interval"
+                android:summary="Define how often updates will be performed in hours"
+                android:defaultValue="1"
+                android:entries="@array/refreshInterval"
+                android:entryValues="@array/refreshIntervalValues"
+                android:dependency="autoRefresh"
+                />
+
+        <CheckBoxPreference
+                android:key="refreshWifiOnly"
+                android:title="Refresh on wifi"
+                android:summary="Only refresh when connected to a wifi network"
+                android:checked="false"
+                android:dependency="autoRefresh"
+                >
+        </CheckBoxPreference>
+
+        </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="Notifications">
+
+        <SwitchPreference
+            android:key="allNotifications"
+            android:title="Notifications"
+            android:defaultValue="false"
+            />
+
+        <SwitchPreference
+            android:key="peEnabled"
+            android:title="PE Notifications"
+            android:summary="Sets a global PE notification. Can be overriden for individual stocks"
+            android:defaultValue="false"
+            />
+
+        <EditTextPreference android:title="PE Target"
+                            android:key="peTarget"
+                            android:defaultValue = "10"
+                            android:dialogTitle="Enter PE Target"
+                            android:inputType="numberDecimal"
+                            />
+
+        <!--<CheckBoxPreference-->
+                <!--android:key="checkbox_preference"-->
+                <!--android:title="title"-->
+                <!--android:summary="summary" />-->
+
+    </PreferenceCategory>
+</PreferenceScreen>         <!-- From: file:/home/kumarad/github/asaneconGradle/app/src/main/res/xml/settings.xml -->

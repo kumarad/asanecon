@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" >
+
+    <!--<ImageView-->
+            <!--android:id="@+id/icon"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:layout_marginLeft="4dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:src="@drawable/ic_launcher" >-->
+    <!--</ImageView>-->
+
+    <TextView
+            android:id="@+id/symbol"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="6dp"
+            android:lines="1"
+            android:text="@+id/TextView01"
+            android:textSize="24dp"
+            >
+    </TextView>
+
+    <TextView
+            android:id="@+id/price"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="6dp"
+            android:lines="1"
+            android:text="@+id/TextView02"
+            android:textSize="24dp"
+            >
+    </TextView>
+
+    <RelativeLayout android:layout_height="fill_parent"
+                    android:layout_width ="wrap_content"
+                    android:gravity="center_vertical">
+        <TextView
+                android:id="@+id/blob1"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:text="%"
+                android:textColor="#FFFFFFFF"
+                android:textSize="8dp"
+                android:background="@drawable/rounded_edges"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_marginBottom="1dp"
+                />
+
+        <TextView
+                android:id="@+id/blob2"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:text="$"
+                android:textColor="#FFFFFFFF"
+                android:textSize="8dp"
+                android:background="@drawable/rounded_edges"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_below="@id/blob1"
+                android:layout_marginBottom="1dp"
+                />
+
+        <TextView
+                android:id="@+id/blob3"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:text="P/E"
+                android:textColor="#FFFFFFFF"
+                android:textSize="5dp"
+                android:background="@drawable/rounded_edges"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_below="@id/blob2"/>
+
+    </RelativeLayout>
+
+</LinearLayout><!-- From: file:/home/kumarad/github/asaneconGradle/app/src/main/res/layout/stock_row.xml -->
