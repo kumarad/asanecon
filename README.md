@@ -1,4 +1,0 @@
-techan
-======
-
-Tech Analysis 

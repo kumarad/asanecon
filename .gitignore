@@ -3,5 +3,7 @@ vogella2/.idea/
 out/
 .idea/
 *.iml
-*.properties
+app/build/
+local.properties
+.gradle/
 
