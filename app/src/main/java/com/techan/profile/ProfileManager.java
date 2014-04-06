@@ -3,8 +3,6 @@ package com.techan.profile;
 import android.content.Context;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ProfileManager {
     private static SymbolProfileManager symbolProfileManager = null;

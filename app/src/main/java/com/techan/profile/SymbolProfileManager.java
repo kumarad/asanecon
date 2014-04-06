@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Collection;
 import java.util.Map;
 
 // Uses persistence manager to get file contents as a string and maps it to SymbolProfile
