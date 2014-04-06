@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.io.*;
 
+// Reads in file and returns it as a string
 public class PersistenceManager {
 
     private static final String FILE_NAME = "techan_profile";
