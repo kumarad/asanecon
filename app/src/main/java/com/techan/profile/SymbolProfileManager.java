@@ -6,14 +6,15 @@ import android.util.Log;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Collection;
+import java.util.Map;
 
 // Uses persistence manager to get file contents as a string and maps it to SymbolProfile
-public class JSONManager {
+public class SymbolProfileManager {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final PersistenceManager persistenceManager;
     private SymbolProfileMap symbolProfileMap;
 
-    public JSONManager(Context ctx) {
+    public SymbolProfileManager(Context ctx) {
         persistenceManager = new PersistenceManager(ctx);
 
         String s = persistenceManager.read();
@@ -42,6 +43,10 @@ public class JSONManager {
         }
     }
 
+    public SymbolProfile getSymbol(String symbol) {
+        return symbolProfileMap.getSymbolProfiles().get(symbol);
+    }
+
     public boolean removeSymbol(String symbol) {
         // Remove symbol.
         symbolProfileMap.removeSymbol(symbol);
@@ -66,8 +71,8 @@ public class JSONManager {
         }
     }
 
-    public Collection<SymbolProfile> getSymbols() {
-        return symbolProfileMap.getSymbolProfiles().values();
+    public Map<String, SymbolProfile> getSymbols() {
+        return symbolProfileMap.getSymbolProfiles();
     }
 
     public void forceDelete() {
