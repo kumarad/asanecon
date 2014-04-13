@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -72,10 +73,6 @@ public class StopLossDialog {
             np.setValue(SettingsActivity.STOP_LOSS_DEFAULT);
         }
 
-        // Handle price text.
-        TextView buyPriceTextView = (TextView)view.findViewById(R.id.show_buy_price);
-        buyPriceTextView.setText(Double.toString(profile.buyPrice));
-
         final Switch s = (Switch) view.findViewById(R.id.switch_sl_notify);
         if(globalNotifications && profile.stopLossPercent != null) {
             s.setChecked(true);
@@ -83,6 +80,11 @@ public class StopLossDialog {
             s.setChecked(false);
             np.setEnabled(false);
         }
+
+        // Handle date picker
+        final DatePicker datePicker = (DatePicker) view.findViewById(R.id.slDatePicker);
+        datePicker.setCalendarViewShown(false);
+        setSlTrackingStartDateOnView(datePicker, profile.slTrackingStartDate);
 
         // Handle warning.
         final TextView warningText = (TextView)view.findViewById(R.id.sl_warning);
@@ -97,7 +99,7 @@ public class StopLossDialog {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        doAdd(parentActivity, stockUri, profile, np, s, listener, stockPagerAdapter);
+                        doAdd(parentActivity, stockUri, profile, np, s, datePicker, listener, stockPagerAdapter);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -111,13 +113,28 @@ public class StopLossDialog {
         alertDialog.create().show();
     }
 
-    private static void doAdd(Activity parentActivity, Uri stockUri, SymbolProfile profile, NumberPicker np, Switch s, SwitchCheckRefreshListener listener, StockPagerAdapter stockPagerAdapter) {
+    private static void setSlTrackingStartDateOnView(DatePicker dp, String buyDate) {
+        Calendar c;
+        if(buyDate == null) {
+            c = Calendar.getInstance();
+        } else {
+            c = Util.getCal(buyDate);
+        }
+
+        // set current date into datepicker
+        dp.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), null);
+    }
+
+
+    private static void doAdd(Activity parentActivity, Uri stockUri, SymbolProfile profile, NumberPicker np, Switch s, DatePicker datePicker, SwitchCheckRefreshListener listener, StockPagerAdapter stockPagerAdapter) {
         boolean cleared = false;
         if(s.isChecked()) {
             Integer stopLossPercent = np.getValue();
             // Either way set highestPrice to buyPrice. So that highestPrices is tracked from when stop loss notifications are activated.
             // TODO let user specify trailing vs non trailing
-            profile.setStopLossInfo(stopLossPercent, true);
+            // TODO ensure date is todays date or earlier. If its not just set to today ?
+            String curDate = Util.getCalStr(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth());
+            profile.setStopLossInfo(stopLossPercent, true, curDate);
         } else {
             profile.clearStopLossInfo();
             cleared = true;
@@ -133,8 +150,8 @@ public class StopLossDialog {
             cursor.moveToFirst();
             Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
 
-            if(Util.isDateLess(Util.getCal(profile.buyDate), Util.getCurCalWithZeroTime())) {
-                ContentValues values = ContentValuesFactory.createSlAddValuesDiffDate(profile.buyPrice, profile.buyDate);
+            if(Util.isDateLess(Util.getCal(profile.slTrackingStartDate), Util.getCurCalWithZeroTime())) {
+                ContentValues values = ContentValuesFactory.createSlAddValuesDiffDate(profile.buyPrice, profile.slTrackingStartDate);
                 cr.update(stockUri, values, null, null);
 
                 // Need to refresh historical data for this stock.
@@ -145,10 +162,10 @@ public class StopLossDialog {
                 ContentValues values = ContentValuesFactory.createSlAddValuesSameDate(curPrice, profile.buyPrice);
                 cr.update(stockUri, values, null, null);
 
-                stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.buyDate, profile.stockCount, profile.stopLossPercent);
+                stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.slTrackingStartDate, profile.stockCount, profile.stopLossPercent);
             }
         } else {
-            stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.buyDate, profile.stockCount, profile.stopLossPercent);
+            stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.slTrackingStartDate, profile.stockCount, profile.stopLossPercent);
         }
 
         listener.commit();

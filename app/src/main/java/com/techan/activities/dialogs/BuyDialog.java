@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.techan.R;
@@ -14,8 +13,6 @@ import com.techan.activities.StockPagerAdapter;
 import com.techan.custom.Util;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
-
-import java.util.Calendar;
 
 public class BuyDialog {
 
@@ -40,15 +37,12 @@ public class BuyDialog {
             shareCountText.setHint("optional");
         }
 
-        final DatePicker datePicker = (DatePicker) view.findViewById(R.id.buyDatePicker);
-        datePicker.setCalendarViewShown(false);
-        setBuyDateOnView(datePicker, profile.buyDate);
 
         alertDialog.setView(view);
         alertDialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                doAdd(parentActivity, profile, stockUri, symbol, buyPriceText, shareCountText, datePicker, stockPagerAdapter);
+                doAdd(parentActivity, profile, buyPriceText, shareCountText, stockPagerAdapter);
             }
         });
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -62,23 +56,10 @@ public class BuyDialog {
 
     }
 
-    private static void setBuyDateOnView(DatePicker dp, String buyDate) {
-        Calendar c;
-        if(buyDate == null) {
-            c = Calendar.getInstance();
-        } else {
-            c = Util.getCal(buyDate);
-        }
-
-        // set current date into datepicker
-        dp.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), null);
-    }
-
-    private static void doAdd(Activity activity, SymbolProfile profile, Uri stockUri, String symbol, EditText buyPriceText, EditText shareCountText, DatePicker datePicker, StockPagerAdapter stockPagerAdapter) {
+    private static void doAdd(Activity activity, SymbolProfile profile, EditText buyPriceText, EditText shareCountText, StockPagerAdapter stockPagerAdapter) {
         boolean showStopLossToast = false;
         String buyPriceStr = buyPriceText.getText().toString();
         String shareCountStr = shareCountText.getText().toString();
-        String buyDateStr = Util.getCalStr(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth());
         if(!buyPriceStr.equals("")) {
             // Buy price is being set.
             double newBuyPrice = Double.parseDouble(buyPriceStr);
@@ -95,20 +76,6 @@ public class BuyDialog {
             } // else buy price is being set for the first time. Means stop loss info doesn't exist yet.
             profile.buyPrice = newBuyPrice;
 
-            //todo ensure date is todays date or earlier. If its not just set to today ?
-            if(profile.buyDate != null) {
-                if(!buyDateStr.equals(profile.buyDate)) {
-                    // Buy date is being updated.
-                    if(profile.stopLossPercent != null) {
-                        showStopLossToast = true;
-                    }
-
-                    // If buy date is being updated clear stop loss info.
-                    profile.clearStopLossInfo();
-                } // else buyDate is null and being set for first time with buyPrice or its the same as before.
-            } // else buy date being set for first time. Means buy price was just set too. Means stop loss info doesn't exist yet.
-            profile.buyDate = buyDateStr;
-
             if(!shareCountStr.equals("")) {
                 profile.stockCount = Integer.parseInt(shareCountStr);
             } else {
@@ -120,7 +87,6 @@ public class BuyDialog {
             }
 
             profile.buyPrice = null;
-            profile.buyDate = null;
             profile.stockCount = null;
             profile.clearStopLossInfo();
         }
@@ -129,7 +95,7 @@ public class BuyDialog {
         ProfileManager.addSymbolData(profile);
 
         // Update cost basis view.
-        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.buyDate, profile.stockCount, profile.stopLossPercent);
+        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.slTrackingStartDate, profile.stockCount, profile.stopLossPercent);
 
         if(showStopLossToast) {
             Util.showErrorToast(activity, "Stop loss information has been reset. Please update.");

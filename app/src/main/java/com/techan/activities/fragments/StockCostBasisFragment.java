@@ -17,7 +17,7 @@ import com.techan.progressbar.SaundProgressBar;
 
 public class StockCostBasisFragment extends Fragment {
     public static final String COST_VAL = "COST_VAL";
-    public static final String BUY_DATE = "BUY_DATE";
+    public static final String SL_TRACKING_START_DATE = "SL_TRACKING_START_DATE";
     public static final String COUNT_VAL = "COUNT_VAL";
     public static final String CUR_PRICE = "CUR_PRICE";
     public static final String HIGH_PRICE = "HIGH_PRICE";
@@ -35,10 +35,8 @@ public class StockCostBasisFragment extends Fragment {
     TextView costValView;
     TextView countValView;
 
-    LinearLayout buyDateRow;
-    TextView buyDateValView;
-
     RelativeLayout stopLossView;
+    TextView slDateValView;
 
     SaundProgressBar regularProgressBar;
 
@@ -57,10 +55,8 @@ public class StockCostBasisFragment extends Fragment {
         costValView = (TextView) rootView.findViewById(R.id.detailCostVal);
         countValView = (TextView) rootView.findViewById(R.id.detailCountVal);
 
-        buyDateRow = (LinearLayout)rootView.findViewById(R.id.buyDateRow);
-        buyDateValView = (TextView)rootView.findViewById(R.id.buyDateVal);
-
         stopLossView = (RelativeLayout)rootView.findViewById(R.id.stopLossView);
+        slDateValView = (TextView)rootView.findViewById(R.id.slDateVal);
 
         warningView.setText("Set cost basis.");
 
@@ -70,15 +66,14 @@ public class StockCostBasisFragment extends Fragment {
         indicator.setBounds(bounds);
         regularProgressBar.setProgressIndicator(indicator);
 
-        update(args.getDouble(CUR_PRICE), args.getDouble(COST_VAL), args.getString(BUY_DATE), args.getInt(COUNT_VAL), args.getInt(SL_PERCENT), args.getDouble(HIGH_PRICE));
+        update(args.getDouble(CUR_PRICE), args.getDouble(COST_VAL), args.getString(SL_TRACKING_START_DATE), args.getInt(COUNT_VAL), args.getInt(SL_PERCENT), args.getDouble(HIGH_PRICE));
 
         return rootView;
     }
 
-    public void update(final Double curPrice, final Double buyPrice, final String buyDate, final Integer stockCount, final Integer slPercent, final Double highPrice) {
+    public void update(final Double curPrice, final Double buyPrice, final String slTrackingStartDate, final Integer stockCount, final Integer slPercent, final Double highPrice) {
         if(buyPrice != null && buyPrice != 0) {
             costValView.setText(Double.toString(buyPrice));
-            buyDateValView.setText(Util.getDateFromDateTimeStr(buyDate));
             clearWarning();
         } else {
             setWarning();
@@ -102,6 +97,8 @@ public class StockCostBasisFragment extends Fragment {
                 progress = (int)(((curPrice - low)*100.00)/(highPrice - low));
             } // else lower. Can't be higher!
             regularProgressBar.setValue("$" + Double.toString(curPrice), progress);
+
+            slDateValView.setText(Util.getDateFromDateTimeStr(slTrackingStartDate));
         } else {
             stopLossView.setVisibility(View.GONE);
         }
@@ -132,7 +129,6 @@ public class StockCostBasisFragment extends Fragment {
         hideCostBasisViews();
 
         costRow.setVisibility(View.GONE);
-        buyDateRow.setVisibility(View.GONE);
         stopLossView.setVisibility(View.GONE);
     }
 
@@ -140,7 +136,6 @@ public class StockCostBasisFragment extends Fragment {
         warningView.setVisibility(View.GONE);
 
         costRow.setVisibility(View.VISIBLE);
-        buyDateRow.setVisibility(View.VISIBLE);
         stopLossView.setVisibility(View.VISIBLE);
     }
 }

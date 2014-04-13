@@ -64,25 +64,4 @@
                 />
     </LinearLayout>
 
-    <TextView
-            android:id="@+id/buy_divider2"
-            android:layout_width="fill_parent"
-            android:layout_height="10dip"
-            android:layout_below="@id/share_count_row"
-            />
-
-    <TextView
-            android:id="@+id/dpText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Buy Date:"
-            android:layout_below="@id/buy_divider2"
-            />
-
-    <DatePicker
-            android:id="@+id/buyDatePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/dpText"/>
-
 </RelativeLayout>

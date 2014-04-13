@@ -53,15 +53,15 @@ public class ContentValuesFactory {
         return values;
     }
 
-    public static ContentValues createSlAddValuesDiffDate(double buyPrice, String buyDate) {
+    public static ContentValues createSlAddValuesDiffDate(double buyPrice, String slTrackingStartDate) {
         ContentValues values = new ContentValues();
         values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, buyPrice);
         values.put(StocksTable.COLUMN_SL_LOWEST_PRICE, buyPrice);
-        values.put(StocksTable.COLUMN_SL_LOWEST_PRICE_DATE, buyDate);
+        values.put(StocksTable.COLUMN_SL_LOWEST_PRICE_DATE, slTrackingStartDate);
 
         // Need to set last updated to an earlier date to ensure RefreshTask doesn't
         // think its already updated.
-        values.put(StocksTable.COLUMN_LAST_UPDATE, buyDate);
+        values.put(StocksTable.COLUMN_LAST_UPDATE, slTrackingStartDate);
         return values;
     }
 
@@ -70,7 +70,7 @@ public class ContentValuesFactory {
         values.put(StocksTable.COLUMN_SYMBOL, profile.symbol);
         values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, profile.buyPrice);
         values.put(StocksTable.COLUMN_SL_LOWEST_PRICE, profile.buyPrice);
-        values.put(StocksTable.COLUMN_LAST_UPDATE, profile.buyDate);
+        values.put(StocksTable.COLUMN_LAST_UPDATE, profile.slTrackingStartDate);
         return values;
     }
 
