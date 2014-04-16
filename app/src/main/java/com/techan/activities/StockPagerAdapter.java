@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.techan.activities.fragments.StockCostBasisFragment;
 import com.techan.activities.fragments.StockTrendFragment;
-import com.techan.activities.fragments.StockVolumeFragment;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
 import com.techan.profile.ProfileManager;
@@ -22,9 +21,8 @@ import java.util.Map;
 
 // Returns a fragment corresponding to one of the sections/tabs/pages.
 public class StockPagerAdapter extends FragmentPagerAdapter {
-    public static final int FRAGMENT_COUNT = 3;
+    public static final int FRAGMENT_COUNT = 2;
     public static final String COST_BASIS = "Cost Basis";
-    public static final String VOL = "Volume";
     public static final String TREND = "Trends";
 
     private String[] fragmentTypes = new String[FRAGMENT_COUNT];
@@ -87,33 +85,6 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         fragment.update(curPrice, buyPrice, slTrackingStartDate, stockCount, slPercent, highPrice);
     }
 
-    protected Fragment createVolFragment() {
-        Fragment fragment = new StockVolumeFragment();
-        Bundle args = new Bundle();
-
-        double volDouble = createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_TRADING_VOLUME));
-        String volString;
-        if(volDouble != 0) {
-            volString = Long.toString((long) volDouble);
-        } else {
-            volString = "N/A";
-        }
-
-        double avgVolDouble = createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_AVG_TRADING_VOLUME));
-        String avgVolString;
-        if(avgVolDouble != 0) {
-            avgVolString = Long.toString((long) avgVolDouble);
-        } else {
-            avgVolString ="N/A";
-        }
-
-        args.putString(StockVolumeFragment.VOLUME, volString);
-        args.putString(StockVolumeFragment.AVG_VOLUME, avgVolString);
-
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     protected Fragment createTrendFragment() {
         Fragment fragment = new StockTrendFragment();
         Bundle args = new Bundle();
@@ -140,8 +111,6 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
                 return createTrendFragment();
             case 1:
                 return createCostBasisFragment();
-            case 2:
-                return createVolFragment();
         }
 
         return null;
@@ -159,8 +128,6 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
                 return (fragmentTypes[position] = TREND);
             case 1:
                 return (fragmentTypes[position] = COST_BASIS);
-            case 2:
-                return (fragmentTypes[position] = VOL);
         }
 
         return null;
