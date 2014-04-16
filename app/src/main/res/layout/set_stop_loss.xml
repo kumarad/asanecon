@@ -57,7 +57,7 @@
         android:id="@+id/dpText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Buy Date:"
+        android:text="Date:"
         android:layout_below="@id/date_divider"
         />
 
