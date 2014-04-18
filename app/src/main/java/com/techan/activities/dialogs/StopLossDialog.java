@@ -162,10 +162,20 @@ public class StopLossDialog {
                 ContentValues values = ContentValuesFactory.createSlAddValuesSameDate(curPrice, profile.buyPrice);
                 cr.update(stockUri, values, null, null);
 
-                stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.slTrackingStartDate, profile.stockCount, profile.stopLossPercent);
+                stockPagerAdapter.updateCostBasisFragment(profile.buyPrice,
+                                                         profile.slTrackingStartDate,
+                                                         profile.stockCount,
+                                                         profile.stopLossPercent,
+                                                         profile.targetPrice,
+                                                         profile.lessThanEqual);
             }
         } else {
-            stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.slTrackingStartDate, profile.stockCount, profile.stopLossPercent);
+            stockPagerAdapter.updateCostBasisFragment(profile.buyPrice,
+                                                      profile.slTrackingStartDate,
+                                                      profile.stockCount,
+                                                      profile.stopLossPercent,
+                                                      profile.targetPrice,
+                                                      profile.lessThanEqual);
         }
 
         listener.commit();

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.techan.R;
+import com.techan.activities.StockPagerAdapter;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 
@@ -25,7 +26,7 @@ public class TargetDialog {
         }
     }
 
-    public static void create(final Activity parentActivity, final String symbol) {
+    public static void create(final Activity parentActivity, final String symbol, final StockPagerAdapter stockPagerAdapter) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
         alertDialog.setTitle("Set target price");
 
@@ -48,7 +49,7 @@ public class TargetDialog {
         alertDialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                doAdd(profile, targetText, compListener);
+                doAdd(profile, targetText, compListener, stockPagerAdapter);
             }
         });
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -58,14 +59,12 @@ public class TargetDialog {
             }
         });
 
-
         alertDialog.setSingleChoiceItems(R.array.comparator, comparatorChoice, compListener);
-
         alertDialog.create().show();
 
     }
 
-    private static void doAdd(SymbolProfile profile, EditText targetText, ComparatorListener compListener) {
+    private static void doAdd(SymbolProfile profile, EditText targetText, ComparatorListener compListener, StockPagerAdapter stockPagerAdapter) {
         String targetStr = targetText.getText().toString();
         if(!targetStr.equals("")) {
             profile.targetPrice = Double.parseDouble(targetStr);
@@ -74,6 +73,14 @@ public class TargetDialog {
             profile.targetPrice = null;
             profile.lessThanEqual = null;
         }
+
+        // Update cost basis view.
+        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice,
+                profile.slTrackingStartDate,
+                profile.stockCount,
+                profile.stopLossPercent,
+                profile.targetPrice,
+                profile.lessThanEqual);
 
         ProfileManager.addSymbolData(profile);
     }

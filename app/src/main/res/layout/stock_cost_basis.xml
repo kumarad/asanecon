@@ -8,7 +8,7 @@
     <TextView
             android:id="@+id/costWarning"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             />
 
     <TextView
@@ -90,10 +90,20 @@
                 android:layout_marginLeft="15dp"/>
     </LinearLayout>
 
+    <View
+        android:id="@+id/cbDiv1"
+        android:layout_below="@id/costRow"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height=".3dp"
+        android:background="@android:color/darker_gray" />
+
+
     <RelativeLayout android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
                     android:id="@+id/stopLossView"
-                    android:layout_below="@id/costBasisChangeRow">
+                    android:layout_below="@id/cbDiv1">
 
         <com.techan.progressbar.SaundProgressBar
             android:id="@+id/slprogressbar"
@@ -134,5 +144,64 @@
         </LinearLayout>
 
     </RelativeLayout>
+
+    <View
+        android:id="@+id/cbDiv2"
+        android:layout_below="@id/stopLossView"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height=".3dp"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="25sp"
+        android:weightSum="1.0"
+        android:layout_below="@id/cbDiv2"
+        android:id="@+id/targetPriceView"
+        android:layout_marginLeft="3dp"
+        >
+
+        <TextView
+            android:id="@+id/targetText"
+            android:layout_width="0dp"
+            android:layout_weight=".24"
+            android:text="Target:"
+            android:layout_gravity="center_vertical"
+            android:layout_height="fill_parent"
+            />
+
+        <TextView
+            android:id="@+id/targetLowVal"
+            android:layout_width="0dp"
+            android:layout_weight=".20"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
+            android:layout_marginRight="15dp"
+            />
+
+        <com.techan.progressbar.SaundProgressBar
+            android:id="@+id/targetBar"
+            android:layout_width="0dp"
+            android:layout_weight=".3"
+            android:layout_height="8dp"
+            android:layout_marginTop="6dp"
+            style="@style/Widget.ProgressBar.RegularProgressBar"
+            />
+
+
+        <TextView
+            android:id="@+id/targetHighVal"
+            android:layout_width="0dp"
+            android:layout_weight=".26"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="left"
+            android:layout_marginLeft="15dp"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -71,18 +71,28 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
             args.putString(StockCostBasisFragment.SL_TRACKING_START_DATE, profile.slTrackingStartDate);
         }
 
+        if(profile.targetPrice != null) {
+            args.putDouble(StockCostBasisFragment.TARGET_PRICE, profile.targetPrice);
+            args.putBoolean(StockCostBasisFragment.TARGET_LESS_THAN_EQUAL, profile.lessThanEqual);
+        }
+
         fragment.setArguments(args);
         return fragment;
     }
 
-    public void updateCostBasisFragment(final Double buyPrice, final String slTrackingStartDate, final Integer stockCount, final Integer slPercent) {
+    public void updateCostBasisFragment(final Double buyPrice,
+                                        final String slTrackingStartDate,
+                                        final Integer stockCount,
+                                        final Integer slPercent,
+                                        final Double targetPrice,
+                                        final Boolean lessThanEqual) {
         StockCostBasisFragment fragment = (StockCostBasisFragment)fragments.get(COST_BASIS);
 
         Cursor cursor = ctx.getContentResolver().query(stockUri, null, null, null, null);
         cursor.moveToFirst();
         Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
         Double highPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_SL_HIGEST_PRICE));
-        fragment.update(curPrice, buyPrice, slTrackingStartDate, stockCount, slPercent, highPrice);
+        fragment.update(curPrice, buyPrice, slTrackingStartDate, stockCount, slPercent, highPrice, targetPrice, lessThanEqual);
     }
 
     protected Fragment createTrendFragment() {

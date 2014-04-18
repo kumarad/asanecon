@@ -139,9 +139,10 @@ public class StockDetailFragmentActivity extends FragmentActivity {
                 BuyDialog.create(this, symbol, stockUri, stockPagerAdapter);
                 return true;
             case R.id.set_target_price:
-                TargetDialog.create(this, symbol);
+                TargetDialog.create(this, symbol, stockPagerAdapter);
                 return true;
             case R.id.set_pe_target:
+                //todo pe target bar ? if so we need to pass the stockPagerAdapter for update.
                 PeDialog.create(this, symbol);
                 return true;
             case R.id.set_stop_loss:

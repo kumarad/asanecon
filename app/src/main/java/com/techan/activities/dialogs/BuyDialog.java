@@ -95,7 +95,12 @@ public class BuyDialog {
         ProfileManager.addSymbolData(profile);
 
         // Update cost basis view.
-        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice, profile.slTrackingStartDate, profile.stockCount, profile.stopLossPercent);
+        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice,
+                                                  profile.slTrackingStartDate,
+                                                  profile.stockCount,
+                                                  profile.stopLossPercent,
+                                                  profile.targetPrice,
+                                                  profile.lessThanEqual);
 
         if(showStopLossToast) {
             Util.showErrorToast(activity, "Stop loss information has been reset. Please update.");
