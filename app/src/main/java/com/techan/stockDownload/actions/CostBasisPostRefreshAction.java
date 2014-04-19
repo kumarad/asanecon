@@ -13,11 +13,6 @@ public class CostBasisPostRefreshAction implements PostRefreshAction {
     }
     @Override
     public void execute() {
-        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice,
-                                                  profile.slTrackingStartDate,
-                                                  profile.stockCount,
-                                                  profile.stopLossPercent,
-                                                  profile.targetPrice,
-                                                  profile.lessThanEqual);
+        stockPagerAdapter.updateCostBasisFragment(profile);
     }
 }

@@ -75,12 +75,7 @@ public class TargetDialog {
         }
 
         // Update cost basis view.
-        stockPagerAdapter.updateCostBasisFragment(profile.buyPrice,
-                profile.slTrackingStartDate,
-                profile.stockCount,
-                profile.stopLossPercent,
-                profile.targetPrice,
-                profile.lessThanEqual);
+        stockPagerAdapter.updateCostBasisFragment(profile);
 
         ProfileManager.addSymbolData(profile);
     }

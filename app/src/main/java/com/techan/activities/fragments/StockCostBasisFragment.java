@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.techan.R;
 import com.techan.custom.Util;
+import com.techan.profile.SymbolProfile;
 import com.techan.progressbar.SaundProgressBar;
 
 public class StockCostBasisFragment extends Fragment {
@@ -98,7 +99,18 @@ public class StockCostBasisFragment extends Fragment {
         return rootView;
     }
 
-    public void update(final Double curPrice,
+    public void update(final Double curPrice, Double highPrice, final SymbolProfile profile) {
+        update(curPrice,
+               profile.buyPrice,
+               profile.slTrackingStartDate,
+               profile.stockCount,
+               profile.stopLossPercent,
+               highPrice,
+               profile.targetPrice,
+               profile.lessThanEqual);
+    }
+
+    protected void update(final Double curPrice,
                        final Double buyPrice,
                        final String slTrackingStartDate,
                        final Integer stockCount,
