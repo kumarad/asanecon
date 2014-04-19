@@ -86,7 +86,6 @@ public class StockCostBasisFragment extends Fragment {
         indicator.setBounds(bounds);
         slProgressBar.setProgressIndicator(indicator);
 
-
         update(args.getDouble(CUR_PRICE),
                 args.getDouble(COST_VAL),
                 args.getString(SL_TRACKING_START_DATE),
@@ -136,6 +135,11 @@ public class StockCostBasisFragment extends Fragment {
             hideCostBasisViews();
         }
 
+        handleStopLossView(slTrackingStartDate, curPrice, slPercent, highPrice);
+        handleTargetPricing(warningSet, curPrice, targetPrice, lessThanEqual);
+    }
+
+    protected void handleStopLossView(String slTrackingStartDate, Double curPrice, Integer slPercent, Double highPrice) {
         if(slPercent != null && slPercent != 0) {
             stopLossView.setVisibility(View.VISIBLE);
             divView1.setVisibility(View.VISIBLE);
@@ -151,8 +155,9 @@ public class StockCostBasisFragment extends Fragment {
             stopLossView.setVisibility(View.GONE);
             divView1.setVisibility(View.GONE);
         }
+    }
 
-        // Handle target pricing
+    protected void handleTargetPricing(boolean warningSet, Double curPrice, Double targetPrice, Boolean lessThanEqual) {
         if(targetPrice != null && targetPrice != 0) {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) divView2.getLayoutParams();
             if(warningSet) {
