@@ -15,7 +15,16 @@ import com.techan.profile.SymbolProfile;
 public class TargetDialog {
 
     static private class ComparatorListener implements DialogInterface.OnClickListener {
-        public boolean lessThanEqual = true;
+        public Boolean lessThanEqual;
+
+        public ComparatorListener(Boolean lessThanEqual) {
+            if(lessThanEqual != null) {
+                this.lessThanEqual = lessThanEqual;
+            } else {
+                this.lessThanEqual = true;
+            }
+        }
+
         @Override
         public void onClick(DialogInterface dialogInterface, int which) {
             if(which == 0) {
@@ -43,7 +52,7 @@ public class TargetDialog {
                 comparatorChoice = 1;
         }
 
-        final ComparatorListener compListener = new ComparatorListener();
+        final ComparatorListener compListener = new ComparatorListener(profile.lessThanEqual);
 
         alertDialog.setView(view);
         alertDialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
