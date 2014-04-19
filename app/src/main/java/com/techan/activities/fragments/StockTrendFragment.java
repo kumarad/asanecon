@@ -33,20 +33,17 @@ public class StockTrendFragment extends Fragment {
         Bundle args = getArguments();
 
         double curPrice = args.getDouble(CUR_PRICE);
-        double high60Day = args.getDouble(HIGH_60_DAY);
-        double low90Day = args.getDouble(LOW_90_DAY);
-        double mov50Avg = args.getDouble(MOV_50_VAL);
-        double mov200Avg = args.getDouble(MOV_200_VAL);
-        double peg = args.getDouble(PEG);
-        double vol = args.getDouble(VOLUME);
-        double avgVol = args.getDouble(AVG_VOLUME);
-        double change = args.getDouble(CHANGE);
 
-        // High/Low
-//        XYPlot plot = (XYPlot) rootView.findViewById(R.id.highLowPlot);
-//        TrendPlot highLowPlot = new TrendPlot(plot, curPrice, high60Day, TrendPlot.GREEN_LINE_COLOR, low90Day, TrendPlot.RED_LINE_COLOR);
-//        highLowPlot.plot();
+        handleHighLowSection(rootView, curPrice, args.getDouble(HIGH_60_DAY), args.getDouble(LOW_90_DAY));
+        handleMovingAverages(rootView, curPrice, args.getDouble(MOV_50_VAL), args.getDouble(MOV_200_VAL));
+        handleTrending(rootView, args.getInt(DAY_COUNT));
+        handleVolumes(rootView, args.getDouble(VOLUME), args.getDouble(AVG_VOLUME), args.getDouble(CHANGE));
+        handlePeg(rootView, args.getDouble(PEG));
 
+        return rootView;
+    }
+
+    protected void handleHighLowSection(View rootView, double curPrice, double high60Day, double low90Day) {
         TextView high60DayView = (TextView) rootView.findViewById(R.id.high60Day);
         high60DayView.setText("60 day high: " + Double.toString(high60Day));
 
@@ -64,8 +61,9 @@ public class StockTrendFragment extends Fragment {
         } else {
             highLowAlertView.setVisibility(View.INVISIBLE);
         }
+    }
 
-
+    protected void handleMovingAverages(View rootView, double curPrice, double mov50Avg, double mov200Avg) {
         TextView mov50AvgView = (TextView) rootView.findViewById(R.id.movAvg50);
         mov50AvgView.setText("50 day moving average: " + Double.toString(mov50Avg));
 
@@ -90,11 +88,12 @@ public class StockTrendFragment extends Fragment {
         } else {
             mov200AvgAlertView.setVisibility(View.INVISIBLE);
         }
+    }
 
+    protected void handleTrending(View rootView, int dayCount) {
         TextView upTrendCountView = (TextView) rootView.findViewById(R.id.upTrendCount);
         upTrendCountView.setText("Up Trend: ");
 
-        int dayCount = args.getInt(DAY_COUNT);
         if(dayCount > 10)
             dayCount = 10;
 
@@ -117,20 +116,9 @@ public class StockTrendFragment extends Fragment {
             }
         });
         regularProgressBar.setProgress(dayCount*10);
+    }
 
-        TextView pegView = (TextView) rootView.findViewById(R.id.pegDetail);
-        if(peg > 0)
-            pegView.setText("PEG: " + Double.toString(peg));
-        else
-            pegView.setText("PEG: -");
-
-        TextView pegAlertView = (TextView) rootView.findViewById(R.id.pegAlert);
-        if(peg > 2) {
-            pegAlertView.setText("High valuation");
-        } else {
-            pegAlertView.setVisibility(View.INVISIBLE);
-        }
-
+    protected void handleVolumes(View rootView, double vol, double avgVol, double change) {
         TextView volView = (TextView) rootView.findViewById(R.id.volDetail);
         if(vol > 0) {
             volView.setText("Volume : " + Long.toString((long)vol));
@@ -156,11 +144,20 @@ public class StockTrendFragment extends Fragment {
         } else {
             volAlertView.setVisibility(View.INVISIBLE);
         }
-
-        return rootView;
     }
 
-    public void update() {
-        //plot.clear() will allow you to redraw the whole thing!
+    protected void handlePeg(View rootView, double peg) {
+        TextView pegView = (TextView) rootView.findViewById(R.id.pegDetail);
+        if(peg > 0)
+            pegView.setText("PEG: " + Double.toString(peg));
+        else
+            pegView.setText("PEG: -");
+
+        TextView pegAlertView = (TextView) rootView.findViewById(R.id.pegAlert);
+        if(peg > 2) {
+            pegAlertView.setText("High valuation");
+        } else {
+            pegAlertView.setVisibility(View.INVISIBLE);
+        }
     }
 }
