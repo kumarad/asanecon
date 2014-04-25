@@ -25,6 +25,8 @@ public class StockCostBasisFragment extends Fragment {
     public static final String SL_PERCENT = "SL_PERCENT";
     public static final String TARGET_PRICE = "TARGET_PRICE";
     public static final String TARGET_LESS_THAN_EQUAL = "TARGET_LESS_THAN_EQUAL";
+    public static final String TARGET_PE = "TARGET_PE";
+    public static final String CUR_PE = "CUR_PE";
 
     TextView warningView;
 
@@ -50,6 +52,13 @@ public class StockCostBasisFragment extends Fragment {
     TextView targetLowTextView;
     SaundProgressBar targetProgressBar;
     TextView targetHighTextView;
+
+    View divView3;
+
+    LinearLayout peTargetView;
+    TextView peLowVal;
+    SaundProgressBar peTargetBar;
+    TextView peHighVal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +87,13 @@ public class StockCostBasisFragment extends Fragment {
         targetProgressBar = (SaundProgressBar) rootView.findViewById(R.id.targetBar);
         targetHighTextView = (TextView) rootView.findViewById(R.id.targetHighVal);
 
+        divView3 = rootView.findViewById(R.id.cbDiv3);
+
+        peTargetView = (LinearLayout) rootView.findViewById(R.id.peTargetView);
+        peLowVal = (TextView) rootView.findViewById(R.id.peLowVal);
+        peTargetBar = (SaundProgressBar) rootView.findViewById(R.id.peTargetBar);
+        peHighVal = (TextView) rootView.findViewById(R.id.peHighVal);
+
         warningView.setText("Set cost basis.");
 
         slProgressBar = (SaundProgressBar) rootView.findViewById(R.id.slprogressbar);
@@ -93,12 +109,14 @@ public class StockCostBasisFragment extends Fragment {
                 args.getInt(SL_PERCENT),
                 args.getDouble(HIGH_PRICE),
                 args.getDouble(TARGET_PRICE),
-                args.getBoolean(TARGET_LESS_THAN_EQUAL));
+                args.getBoolean(TARGET_LESS_THAN_EQUAL),
+                args.getDouble(TARGET_PE),
+                args.getDouble(CUR_PE));
 
         return rootView;
     }
 
-    public void update(final Double curPrice, Double highPrice, final SymbolProfile profile) {
+    public void update(final Double curPrice, Double highPrice, Double curPE, final SymbolProfile profile) {
         update(curPrice,
                profile.buyPrice,
                profile.slTrackingStartDate,
@@ -106,7 +124,9 @@ public class StockCostBasisFragment extends Fragment {
                profile.stopLossPercent,
                highPrice,
                profile.targetPrice,
-               profile.lessThanEqual);
+               profile.lessThanEqual,
+               profile.peTarget,
+               curPE);
     }
 
     protected void update(final Double curPrice,
@@ -116,7 +136,9 @@ public class StockCostBasisFragment extends Fragment {
                        final Integer slPercent,
                        final Double highPrice,
                        final Double targetPrice,
-                       final Boolean lessThanEqual) {
+                       final Boolean lessThanEqual,
+                       final Double targetPE,
+                       final Double curPE) {
         boolean warningSet = false;
         if((buyPrice != null && buyPrice != 0)) {
             costValView.setText(Double.toString(buyPrice));
@@ -136,10 +158,14 @@ public class StockCostBasisFragment extends Fragment {
         }
 
         handleStopLossView(slTrackingStartDate, curPrice, slPercent, highPrice);
-        handleTargetPricing(warningSet, curPrice, targetPrice, lessThanEqual);
+
+        boolean targetPriceSet = handleTargetPricing(warningSet, curPrice, targetPrice, lessThanEqual);
+        handleTargetPE(warningSet, targetPriceSet, targetPE, curPE);
     }
 
     protected void handleStopLossView(String slTrackingStartDate, Double curPrice, Integer slPercent, Double highPrice) {
+        // assumes that this is only set if buyPrice is set. so doesn't have to do special visibility handling
+        // like the target price and pe stuff.
         if(slPercent != null && slPercent != 0) {
             stopLossView.setVisibility(View.VISIBLE);
             divView1.setVisibility(View.VISIBLE);
@@ -157,8 +183,10 @@ public class StockCostBasisFragment extends Fragment {
         }
     }
 
-    protected void handleTargetPricing(boolean warningSet, Double curPrice, Double targetPrice, Boolean lessThanEqual) {
+    protected boolean handleTargetPricing(boolean warningSet, Double curPrice, Double targetPrice, Boolean lessThanEqual) {
+        boolean set = false;
         if(targetPrice != null && targetPrice != 0) {
+            set = true;
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) divView2.getLayoutParams();
             if(warningSet) {
                 params.addRule(RelativeLayout.BELOW, R.id.costWarning);
@@ -199,8 +227,51 @@ public class StockCostBasisFragment extends Fragment {
             divView2.setVisibility(View.GONE);
             targetPriceView.setVisibility(View.GONE);
         }
+
+        return set;
     }
 
+    private void handleTargetPE(boolean warningSet, boolean targetPriceSet, Double targetPE, Double curPE) {
+        if(targetPE != null && targetPE != 0) {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) divView3.getLayoutParams();
+            if(targetPriceSet) {
+                params.addRule(RelativeLayout.BELOW, R.id.targetPriceView);
+            } else if(warningSet) {
+                params.addRule(RelativeLayout.BELOW, R.id.costWarning);
+            } else {
+                params.addRule(RelativeLayout.BELOW, R.id.stopLossView);
+            }
+
+            divView3.setLayoutParams(params);
+
+            divView3.setVisibility(View.VISIBLE);
+            peTargetView.setVisibility(View.VISIBLE);
+            if(targetPE < curPE) {
+                peLowVal.setVisibility(View.VISIBLE);
+                peLowVal.setText(Double.toString(targetPE));
+                peHighVal.setVisibility(View.GONE);
+                double factor = 100 - (targetPE/curPE) * 100;
+                peTargetBar.setProgress((int)factor);
+                peTargetBar.setProgressDrawable(getResources().getDrawable(R.drawable.blue_progressbar));
+            } else if(targetPE > curPE) {
+                peLowVal.setVisibility(View.GONE);
+                peHighVal.setVisibility(View.VISIBLE);
+                peHighVal.setText(Double.toString(targetPE));
+                double factor = (curPE/targetPE) * 100;
+                peTargetBar.setProgress((int)factor);
+                peTargetBar.setProgressDrawable(getResources().getDrawable(R.drawable.blue_progressbar));
+            } else {
+                peLowVal.setVisibility(View.GONE);
+                peHighVal.setVisibility(View.VISIBLE);
+                peHighVal.setText(Double.toString(targetPE));
+                peTargetBar.setProgress(100);
+                peTargetBar.setProgressDrawable(getResources().getDrawable(R.drawable.blue_progressbar));
+            }
+        } else {
+            divView3.setVisibility(View.GONE);
+            peTargetView.setVisibility(View.GONE);
+        }
+    }
 
     private void hideCostBasisViews() {
         costBasisView.setVisibility(View.GONE);

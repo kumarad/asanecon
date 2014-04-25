@@ -13,12 +13,13 @@ import android.widget.TextView;
 
 import com.techan.R;
 import com.techan.activities.SettingsActivity;
+import com.techan.activities.StockPagerAdapter;
 import com.techan.custom.SwitchCheckListener;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 
 public class PeDialog {
-    public static void create(Activity parentActivity, String symbol) {
+    public static void create(Activity parentActivity, String symbol, final StockPagerAdapter stockPagerAdapter) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
         alertDialog.setTitle("Target PE value for stock");
 
@@ -72,7 +73,7 @@ public class PeDialog {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        doAdd(profile, editText, s, listener);
+                        doAdd(profile, editText, s, listener, stockPagerAdapter);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -85,7 +86,7 @@ public class PeDialog {
         alertDialog.create().show();
     }
 
-    private static void doAdd(SymbolProfile profile, EditText editText, Switch s, SwitchCheckListener listener) {
+    private static void doAdd(SymbolProfile profile, EditText editText, Switch s, SwitchCheckListener listener, StockPagerAdapter stockPagerAdapter) {
         if(s.isChecked()) {
             profile.peTarget = Double.parseDouble(editText.getText().toString());
         } else {
@@ -93,6 +94,8 @@ public class PeDialog {
         }
 
         ProfileManager.addSymbolData(profile);
+
+        stockPagerAdapter.updateCostBasisFragment(profile);
 
         listener.commit();
     }

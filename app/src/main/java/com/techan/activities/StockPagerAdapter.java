@@ -76,6 +76,11 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
             args.putBoolean(StockCostBasisFragment.TARGET_LESS_THAN_EQUAL, profile.lessThanEqual);
         }
 
+        if(profile.peTarget != null) {
+            args.putDouble(StockCostBasisFragment.TARGET_PE, profile.peTarget);
+            args.putDouble(StockCostBasisFragment.CUR_PE, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PE)));
+        }
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,7 +92,8 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         cursor.moveToFirst();
         Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
         Double highPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_SL_HIGEST_PRICE));
-        fragment.update(curPrice, highPrice, profile);
+        Double curPE = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PE));
+        fragment.update(curPrice, highPrice, curPE, profile);
     }
 
     protected Fragment createTrendFragment() {

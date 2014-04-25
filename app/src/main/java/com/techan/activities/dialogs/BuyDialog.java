@@ -16,7 +16,7 @@ import com.techan.profile.SymbolProfile;
 
 public class BuyDialog {
 
-    public static void create(final Activity parentActivity, final String symbol, final Uri stockUri, final StockPagerAdapter stockPagerAdapter) {
+    public static void create(final Activity parentActivity, final String symbol, final StockPagerAdapter stockPagerAdapter) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
         alertDialog.setTitle("Add purchase info");
 

@@ -167,7 +167,7 @@
             android:id="@+id/targetText"
             android:layout_width="0dp"
             android:layout_weight=".24"
-            android:text="Target:"
+            android:text="Target Price:"
             android:layout_gravity="center_vertical"
             android:layout_height="fill_parent"
             />
@@ -202,6 +202,64 @@
             android:layout_marginLeft="15dp"
             />
 
+    </LinearLayout>
+
+    <View
+        android:id="@+id/cbDiv3"
+        android:layout_below="@id/targetPriceView"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height=".3dp"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="25sp"
+        android:weightSum="1.0"
+        android:layout_below="@id/cbDiv3"
+        android:id="@+id/peTargetView"
+        android:layout_marginLeft="3dp"
+        >
+
+        <TextView
+            android:id="@+id/targetPeText"
+            android:layout_width="0dp"
+            android:layout_weight=".24"
+            android:text="PE Target:"
+            android:layout_gravity="center_vertical"
+            android:layout_height="fill_parent"
+            />
+
+        <TextView
+            android:id="@+id/peLowVal"
+            android:layout_width="0dp"
+            android:layout_weight=".20"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
+            android:layout_marginRight="15dp"
+            />
+
+        <com.techan.progressbar.SaundProgressBar
+            android:id="@+id/peTargetBar"
+            android:layout_width="0dp"
+            android:layout_weight=".3"
+            android:layout_height="8dp"
+            android:layout_marginTop="6dp"
+            style="@style/Widget.ProgressBar.RegularProgressBar"
+            />
+
+
+        <TextView
+            android:id="@+id/peHighVal"
+            android:layout_width="0dp"
+            android:layout_weight=".26"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="left"
+            android:layout_marginLeft="15dp"
+            />
     </LinearLayout>
 
 </RelativeLayout>
