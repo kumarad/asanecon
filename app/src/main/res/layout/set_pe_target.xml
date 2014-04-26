@@ -5,27 +5,10 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-            android:id="@+id/pe_warning"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dip"
-            />
-
-    <Switch android:id="@+id/switch_pe_notify"
-            android:text="@string/pe_notifications"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dip"
-            android:layout_below="@id/pe_warning"/>
-
-
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="50sp"
-            android:weightSum="1.0"
-            android:layout_below="@id/switch_pe_notify"
-            >
+            android:weightSum="1.0">
 
         <TextView
                 android:id="@+id/pe_target"

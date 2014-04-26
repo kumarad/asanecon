@@ -27,45 +27,16 @@ public class PeDialog {
         LayoutInflater inflater = parentActivity.getLayoutInflater();
         View view = inflater.inflate(R.layout.set_pe_target, null);
 
-        // Get global notification preference
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(parentActivity);
-        boolean globalNotifications = sharedPref.getBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, true);
-        boolean globalPeNotification = sharedPref.getBoolean(SettingsActivity.PE_ENABLED_KEY, false);
-        double globalPeTarget = Double.parseDouble(sharedPref.getString(SettingsActivity.PE_TARGET_KEY, null));
-
         final SymbolProfile profile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), symbol);
 
         // Handle edit text view.
         final EditText editText = ((EditText)view.findViewById(R.id.edit_pe_target));
         if(profile.peTarget != null) {
             editText.setText(Double.toString(profile.peTarget));
-        } else {
-            editText.setText(Double.toString(globalPeTarget));
         }
-
-        final TextView warningText = (TextView)view.findViewById(R.id.pe_warning);
-
-        // Handle switch.
-        final Switch s = (Switch) view.findViewById(R.id.switch_pe_notify);
-        if(globalNotifications && profile.peTarget != null) {
-            // Global notifications are enabled and peTarget in profile is not null so its set to true.
-            s.setChecked(true);
-            warningText.setVisibility(View.GONE);
-        } else if(globalNotifications && globalPeNotification) {
-            editText.setEnabled(false);
-        } else {
-            s.setChecked(false);
-            editText.setEnabled(false);
-            warningText.setVisibility(View.GONE);
-        }
-        warningText.setText("Global PE Target set to: " + globalPeTarget);
 
         // Set cursor to end of text.
         editText.setSelection(editText.length());
-
-        // Create listener for switch changes.
-        final SwitchCheckListener listener = new SwitchCheckListener(editText, globalNotifications, sharedPref.edit(), warningText, globalPeNotification);
-        s.setOnCheckedChangeListener(listener);
 
         // Create dialog.
         //Pass null as parent view because its a dialog.
@@ -73,31 +44,40 @@ public class PeDialog {
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        doAdd(profile, editText, s, listener, stockPagerAdapter);
+                        doAdd(profile, editText, stockPagerAdapter);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Clear", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        //Ignore
+                        doClear(profile, stockPagerAdapter);
                     }
                 });
 
         alertDialog.create().show();
     }
 
-    private static void doAdd(SymbolProfile profile, EditText editText, Switch s, SwitchCheckListener listener, StockPagerAdapter stockPagerAdapter) {
-        if(s.isChecked()) {
-            profile.peTarget = Double.parseDouble(editText.getText().toString());
+    private static void doAdd(SymbolProfile profile, EditText editText, StockPagerAdapter stockPagerAdapter) {
+        String valText = editText.getText().toString();
+        if(valText != null && !valText.isEmpty()) {
+            Double val = Double.parseDouble(valText);
+            if (val != null && val > 0) {
+                profile.peTarget = val;
+            } else {
+                profile.peTarget = null;
+            }
         } else {
             profile.peTarget = null;
         }
 
         ProfileManager.addSymbolData(profile);
-
         stockPagerAdapter.updateCostBasisFragment(profile);
+    }
 
-        listener.commit();
+    private static void doClear(SymbolProfile profile, StockPagerAdapter stockPagerAdapter) {
+        profile.peTarget = null;
+        ProfileManager.addSymbolData(profile);
+        stockPagerAdapter.updateCostBasisFragment(profile);
     }
 
 }
