@@ -45,10 +45,10 @@ public class BuyDialog {
                 doAdd(parentActivity, profile, buyPriceText, shareCountText, stockPagerAdapter);
             }
         });
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("Clear", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                doClear(parentActivity, profile, stockPagerAdapter);
             }
         });
 
@@ -100,5 +100,25 @@ public class BuyDialog {
         if(showStopLossToast) {
             Util.showErrorToast(activity, "Stop loss information has been reset. Please update.");
         }
+    }
+
+    private static void doClear(Activity activity, SymbolProfile profile, StockPagerAdapter stockPagerAdapter) {
+        boolean showStopLossToast = false;
+        if(profile.stopLossPercent != null) {
+            showStopLossToast = true;
+        }
+
+        profile.buyPrice = null;
+        profile.stockCount = null;
+        profile.clearStopLossInfo();
+
+        // Update profile info.
+        ProfileManager.addSymbolData(profile);
+
+        // Update cost basis view.
+        stockPagerAdapter.updateCostBasisFragment(profile);
+
+        if(showStopLossToast)
+            Util.showErrorToast(activity, "Stop loss information has been reset. Please update.");
     }
 }

@@ -61,10 +61,10 @@ public class TargetDialog {
                 doAdd(profile, targetText, compListener, stockPagerAdapter);
             }
         });
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("Clear", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                doClear(profile, stockPagerAdapter);
             }
         });
 
@@ -82,6 +82,16 @@ public class TargetDialog {
             profile.targetPrice = null;
             profile.lessThanEqual = null;
         }
+
+        // Update cost basis view.
+        stockPagerAdapter.updateCostBasisFragment(profile);
+
+        ProfileManager.addSymbolData(profile);
+    }
+
+    private static void doClear(SymbolProfile profile, StockPagerAdapter stockPagerAdapter) {
+        profile.targetPrice = null;
+        profile.lessThanEqual = null;
 
         // Update cost basis view.
         stockPagerAdapter.updateCostBasisFragment(profile);

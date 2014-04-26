@@ -5,25 +5,10 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-            android:id="@+id/sl_warning"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dip"
-            />
-
-    <Switch android:id="@+id/switch_sl_notify"
-            android:text="Stop Loss Notifications"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dip"
-            android:layout_below="@id/sl_warning"/>
-
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="150sp"
             android:weightSum="1.0"
-            android:layout_below="@id/switch_sl_notify"
             android:id="@+id/edit_stop_loss_percent"
             >
 
