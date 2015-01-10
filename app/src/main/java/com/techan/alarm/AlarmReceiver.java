@@ -43,19 +43,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         AlarmManager alarms = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 
         // Create an alarm. RTC_WAKUP tells the alarm to go off the defined interval from current time. Currently set to every 5 minutes.
-        //todo use refreshValueHrs * 60 * 60 * 1000 eventually.
         // refreshValueHrs * 60 (minutes) * 60 (seconds) * 1000 (ms)
         int interval = refreshValueHrs * 60 * 60 * 1000;
-//        int interval;
-//        interval = 1000 * 30 * 1;
-//        if(refreshValueHrs == 1) {
-//            interval = 1000 * 30 * 1;
-//        } else {
-//            interval = 1000 * 30 * 2;
-//        }
-
         alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, recurringDownloadIntent);
-
     }
 
     public static void cancelAutoRefresh(Context context) {

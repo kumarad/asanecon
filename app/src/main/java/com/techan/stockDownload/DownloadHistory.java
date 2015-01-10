@@ -115,8 +115,9 @@ public class DownloadHistory {
         }
     }
 
-    protected static void handleStopLoss(HistoryInfo historyInfo, String[] rowData, int count, Integer slDayCountLessThan90) {
-        if(slDayCountLessThan90 == null || count <= slDayCountLessThan90) {
+    protected static void handleStopLoss(HistoryInfo historyInfo, String[] rowData, int count, Integer curDateMinusSlDateWhenSlAfter90Days) {
+        if(curDateMinusSlDateWhenSlAfter90Days == null ||   // Stop loss tracking start date before 90 days. So need to use each entry regardless for stop loss calculation
+           count <= curDateMinusSlDateWhenSlAfter90Days) {  // Only track those days that are within the range that is between the stop loss start date and the cur date.
             double daysHigh = Double.parseDouble(rowData[DAY_HIGH_INDEX]);
             if(daysHigh > historyInfo.historicalHigh) {
                 historyInfo.historicalHigh = daysHigh;
@@ -131,7 +132,7 @@ public class DownloadHistory {
     }
 
     // StockTrends will be null if exception/error is encountered.
-    protected static void downloadInternal(String url, StockData data, HistoryInfo historyInfo, boolean includeSL, Integer slDayCountLessThan90) {
+    protected static void downloadInternal(String url, StockData data, HistoryInfo historyInfo, boolean includeSL, Integer curDateMinusSlDateWhenSlAfter90Days) {
         AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
         HttpContext localContext = new BasicHttpContext();
         HttpGet getRequest = new HttpGet(url);
@@ -148,7 +149,7 @@ public class DownloadHistory {
 
                 handleTrends(historyInfo, rowData, i);
                 if(includeSL) {
-                    handleStopLoss(historyInfo, rowData, i, slDayCountLessThan90);
+                    handleStopLoss(historyInfo, rowData, i, curDateMinusSlDateWhenSlAfter90Days);
                 }
             }
 
@@ -178,7 +179,7 @@ public class DownloadHistory {
             LowestCalInfo lowestCalInfo = lowestDate(curCalDate, lastSLUpdate);
             String url = generateUrlForRange(data.symbol, curCalDate, lowestCalInfo.lowestCal);
             HistoryInfo historyInfo = new HistoryInfo(historicalHigh, historicalLow);
-            downloadInternal(url, data, historyInfo, true, lowestCalInfo.slDayCountLessThan90);
+            downloadInternal(url, data, historyInfo, true, lowestCalInfo.curDateMinusSlDateWhenSlAfter90Days);
         } else {
             download(data, curCalDate);
         }

@@ -56,7 +56,7 @@ public class StopLossDialog {
         // Handle number picker.
         final NumberPicker np = ((NumberPicker)view.findViewById(R.id.stop_loss_np));
         np.setMaxValue(100);
-        np.setMinValue(0);
+        np.setMinValue(1);
 
         if(profile.stopLossPercent != null) {
             np.setValue(profile.stopLossPercent);
@@ -105,9 +105,8 @@ public class StopLossDialog {
         Integer stopLossPercent = np.getValue();
         // Either way set highestPrice to buyPrice. So that highestPrices is tracked from when stop loss notifications are activated.
         // TODO let user specify trailing vs non trailing
-        // TODO ensure date is todays date or earlier. If its not just set to today ?
-        String curDate = Util.getCalStr(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth());
-        profile.setStopLossInfo(stopLossPercent, true, curDate);
+        String curPickerDate = Util.getCalStr(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth());
+        profile.setStopLossInfo(stopLossPercent, true, curPickerDate);
 
         // Update profile manager.
         ProfileManager.addSymbolData(profile);
@@ -119,6 +118,7 @@ public class StopLossDialog {
         Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
 
         if(Util.isDateLess(Util.getCal(profile.slTrackingStartDate), Util.getCurCalWithZeroTime())) {
+            // Date picked is before current date. Add it to the db and have refresh task figure out current stop loss state.
             ContentValues values = ContentValuesFactory.createSlAddValuesDiffDate(profile.buyPrice, profile.slTrackingStartDate);
             cr.update(stockUri, values, null, null);
 
@@ -127,6 +127,7 @@ public class StopLossDialog {
             rt.addAction(new CostBasisPostRefreshAction(stockPagerAdapter, profile));
             rt.execute();
         } else {
+            // Start tracking stop loss from todays date.
             ContentValues values = ContentValuesFactory.createSlAddValuesSameDate(curPrice, profile.buyPrice);
             cr.update(stockUri, values, null, null);
 

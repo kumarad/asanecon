@@ -32,17 +32,17 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
     final Calendar curCal;
     final String curDateStr;
 
-    final List<String> symbols = new ArrayList<String>();
+    final List<String> symbols = new ArrayList<>();
 
     static class DownloadInfo {
         Uri uri;
         String lastUpdate;
         Integer stopLossPercent;
-        Double historicalHigh;
-        Double historicalLow;
+        Double historicalHigh;      // used for sl tracking
+        Double historicalLow;       // used for sl tracking
     }
 
-    final Map<String, DownloadInfo> downloadInfoMap = new HashMap<String, DownloadInfo>();
+    final Map<String, DownloadInfo> downloadInfoMap = new HashMap<>();
 
     // Refresh all.
     public RefreshTask(Context ctx, ContentResolver contentResolver, boolean autoRefresh) {
@@ -139,7 +139,7 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
             // isDateSame will return false when null is passed for lastUpdate.
             // When a stock is added, lastUpdate = null;
             // When stock is recovered from profile, lastUpdate is null if no stop loss tracking
-            //                                       lastUpdate is buy price for stop loss if tracking
+            //                                       lastUpdate is buy price date for stop loss if tracking
             // When refreshed, last update is last time both trends and stop loss info was updated.
             if(!Util.isDateSame(lastUpdate, curCal)) {
                 if(stopLossPercent != null) {

@@ -110,6 +110,4 @@ public class AddDialog {
 
         Collection<SymbolProfile> profiles = ProfileManager.getSymbols(parentActivity.getApplicationContext());
     }
-
-
 }

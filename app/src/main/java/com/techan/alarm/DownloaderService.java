@@ -11,6 +11,7 @@ import com.techan.stockDownload.RefreshTask;
 public class DownloaderService extends Service {
 
     private static long last = 0;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         new RefreshTask(getApplicationContext(), this.getContentResolver(), true).download();

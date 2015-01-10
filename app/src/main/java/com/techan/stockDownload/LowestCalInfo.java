@@ -4,10 +4,10 @@ import java.util.Calendar;
 
 public class LowestCalInfo {
     public Calendar lowestCal;
-    public Integer slDayCountLessThan90;
+    public Integer curDateMinusSlDateWhenSlAfter90Days;
     public LowestCalInfo(Calendar lowestCalInfo, Integer slDayCount) {
         this.lowestCal = lowestCalInfo;
-        this.slDayCountLessThan90 = slDayCount;
+        this.curDateMinusSlDateWhenSlAfter90Days = slDayCount;
     }
 
 }

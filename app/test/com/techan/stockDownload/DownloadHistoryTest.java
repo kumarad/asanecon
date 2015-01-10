@@ -1,9 +1,6 @@
 package com.techan.stockDownload;
 
 import com.techan.custom.Util;
-import com.techan.stockDownload.DownloadHistory;
-import com.techan.stockDownload.HistoryInfo;
-import com.techan.stockDownload.LowestCalInfo;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 
 import org.junit.Test;
@@ -115,7 +112,7 @@ public class DownloadHistoryTest {
 
         LowestCalInfo info = DownloadHistoryTester.lowestDateTest(endCal, startCalStr);
         assertThat(info.lowestCal, equalTo(startCal));
-        assertThat(info.slDayCountLessThan90, equalTo(null));
+        assertThat(info.curDateMinusSlDate, equalTo(null));
     }
 
     @Test
@@ -134,7 +131,7 @@ public class DownloadHistoryTest {
         LowestCalInfo info = DownloadHistoryTester.lowestDateTest(endCal, startCalStr);
         endCal.add(Calendar.DAY_OF_MONTH, DownloadHistory.DAY_COUNT_90 * -1);
         assertThat(info.lowestCal, equalTo(endCal));
-        assertThat(info.slDayCountLessThan90, equalTo(3));
+        assertThat(info.curDateMinusSlDate, equalTo(3));
     }
 
     @Test

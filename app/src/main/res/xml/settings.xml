@@ -31,14 +31,14 @@
 
         </PreferenceCategory>
 
-    <PreferenceCategory
-            android:title="Notifications">
+    <!--<PreferenceCategory-->
+            <!--android:title="Notifications">-->
 
-        <SwitchPreference
-            android:key="allNotifications"
-            android:title="Notifications"
-            android:defaultValue="false"
-            />
+        <!--<SwitchPreference-->
+            <!--android:key="allNotifications"-->
+            <!--android:title="Notifications"-->
+            <!--android:defaultValue="false"-->
+            <!--/>-->
 
-    </PreferenceCategory>
+    <!--</PreferenceCategory>-->
 </PreferenceScreen>         
