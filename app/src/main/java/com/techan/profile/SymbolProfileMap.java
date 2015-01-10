@@ -1,11 +1,10 @@
 package com.techan.profile;
 
-import com.google.common.collect.Maps;
-
+import java.util.HashMap;
 import java.util.Map;
 
 public class SymbolProfileMap {
-    Map<String, SymbolProfile> symbolProfiles = Maps.newHashMap();
+    Map<String, SymbolProfile> symbolProfiles = new HashMap<>();
 
     public Map<String, SymbolProfile> getSymbolProfiles() {
         return symbolProfiles;
