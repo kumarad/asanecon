@@ -8,6 +8,7 @@
     <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:id="@+id/highLowPlotRow"
             >
 
@@ -37,7 +38,6 @@
                     android:layout_width="0dp"
                     android:layout_weight=".7"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
                     />
 
             <TextView
@@ -68,7 +68,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lowAlertRow"
-                android:layout_marginLeft="3dp"
                 />
     </RelativeLayout>
 
@@ -85,6 +84,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/div1"
+            android:layout_marginLeft="5dp"
             android:id="@+id/avgBarRow"
             >
 
@@ -114,7 +114,6 @@
                     android:layout_width="0dp"
                     android:layout_weight=".7"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
                     />
 
             <TextView
@@ -144,7 +143,6 @@
                     android:layout_width="0dp"
                     android:layout_weight=".7"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
                     />
 
             <TextView
@@ -201,6 +199,7 @@
             android:layout_height="wrap_content"
             android:weightSum="1.0"
             android:layout_below="@id/div2"
+            android:layout_marginLeft="5dp"
             android:id="@+id/upTrendCountRow"
             >
 
@@ -209,7 +208,6 @@
                 android:layout_width="0dp"
                 android:layout_weight=".7"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
                 />
 
         <TextView
@@ -264,7 +262,7 @@
             android:id="@+id/avgVolDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
+            android:layout_marginLeft="5dp"
             android:layout_below="@id/avgBar"
             />
 
@@ -273,6 +271,7 @@
             android:layout_height="wrap_content"
             android:weightSum="1.0"
             android:layout_below="@id/avgVolDetail"
+            android:layout_marginLeft="5dp"
             android:id="@+id/volRow"
             >
 
@@ -281,7 +280,6 @@
                 android:layout_width="0dp"
                 android:layout_weight=".7"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
                 />
 
         <TextView
@@ -311,6 +309,7 @@
             android:layout_height="wrap_content"
             android:weightSum="1.0"
             android:layout_below="@id/div4"
+            android:layout_marginLeft="5dp"
             android:id="@+id/pegRow"
             >
 
@@ -319,7 +318,6 @@
                 android:layout_width="0dp"
                 android:layout_weight=".7"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
                 />
 
         <TextView

@@ -94,7 +94,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
 
         // Create a cursor that maps each stock symbol to the appropriate field on the UI.
         String[] from = new String[] {StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE};
-        int[] to = new int[] { R.id.symbol, R.id.price};
+        int[] to = new int[] { R.id.listSymbol, R.id.listPrice};
         adapter = new StockCursorAdapter(this, R.layout.stock_row, null, from, to, 0);
 
         setListAdapter(adapter);
