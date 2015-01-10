@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.androidplot.xy.XYPlot;
 import com.techan.R;
-import com.techan.custom.TrendPlot;
 import com.techan.progressbar.LimitProgressBar;
 import com.techan.progressbar.SaundProgressBar;
 
@@ -106,7 +104,7 @@ public class StockTrendFragment extends Fragment {
 
         SaundProgressBar regularProgressBar = (SaundProgressBar) rootView.findViewById(R.id.upTrendBar);
         Drawable indicator = getResources().getDrawable(R.drawable.progress_indicator_b2);
-        Rect bounds = new Rect(0, 0, indicator.getIntrinsicWidth() + 5, indicator.getIntrinsicHeight());
+        Rect bounds = new Rect(0, 0, indicator.getIntrinsicWidth() + SaundProgressBar.INDICATOR_PADDING, indicator.getIntrinsicHeight());
         indicator.setBounds(bounds);
         regularProgressBar.setProgressIndicator(indicator);
         regularProgressBar.setTextFormatter(new SaundProgressBar.Formatter() {

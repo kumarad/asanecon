@@ -17,16 +17,15 @@ public class LimitProgressBar extends SaundProgressBar {
         super(context, attrs);
 
         firstLimitDrawable = getResources().getDrawable(R.drawable.progress_indicator_b2);
-        Rect bounds = new Rect(0, 0, firstLimitDrawable.getIntrinsicWidth() + 5, firstLimitDrawable.getIntrinsicHeight());
+        Rect bounds = new Rect(0, 0, firstLimitDrawable.getIntrinsicWidth() + INDICATOR_PADDING, firstLimitDrawable.getIntrinsicHeight());
         firstLimitDrawable.setBounds(bounds);
 
         secondLimitDrawable = getResources().getDrawable(R.drawable.progress_indicator_b2);
-        bounds = new Rect(0, 0, secondLimitDrawable.getIntrinsicWidth() + 5, secondLimitDrawable.getIntrinsicHeight());
+        bounds = new Rect(0, 0, secondLimitDrawable.getIntrinsicWidth() + INDICATOR_PADDING, secondLimitDrawable.getIntrinsicHeight());
         secondLimitDrawable.setBounds(bounds);
 
-
         m_indicator = getResources().getDrawable(R.drawable.progress_indicator_b2);
-        bounds = new Rect(0, 0, m_indicator.getIntrinsicWidth() + 5, m_indicator.getIntrinsicHeight());
+        bounds = new Rect(0, 0, m_indicator.getIntrinsicWidth() + INDICATOR_PADDING, m_indicator.getIntrinsicHeight());
         m_indicator.setBounds(bounds);
         setProgressIndicator(m_indicator);
     }

@@ -27,6 +27,7 @@ import com.techan.R;
  *
  */
 public class SaundProgressBar extends ProgressBar {
+    public static final int INDICATOR_PADDING = 50;
     protected Drawable m_indicator;
     protected int m_offset = 5;
     protected TextPaint m_textPaint;

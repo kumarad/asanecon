@@ -98,7 +98,7 @@ public class StockCostBasisFragment extends Fragment {
 
         slProgressBar = (SaundProgressBar) rootView.findViewById(R.id.slprogressbar);
         Drawable indicator = getResources().getDrawable(R.drawable.progress_indicator_b2);
-        Rect bounds = new Rect(0, 0, indicator.getIntrinsicWidth() + 5, indicator.getIntrinsicHeight());
+        Rect bounds = new Rect(0, 0, indicator.getIntrinsicWidth() + SaundProgressBar.INDICATOR_PADDING, indicator.getIntrinsicHeight());
         indicator.setBounds(bounds);
         slProgressBar.setProgressIndicator(indicator);
 
