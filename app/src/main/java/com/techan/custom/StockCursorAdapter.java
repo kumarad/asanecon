@@ -3,6 +3,7 @@ package com.techan.custom;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleCursorAdapter;
@@ -36,8 +37,22 @@ public class StockCursorAdapter extends SimpleCursorAdapter {
         symbolView.setText(symbolStr);
 
         Double price = c.getDouble(2);
+        Double change = c.getDouble(3);
+
         TextView priceView = (TextView) convertView.findViewById(R.id.listPrice);
         priceView.setText(Double.toString(price));
+
+        TextView changeView = (TextView) convertView.findViewById(R.id.listChange);
+        changeView.setText(String.format("(%s)",Double.toString(change)));
+
+
+        if(change < 0) {
+            priceView.setTextColor(Color.RED);
+            changeView.setTextColor(Color.RED);
+        } else {
+            priceView.setTextColor(Color.GREEN);
+            changeView.setTextColor(Color.GREEN);
+        }
 
         return row;
     }

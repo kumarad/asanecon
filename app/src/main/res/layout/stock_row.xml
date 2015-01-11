@@ -7,24 +7,38 @@
 
     <TextView
             android:id="@+id/listSymbol"
+            android:text="Stock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text="stock name"
             android:textSize="24sp"
             >
     </TextView>
 
     <TextView
+        android:id="@+id/listChange"
+        android:text="Change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        >
+    </TextView>
+
+
+    <TextView
             android:id="@+id/listPrice"
-            android:text="price"
+            android:text="Price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
-            android:layout_marginRight="20dp"
-            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/listChange"
             >
+
     </TextView>
+
 
     <!--<RelativeLayout android:layout_height="fill_parent"-->
                     <!--android:layout_width ="wrap_content"-->

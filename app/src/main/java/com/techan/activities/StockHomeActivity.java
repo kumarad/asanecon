@@ -78,6 +78,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         String[] projection = {StocksTable.COLUMN_SYMBOL};
         Cursor cursor = cr.query(StockContentProvider.CONTENT_URI, projection, null, null, null);
         if(cursor.getCount() == 0) {
+            // Nothing in db. Lets see if we find something in the from the profile manager.
             Collection<SymbolProfile> symbolProfiles = ProfileManager.getSymbols(getApplicationContext());
             if(symbolProfiles.size() != 0) {
                 for(SymbolProfile symbolProfile : symbolProfiles) {
@@ -93,8 +94,8 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         getLoaderManager().initLoader(0, null, this);
 
         // Create a cursor that maps each stock symbol to the appropriate field on the UI.
-        String[] from = new String[] {StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE};
-        int[] to = new int[] { R.id.listSymbol, R.id.listPrice};
+        String[] from = new String[] {StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_CHANGE};
+        int[] to = new int[] { R.id.listSymbol, R.id.listPrice, R.id.listChange};
         adapter = new StockCursorAdapter(this, R.layout.stock_row, null, from, to, 0);
 
         setListAdapter(adapter);
@@ -113,7 +114,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
 
         // Cursor query must have an integer column "_id" for the CursorAdapter to work.
         // The cursors id will be _id.
-        String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE};
+        String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_CHANGE};
 
         // CONTENT_URI = "content://com.techan.contentprovider/stocks"
         return new CursorLoader(this, StockContentProvider.CONTENT_URI, projection,
