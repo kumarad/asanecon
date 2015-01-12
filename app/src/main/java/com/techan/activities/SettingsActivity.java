@@ -19,6 +19,7 @@ public class SettingsActivity extends Activity {
     public static final String REFRESH_INTERVAL_KEY ="refreshInterval";
     public static final String REFRESH_WIFI_ONLY_KEY = "refreshWifiOnly";
     public static final String ALL_NOTIFICATIONS_KEY = "allNotifications";
+    public static final String SHOW_COST_BASIS = "showCostBasis";
     public static final int STOP_LOSS_DEFAULT = 25;
 
     @Override
@@ -107,5 +108,17 @@ public class SettingsActivity extends Activity {
             AlarmReceiver.cancelAutoRefresh(parent);
             AlarmReceiver.setAutoRefresh(parent, Integer.parseInt(refreshIntervalStr));
         }
+    }
+
+    public static boolean getCostBasisSetting(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(SettingsActivity.SHOW_COST_BASIS, false);
+    }
+
+    public static void setCostBasisSetting(Context context, boolean showCostBasis) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(SettingsActivity.SHOW_COST_BASIS, showCostBasis);
+        editor.commit();
     }
 }

@@ -198,6 +198,18 @@ public class Util {
         textView.append("%)");
     }
 
+    public static void setChange(TextView changeView, double change, double original) {
+        double changePercent = Util.roundTwoDecimals((Math.abs(change)*100.0)/original);
+        changeView.setText(" (");
+
+        if(change < 0) {
+            changeView.append("-");
+        }
+
+        changeView.append(Double.toString(changePercent));
+        changeView.append("%)");
+    }
+
     public static double findMax(double... vals) {
         double max = Double.MIN_VALUE;
         for(double d : vals) {

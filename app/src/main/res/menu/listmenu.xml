@@ -3,14 +3,16 @@
 
     <item
             android:id="@+id/insert"
-            android:showAsAction="always"
+            android:showAsAction="ifRoom"
+            android:title="Add Symbol"
             android:icon="@drawable/ic_menu_add"
             >
     </item>
 
     <item
             android:id="@+id/refresh"
-            android:showAsAction="always"
+            android:showAsAction="ifRoom"
+            android:title="Refresh"
             android:icon="@drawable/ic_menu_refresh"
             >
     </item>
@@ -23,11 +25,17 @@
     </item>
 
     <item
+        android:id="@+id/showCostBasis"
+        android:showAsAction="collapseActionView"
+        android:title="Show Cost Basis"
+        >
+    </item>
+
+    <item
             android:id="@+id/deletePort"
             android:showAsAction="collapseActionView"
             android:title="Delete Portfolio"
             >
     </item>
-
 
 </menu> 

@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -142,6 +143,14 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.listmenu, menu);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean showCostBasis = prefs.getBoolean(SettingsActivity.SHOW_COST_BASIS, false);
+        MenuItem item = menu.findItem(R.id.showCostBasis);
+        if(showCostBasis) {
+            item.setTitle(getString(R.string.showCurrentPrice));
+        } else {
+            item.setTitle(getString(R.string.showCostBasis));
+        }
         return true;
     }
 
@@ -157,6 +166,19 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
                 return true;
             case R.id.settings:
                 settings();
+                return true;
+            case R.id.showCostBasis:
+                boolean showCostBasis = SettingsActivity.getCostBasisSetting(this);
+                if(showCostBasis) {
+                    item.setTitle(getString(R.string.showCurrentPrice));
+                    showCostBasis = false;
+                } else {
+                    item.setTitle(getString(R.string.showCostBasis));
+                    showCostBasis = true;
+                }
+                SettingsActivity.setCostBasisSetting(this, showCostBasis);
+                adapter.notifyDataSetInvalidated();
+                invalidateOptionsMenu();
                 return true;
             case R.id.deletePort:
                 DeletePortfolioDialog.create(this);
