@@ -1,5 +1,8 @@
 package com.techan.profile;
 
+import java.util.List;
+import java.util.Set;
+
 public class SymbolProfile {
     public String symbol;
 
@@ -16,6 +19,9 @@ public class SymbolProfile {
     public Double targetPrice = null;
     public Boolean lessThanEqual = null;
     public Double peTarget = null;
+
+    ///////////////////////////////////////////////////////////
+    public Set<String> portfolios;
 
     // Needed by jackson
     public SymbolProfile() {}

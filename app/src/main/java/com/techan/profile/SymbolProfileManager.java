@@ -9,12 +9,13 @@ import java.util.Map;
 
 // Uses persistence manager to get file contents as a string and maps it to SymbolProfile
 public class SymbolProfileManager {
+    private static final String symboleProfileFileName = "techan_profile";
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final PersistenceManager persistenceManager;
     private SymbolProfileMap symbolProfileMap;
 
     public SymbolProfileManager(Context ctx) {
-        persistenceManager = new PersistenceManager(ctx);
+        persistenceManager = new PersistenceManager(ctx, symboleProfileFileName);
 
         String s = persistenceManager.read();
         if(s.equals("")) {

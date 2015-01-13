@@ -33,13 +33,6 @@ public class SwitchCheckListener implements CompoundButton.OnCheckedChangeListen
         this.childNotifications = childNotifications;
     }
 
-    protected void handleGlobalPreferences(boolean checked) {
-        // Activates global notifications if this notification is being checked.
-        if(!globalNotifications) {
-            settingsEditor.putBoolean(SettingsActivity.ALL_NOTIFICATIONS_KEY, checked);
-        }
-    }
-
     protected void handleWarning(boolean checked) {
         // No warning to handle.
         if(warningView == null) return;
@@ -69,8 +62,6 @@ public class SwitchCheckListener implements CompoundButton.OnCheckedChangeListen
             checkDependantView.setEnabled(false);
             handleWarning(false);
         }
-
-        handleGlobalPreferences(isChecked);
     }
 
     public void commit() {

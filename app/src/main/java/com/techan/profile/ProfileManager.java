@@ -3,13 +3,19 @@ package com.techan.profile;
 import android.content.Context;
 
 import java.util.Collection;
+import java.util.Set;
 
 public class ProfileManager {
     private static SymbolProfileManager symbolProfileManager = null;
+    private static PortfolioManager portfolioManager = null;
 
     private static void initialize(Context ctx) {
         if(symbolProfileManager == null) {
             symbolProfileManager = new SymbolProfileManager(ctx);
+        }
+
+        if(portfolioManager == null) {
+            portfolioManager = new PortfolioManager(ctx);
         }
     }
 
@@ -50,4 +56,20 @@ public class ProfileManager {
         initialize(ctx);
         return symbolProfileManager.deleteProfile();
     }
+
+    public static boolean addPortfolio(Context ctx, String portfolio) {
+        initialize(ctx);
+        return portfolioManager.addPortfolio(portfolio);
+    }
+
+    public static Set<String> getPortfolios(Context ctx) {
+        initialize(ctx);
+        return portfolioManager.getPortfolios();
+    }
+
+    public static boolean removePortfolio(Context ctx, String portfolio) {
+        initialize(ctx);
+        return portfolioManager.removePortfolio(portfolio);
+    }
+
 }

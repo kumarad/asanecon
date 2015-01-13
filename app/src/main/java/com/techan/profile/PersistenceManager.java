@@ -8,28 +8,29 @@ import java.io.*;
 // Reads in file and returns it as a string
 public class PersistenceManager {
 
-    private static final String FILE_NAME = "techan_profile";
+    private final String fileName;
     private int fileSize = 0;
     private Context ctx;
 
-    public PersistenceManager(Context ctx) {
+    public PersistenceManager(Context ctx, String fileName) {
         this.ctx = ctx;
+        this.fileName = fileName;
         try {
             // Will throw FileNotFoundException if file hasn't been created yet.
             // First time app starts we won't find the file.
-            ctx.openFileInput(FILE_NAME).close();
+            ctx.openFileInput(fileName).close();
 
             // File exists. Figure out its size.
-            File file = new File(ctx.getFilesDir().getPath() + "/" + FILE_NAME);
+            File file = new File(ctx.getFilesDir().getPath() + "/" + fileName);
             long fileSizeLong = file.length();
-            if(fileSize > Integer.MAX_VALUE) {
+            if(fileSizeLong > Integer.MAX_VALUE) {
                 throw new RuntimeException("Should never happen.");
             }
             fileSize = (int)fileSizeLong;
         } catch( FileNotFoundException e1) {
             // File hasn't been created yet. Create it. First time this app is running on this device.
             try {
-                FileOutputStream fos = ctx.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+                FileOutputStream fos = ctx.openFileOutput(fileName, Context.MODE_PRIVATE);
                 fos.close();
             } catch(FileNotFoundException e2) {
                 Log.e(Constants.LOG_TAG, "Failed to create techan_profile.");
@@ -42,12 +43,12 @@ public class PersistenceManager {
     }
 
     public void forceDelete() {
-        ctx.deleteFile(FILE_NAME);
+        ctx.deleteFile(fileName);
     }
 
     public boolean write(String s) {
         try {
-            FileOutputStream fos = ctx.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+            FileOutputStream fos = ctx.openFileOutput(fileName, Context.MODE_PRIVATE);
             // Get number of bytes being written to file. Always overwrites file!
             byte[] bytes = s.getBytes();
 
@@ -73,7 +74,7 @@ public class PersistenceManager {
 
         String retStr = null;
         try {
-            FileInputStream fis = ctx.openFileInput(FILE_NAME);
+            FileInputStream fis = ctx.openFileInput(fileName);
             byte[] bytes = new byte[fileSize];
             int read = 0;
             while (read != fileSize) {
@@ -96,7 +97,7 @@ public class PersistenceManager {
         }
 
         try {
-            FileOutputStream fos = ctx.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+            FileOutputStream fos = ctx.openFileOutput(fileName, Context.MODE_PRIVATE);
             byte[] bytes = "".getBytes();
             // Update file size.
             fileSize = 0;
@@ -110,8 +111,5 @@ public class PersistenceManager {
             Log.e(Constants.LOG_TAG, "Failed to delete profile file.");
             return false;
         }
-
-
-
     }
 }
