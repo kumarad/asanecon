@@ -19,15 +19,18 @@ import android.widget.ListView;
 import com.techan.R;
 import com.techan.activities.dialogs.AddPortfolio;
 import com.techan.activities.fragments.StockListFragment;
+import com.techan.profile.Portfolio;
 import com.techan.profile.ProfileManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class HomeActivity extends Activity {
     public static String PORTFOLIO = "PORTFOLIO";
-
+    public static String ALL_STOCKS = "All stocks";
+    public static String ADD_PORTFOLIO = "Add portfolio";
     private DrawerLayout drawerLayout;
     private ListView drawerListView;
     private ActionBarDrawerToggle drawerToggle;
@@ -35,6 +38,7 @@ public class HomeActivity extends Activity {
     private List<String> portfolios = new ArrayList<>();
     private ActionBar actionBar;
     private boolean resetDrawer = false;
+    private String actionBarTitle = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,10 @@ public class HomeActivity extends Activity {
         setContentView(R.layout.stock_home);
 
         actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
 
         loadDrawerItems();
         setupDrawer();
@@ -51,11 +58,13 @@ public class HomeActivity extends Activity {
     }
 
     private void loadDrawerItems() {
-        Set<String> portfolios = ProfileManager.getPortfolios(this);
+        Map<String, Portfolio> portfolios = ProfileManager.getPortfolios(this);
         this.portfolios.clear();
-        this.portfolios.add("All");
-        this.portfolios.addAll(portfolios);
-        this.portfolios.add("Add Portfolio");
+        this.portfolios.add(ALL_STOCKS);
+        for(String curPortfolioName : portfolios.keySet()) {
+            this.portfolios.add(curPortfolioName);
+        }
+        this.portfolios.add(ADD_PORTFOLIO);
     }
 
     private void setupDrawer() {
@@ -85,10 +94,14 @@ public class HomeActivity extends Activity {
                     onDrawerOpened(drawerView);
                     isDrawerOpen = true;
                     invalidateOptionsMenu();
+
+                    actionBarTitle = actionBar.getTitle().toString();
+                    actionBar.setTitle(null);
                 } else if(slideOffset < .45 && isDrawerOpen){
                     onDrawerClosed(drawerView);
                     isDrawerOpen = false;
                     invalidateOptionsMenu();
+                    actionBar.setTitle(actionBarTitle);
                 }
             }
         };
@@ -104,10 +117,14 @@ public class HomeActivity extends Activity {
     }
 
     private void displayFragment(int position) {
-        if(portfolios.get(position).equals("Add Portfolio")) {
+        if(portfolios.get(position).equals(ADD_PORTFOLIO)) {
             AddPortfolio.create(this);
         } else {
             StockListFragment fragment = new StockListFragment();
+
+            String portfolioName = portfolios.get(position);
+            actionBar.setTitle(portfolioName);
+            actionBarTitle = portfolioName;
 
             Bundle bundle = new Bundle();
             bundle.putString(PORTFOLIO, portfolios.get(position));

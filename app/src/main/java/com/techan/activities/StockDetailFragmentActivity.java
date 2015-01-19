@@ -1,5 +1,6 @@
 package com.techan.activities;
 
+import android.app.ActionBar;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -67,7 +68,12 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.stock_pager_title_strip);
         pagerTabStrip.setTabIndicatorColor(Color.parseColor(Constants.ANDROID_BLUE));
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setTitle(null);
+        }
     }
 
     void populateGeneralView() {
@@ -148,7 +154,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
                 StopLossDialog.create(this, symbol, stockUri, stockPagerAdapter);
                 return true;
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
         }
 

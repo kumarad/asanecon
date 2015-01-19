@@ -57,7 +57,7 @@ public class AddPortfolio {
         }
 
         // Check to see if the symbol is already in the database. Can't have duplicates.
-        if(ProfileManager.getPortfolios(parentActivity).contains(portfolio)) {
+        if(ProfileManager.getPortfolios(parentActivity).containsKey(portfolio)) {
             Util.showErrorToast(parentActivity, "Portfolio already exists");
             return false;
         }

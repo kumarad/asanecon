@@ -25,18 +25,21 @@ import com.techan.activities.HomeActivity;
 import com.techan.activities.SettingsActivity;
 import com.techan.activities.StockDetailFragmentActivity;
 import com.techan.activities.dialogs.AddDialog;
+import com.techan.activities.dialogs.DeleteAllStocksDialog;
 import com.techan.activities.dialogs.DeletePortfolioDialog;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.StockCursorAdapter;
 import com.techan.database.StocksTable;
+import com.techan.profile.Portfolio;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.ContentValuesFactory;
 import com.techan.stockDownload.RefreshTask;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 public class StockListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -44,14 +47,15 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
     // Construction
     /////////////////////
 
+    public static final Integer LOADER_ID = 1;
     // Maps columns from a cursor to TextViews or ImageViews defined in an XML file.
     private StockCursorAdapter adapter;
-    private String portfolio;
+    private String portfolioName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        portfolio = this.getArguments().getString(HomeActivity.PORTFOLIO);
+        portfolioName = this.getArguments().getString(HomeActivity.PORTFOLIO);
         return inflater.inflate(R.layout.stock_list, container, false);
     }
 
@@ -94,9 +98,9 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
         }
     }
 
-    private void fillData() {
+    public void fillData() {
         // Initialize loader for this activity. Loads stuff from data base asynchronously.
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
 
         // Create a cursor that maps each stock symbol to the appropriate field on the UI.
         String[] from = new String[] {StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_CHANGE};
@@ -121,16 +125,17 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
         // The cursors id will be _id.
         String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_CHANGE};
 
-        if(portfolio.equals("All")) {
+        if(portfolioName.equals(HomeActivity.ALL_STOCKS)) {
             // CONTENT_URI = "content://com.techan.contentprovider/stocks"
             return new CursorLoader(getActivity(), StockContentProvider.CONTENT_URI, projection,
                                     null, null, null);
         } else {
-            List<String> symbols = new ArrayList<>();
-            Collection<SymbolProfile> symbolProfileList = ProfileManager.getSymbols(getActivity());
-            for (SymbolProfile profile : symbolProfileList) {
-                if (profile.portfolios != null && profile.portfolios.contains(portfolio)) {
-                    symbols.add(profile.symbol);
+            Set<String> symbols = Collections.emptySet();
+            Map<String, Portfolio> portfolios = ProfileManager.getPortfolios(getActivity());
+            for(Map.Entry<String, Portfolio> curPortfolioEntry : portfolios.entrySet()) {
+                if(curPortfolioEntry.getKey().equals(portfolioName)) {
+                    symbols = curPortfolioEntry.getValue().getSymbols();
+                    break;
                 }
             }
 
@@ -145,7 +150,7 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
             return new CursorLoader(getActivity(),
                     StockContentProvider.CONTENT_URI,
                     projection,
-                    "field IN (" + inList.toString() + ")",
+                    "sym IN (" + inList.toString() + ")",
                     symbols.toArray(new String[0]),
                     null);
         }
@@ -173,11 +178,21 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
         inflater.inflate(R.menu.listmenu, menu);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean showCostBasis = prefs.getBoolean(SettingsActivity.SHOW_COST_BASIS, false);
-        MenuItem item = menu.findItem(R.id.showCostBasis);
+        MenuItem costVsCurrentItem = menu.findItem(R.id.showCostBasis);
         if(showCostBasis) {
-            item.setTitle(getString(R.string.showCurrentPrice));
+            costVsCurrentItem.setTitle(getString(R.string.showCurrentPrice));
         } else {
-            item.setTitle(getString(R.string.showCostBasis));
+            costVsCurrentItem.setTitle(getString(R.string.showCostBasis));
+        }
+
+        MenuItem deleteAllStocksItem = menu.findItem(R.id.deleteAllStocks);
+        MenuItem deletePortfolioItem = menu.findItem(R.id.deletePortfolio);
+        if(portfolioName.equals(HomeActivity.ALL_STOCKS)) {
+            deleteAllStocksItem.setVisible(true);
+            deletePortfolioItem.setVisible(false);
+        } else {
+            deleteAllStocksItem.setVisible(false);
+            deletePortfolioItem.setVisible(true);
         }
     }
 
@@ -186,7 +201,7 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.insert:
-                AddDialog.create(getActivity());
+                AddDialog.create(this, portfolioName, getLoaderManager());
                 return true;
             case R.id.refresh:
                 (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
@@ -207,8 +222,11 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
                 adapter.notifyDataSetInvalidated();
                 getActivity().invalidateOptionsMenu();
                 return true;
-            case R.id.deletePort:
-                DeletePortfolioDialog.create(getActivity());
+            case R.id.deletePortfolio:
+                DeletePortfolioDialog.create(getActivity(), portfolioName);
+                return true;
+            case R.id.deleteAllStocks:
+                DeleteAllStocksDialog.create(getActivity());
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -217,7 +235,6 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
     private void settings() {
         Intent i = new Intent(getActivity(), SettingsActivity.class);
         startActivity(i);
-//        startActivityForResult(i, ACTIVITY_CREATE);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -229,7 +246,6 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
         super.onListItemClick(l,v, position, id);
 
         // Create an intent. Like an action.
-//        Intent i = new Intent(this, StockDetailActivity.class);
         Intent i = new Intent(getActivity(), StockDetailFragmentActivity.class);
 
 

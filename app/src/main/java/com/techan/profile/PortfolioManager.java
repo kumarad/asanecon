@@ -5,51 +5,83 @@ import android.content.Context;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class PortfolioManager {
     private static final String portfolioFileName = "techan_portfolios";
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final PersistenceManager persistenceManager;
-    Set<String> portfolios;
+    private Map<String,Portfolio> portfolioMap;
 
     public PortfolioManager(Context ctx) {
         persistenceManager = new PersistenceManager(ctx, portfolioFileName);
 
         String s = persistenceManager.read();
         if(s.equals("")) {
-            portfolios = new HashSet<>();
+            portfolioMap = new HashMap<>();
         } else {
             try {
-                portfolios = objectMapper.readValue(s, new TypeReference<Set<String>>(){});
+                portfolioMap = objectMapper.readValue(s, new TypeReference<Map<String,Portfolio>>(){});
             } catch(Exception e) {
                 throw new RuntimeException("Failed to construct portfolio list");
             }
         }
     }
 
-    public boolean addPortfolio(String portfolio) {
+    public boolean addPortfolio(String portfolioName) {
         try {
-            portfolios.add(portfolio);
+            portfolioMap.put(portfolioName, new Portfolio(portfolioName));
 
-            return persistenceManager.write(objectMapper.writeValueAsString(portfolios));
+            return persistenceManager.write(objectMapper.writeValueAsString(portfolioMap));
         } catch(Exception e) {
             return false;
         }
     }
 
-    public boolean removePortfolio(String portfolio) {
-        portfolios.remove(portfolio);
+    public boolean removePortfolio(String portfolioName) {
+        portfolioMap.remove(portfolioName);
 
         try {
-            return persistenceManager.write(objectMapper.writeValueAsString(portfolios));
+            return persistenceManager.write(objectMapper.writeValueAsString(portfolioMap));
         } catch(Exception e) {
             return false;
         }
     }
 
-    public Set<String> getPortfolios() {
-        return portfolios;
+    public Map<String, Portfolio> getPortfolios() {
+        return portfolioMap;
+    }
+
+    public boolean addSymbolToPortfolio(String portfolioName, String symbol) {
+        Portfolio portfolio = portfolioMap.get(portfolioName);
+        if(portfolio != null) {
+            portfolio.addSymbol(symbol);
+
+            try {
+                return persistenceManager.write(objectMapper.writeValueAsString(portfolioMap));
+            } catch(Exception e) {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean removeSymbolFromPortfolio(String portfolioName, String symbol) {
+        Portfolio portfolio = portfolioMap.get(portfolioName);
+        if(portfolio != null) {
+            portfolio.removeSymbol(symbol);
+
+            try {
+                return persistenceManager.write(objectMapper.writeValueAsString(portfolioMap));
+            } catch(Exception e) {
+                return false;
+            }
+        }
+
+        return false;
     }
 }

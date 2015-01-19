@@ -3,6 +3,8 @@ package com.techan.profile;
 import android.content.Context;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ProfileManager {
@@ -62,7 +64,7 @@ public class ProfileManager {
         return portfolioManager.addPortfolio(portfolio);
     }
 
-    public static Set<String> getPortfolios(Context ctx) {
+    public static Map<String, Portfolio> getPortfolios(Context ctx) {
         initialize(ctx);
         return portfolioManager.getPortfolios();
     }
@@ -70,6 +72,16 @@ public class ProfileManager {
     public static boolean removePortfolio(Context ctx, String portfolio) {
         initialize(ctx);
         return portfolioManager.removePortfolio(portfolio);
+    }
+
+    public static boolean addSymbolToPortfolio(Context ctx, String portfolioName, String symbol) {
+        initialize(ctx);
+        return portfolioManager.addSymbolToPortfolio(portfolioName, symbol);
+    }
+
+    public static boolean removeSymbolFromPortfolio(Context ctx, String portfolioName, String symbol) {
+        initialize(ctx);
+        return portfolioManager.removeSymbolFromPortfolio(portfolioName, symbol);
     }
 
 }

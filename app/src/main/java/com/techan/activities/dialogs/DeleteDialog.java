@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.techan.activities.StockHomeActivity;
+import com.techan.activities.HomeActivity;
 import com.techan.custom.Util;
 import com.techan.profile.ProfileManager;
 
@@ -42,7 +42,7 @@ public class DeleteDialog {
             Util.showErrorToast(parentActivity, "Oops. Something on your device prevented profile data from being updated.");
         }
 
-        Intent i = new Intent(parentActivity, StockHomeActivity.class);
+        Intent i = new Intent(parentActivity, HomeActivity.class);
         parentActivity.startActivityForResult(i, ACTIVITY_CREATE);
     }
 
