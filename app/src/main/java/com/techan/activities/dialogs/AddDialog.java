@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -16,14 +15,10 @@ import com.techan.R;
 import com.techan.activities.HomeActivity;
 import com.techan.activities.fragments.StockListFragment;
 import com.techan.contentProvider.StockContentProvider;
-import com.techan.custom.StockCursorAdapter;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
 import com.techan.profile.ProfileManager;
-import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.RefreshTask;
-
-import java.util.Collection;
 
 public class AddDialog {
     public static void create(final StockListFragment stockListFragment, final String portfolioName, final LoaderManager loaderManager) {
@@ -63,7 +58,7 @@ public class AddDialog {
         String symbol = addText.getText().toString().toUpperCase();
 
         if(verify(symbol, stockListFragment.getActivity())) {
-            addInternal(symbol, stockListFragment, portfolioName, loaderManager);
+            addInternal(stockListFragment.getActivity(), symbol, stockListFragment, portfolioName, loaderManager);
         }
     }
 
@@ -78,52 +73,54 @@ public class AddDialog {
             return false;
         }
 
-        // Check to see if the symbol is already in the database. Can't have duplicates.
-        String[] projection = {StocksTable.COLUMN_ID};
-        Cursor cursor = parentActivity.getContentResolver().query(StockContentProvider.CONTENT_URI, projection, StocksTable.COLUMN_SYMBOL + "='" + symbol + "'", null, null);
-        if(cursor.getCount() != 0) {
-            // Already in cursor.
-            Util.showErrorToast(parentActivity, "Stock symbol already added.");
-            return false;
-        }
-
         return true;
     }
 
-    private static void addInternal(String symbol, StockListFragment stockListFragment, String portfolioName, LoaderManager loaderManager) {
-        // RefreshTask expects symbol profile to exist! So make sure to add to profile manager first.
-        if(!ProfileManager.addSymbol(stockListFragment.getActivity(), symbol)) {
-            // Failure adding symbol to persistent file. Let user know.
-            Util.showErrorToast(stockListFragment.getActivity(), "Oops. Something on your device prevented profile from being updated.");
+
+    private static void addInternal(Activity parentActivity, String symbol, StockListFragment stockListFragment, String portfolioName, LoaderManager loaderManager) {
+        // Check to see if the symbol is already in the database. Can't have duplicates.
+        boolean alreadyInDb = false;
+        String[] projection = {StocksTable.COLUMN_ID};
+        Cursor cursor = parentActivity.getContentResolver().query(StockContentProvider.CONTENT_URI, projection, StocksTable.COLUMN_SYMBOL + "='" + symbol + "'", null, null);
+        if(cursor.getCount() != 0) {
+            alreadyInDb = true;
+        }
+
+        if(!alreadyInDb) {
+            // If the stock was in the profile then it would have been loaded into the db on start up.
+            // So the fact that this symbol is not in the db means we need to add it to the profile here.
+
+            // RefreshTask expects symbol profile to exist! So make sure to add to profile manager first.
+            if (!ProfileManager.addSymbol(stockListFragment.getActivity(), symbol)) {
+                // Failure adding symbol to persistent file. Let user know.
+                Util.showErrorToast(stockListFragment.getActivity(), "Oops. Something on your device prevented profile from being updated.");
+            }
         }
 
         if(!portfolioName.equals(HomeActivity.ALL_STOCKS)) {
-            if (!ProfileManager.addSymbolToPortfolio(stockListFragment.getActivity(), portfolioName, symbol)) {
-                Util.showErrorToast(stockListFragment.getActivity(), "Oops. Something on your device prevented profile from being updated.");
+            if(ProfileManager.getPortfolios(parentActivity).get(portfolioName).getSymbols().contains(symbol)) {
+                Util.showErrorToast(parentActivity, "Stock symbol already added.");
+            } else {
+                if(!ProfileManager.addSymbolToPortfolio(stockListFragment.getActivity(), portfolioName, symbol)) {
+                    Util.showErrorToast(stockListFragment.getActivity(), "Oops. Something on your device prevented profile from being updated.");
+                }
             }
-        } // else not being added to a specific portfolio.
-
-        //testJSONManager(symbol, parentActivity);
-
-        ContentValues values = new ContentValues();
-        values.put(StocksTable.COLUMN_SYMBOL, symbol);
-        Uri addedUri = stockListFragment.getActivity().getContentResolver().insert(StockContentProvider.CONTENT_URI, values);
-        Uri uri = Uri.parse(StockContentProvider.BASE_URI_STR + addedUri);
-        (new RefreshTask(stockListFragment.getActivity(), stockListFragment.getActivity().getContentResolver(), uri, symbol, true)).execute();
-        loaderManager.restartLoader(StockListFragment.LOADER_ID, null,stockListFragment);
-    }
-
-    private static void testJSONManager(String symbol, Activity parentActivity) {
-        SymbolProfile symProfile = ProfileManager.getSymbolData(parentActivity.getApplication(), symbol);
-        if(symbol.equals("IBM")) {
-            symProfile.stopLossPercent = 25;
-        } else if(symbol.equals("MSFT")) {
-            symProfile.stopLossPercent = 10;
-            symProfile.buyPrice = 400.12;
+        } else {
+            if(alreadyInDb) {
+                Util.showErrorToast(parentActivity, "Stock symbol already added.");
+            }
         }
 
-        ProfileManager.addSymbolData(symProfile);
+        if(!alreadyInDb) {
+            // Stock needs to be added to the database.
+            ContentValues values = new ContentValues();
+            values.put(StocksTable.COLUMN_SYMBOL, symbol);
+            Uri addedUri = stockListFragment.getActivity().getContentResolver().insert(StockContentProvider.CONTENT_URI, values);
+            Uri uri = Uri.parse(StockContentProvider.BASE_URI_STR + addedUri);
+            (new RefreshTask(stockListFragment.getActivity(), stockListFragment.getActivity().getContentResolver(), uri, symbol, true)).execute();
+        }
 
-        Collection<SymbolProfile> profiles = ProfileManager.getSymbols(parentActivity.getApplicationContext());
+        loaderManager.restartLoader(StockListFragment.LOADER_ID, null, stockListFragment);
+
     }
 }
