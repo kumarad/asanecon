@@ -84,4 +84,9 @@ public class PortfolioManager {
 
         return false;
     }
+
+    public boolean deletePortfolios() {
+        portfolioMap = new HashMap<>();
+        return persistenceManager.clear();
+    }
 }

@@ -54,11 +54,6 @@ public class ProfileManager {
         symbolProfileManager.forceDelete();
     }
 
-    public static boolean deleteProfile(Context ctx) {
-        initialize(ctx);
-        return symbolProfileManager.deleteProfile();
-    }
-
     public static boolean addPortfolio(Context ctx, String portfolio) {
         initialize(ctx);
         return portfolioManager.addPortfolio(portfolio);
@@ -84,4 +79,8 @@ public class ProfileManager {
         return portfolioManager.removeSymbolFromPortfolio(portfolioName, symbol);
     }
 
+    public static boolean deleteProfile(Context ctx) {
+        initialize(ctx);
+        return symbolProfileManager.deleteProfile() && portfolioManager.deletePortfolios();
+    }
 }

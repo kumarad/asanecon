@@ -41,7 +41,7 @@
     <item
             android:id="@+id/deleteAllStocks"
             android:showAsAction="collapseActionView"
-            android:title="Delete All Stocks"
+            android:title="Delete Everything"
             >
     </item>
 

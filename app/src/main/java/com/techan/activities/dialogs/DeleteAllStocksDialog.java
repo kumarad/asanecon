@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
+import com.techan.activities.HomeActivity;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
 import com.techan.profile.ProfileManager;
@@ -11,7 +12,7 @@ import com.techan.profile.ProfileManager;
 public class DeleteAllStocksDialog {
     public static void create(final Activity parentActivity) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
-        alertDialog.setTitle("Delete All Stocks");
+        alertDialog.setTitle("Delete All Stocks and Portfolios");
 
         alertDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
@@ -35,5 +36,9 @@ public class DeleteAllStocksDialog {
         }
 
         parentActivity.getContentResolver().delete(StockContentProvider.CONTENT_URI, null, null);
+
+        if(parentActivity instanceof HomeActivity) {
+            ((HomeActivity)parentActivity).resetDrawer();
+        }
     }
 }

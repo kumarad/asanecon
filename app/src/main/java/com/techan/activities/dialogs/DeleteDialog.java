@@ -8,7 +8,10 @@ import android.net.Uri;
 
 import com.techan.activities.HomeActivity;
 import com.techan.custom.Util;
+import com.techan.profile.Portfolio;
 import com.techan.profile.ProfileManager;
+
+import java.util.Map;
 
 public class DeleteDialog {
     public static void create(final Activity parentActivity, final Uri stockUri, final String symbol) {
@@ -30,7 +33,6 @@ public class DeleteDialog {
         });
 
         alertDialog.create().show();
-
     }
 
     private static final int ACTIVITY_CREATE = 0;
@@ -40,6 +42,12 @@ public class DeleteDialog {
 
         if(!ProfileManager.removeSymbol(parentActivity.getApplicationContext(), symbol)) {
             Util.showErrorToast(parentActivity, "Oops. Something on your device prevented profile data from being updated.");
+        }
+
+        for(Map.Entry<String, Portfolio> entry : ProfileManager.getPortfolios(parentActivity).entrySet()) {
+            if(entry.getValue().getSymbols().contains(symbol)) {
+                ProfileManager.removeSymbolFromPortfolio(parentActivity, entry.getKey(), symbol);
+            }
         }
 
         Intent i = new Intent(parentActivity, HomeActivity.class);
