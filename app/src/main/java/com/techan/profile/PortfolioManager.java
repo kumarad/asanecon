@@ -85,6 +85,31 @@ public class PortfolioManager {
         return false;
     }
 
+    public boolean deletePortfolio(String portfolioName, boolean deleteAllStocks) {
+        Portfolio portfolio = portfolioMap.get(portfolioName);
+        if(portfolio != null) {
+            if(deleteAllStocks) {
+                // Delete the stocks in this portfolio across all other portfolios.
+                for(String curSymbol : portfolio.getSymbols()) {
+                    for(Map.Entry<String, Portfolio> curEntry : portfolioMap.entrySet()) {
+                        curEntry.getValue().removeSymbol(curSymbol);
+                    }
+                }
+            }
+
+            portfolioMap.remove(portfolioName);
+
+            try {
+                return persistenceManager.write(objectMapper.writeValueAsString(portfolioMap));
+            } catch(Exception e) {
+                return false;
+            }
+        }
+
+        return false;
+
+    }
+
     public boolean deletePortfolios() {
         portfolioMap = new HashMap<>();
         return persistenceManager.clear();

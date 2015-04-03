@@ -79,6 +79,11 @@ public class ProfileManager {
         return portfolioManager.removeSymbolFromPortfolio(portfolioName, symbol);
     }
 
+    public static boolean deletePortfolio(Context ctx, String portfolioName, boolean deleteAllStocks) {
+        initialize(ctx);
+        return portfolioManager.deletePortfolio(portfolioName, deleteAllStocks);
+    }
+
     public static boolean deleteProfile(Context ctx) {
         initialize(ctx);
         return symbolProfileManager.deleteProfile() && portfolioManager.deletePortfolios();

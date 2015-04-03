@@ -50,25 +50,20 @@ public class DeletePortfolioDialog {
         Map<String,Portfolio> portfolios = ProfileManager.getPortfolios(parentActivity);
         Portfolio portfolioToDelete = portfolios.get(portfolioName);
         if(portfolioToDelete != null) {
-            ProfileManager.removePortfolio(parentActivity, portfolioName);
-
             CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.deletePortfolioStockCheckbox);
             if (checkBox.isChecked()) {
-                for(String symbolToDelete : portfolioToDelete.getSymbols()) {
-                    for (Map.Entry<String, Portfolio> curEntry : portfolios.entrySet()) {
-                        if (curEntry.getValue().getSymbols().contains(symbolToDelete)) {
-                            //todo this is not performant - should fix
-                            ProfileManager.removeSymbolFromPortfolio(parentActivity, curEntry.getKey(), symbolToDelete);
-                        }
-                    }
-                }
-
                 for(String stockSymbol : portfolioToDelete.getSymbols()) {
                     parentActivity.getContentResolver().delete(StockContentProvider.CONTENT_URI,
                             "sym like ?",
                             new String[]{stockSymbol});
                     ProfileManager.removeSymbol(parentActivity, stockSymbol);
                 }
+
+                // Have to do this after we have gone through the sql delete flow because
+                // this will delete the symbols from the portfolio.
+                ProfileManager.deletePortfolio(parentActivity, portfolioName, true);
+            } else {
+                ProfileManager.removePortfolio(parentActivity, portfolioName);
             }
 
             Intent intent = new Intent(parentActivity, HomeActivity.class);
