@@ -247,7 +247,7 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
 
         // Create an intent. Like an action.
         Intent i = new Intent(getActivity(), StockDetailFragmentActivity.class);
-
+        i.putExtra(HomeActivity.PORTFOLIO, portfolioName);
 
         // StockContentProvider.CONTENT_ITEM_TYPE is the key for the extra info
         // being placed in the intent.

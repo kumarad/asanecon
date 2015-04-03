@@ -1,7 +1,5 @@
 package com.techan.profile;
 
-import java.util.Set;
-
 public class SymbolProfile {
     public String symbol;
 

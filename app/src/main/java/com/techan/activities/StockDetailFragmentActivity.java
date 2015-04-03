@@ -33,6 +33,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
 
     private ViewPager viewPager;
     private StockPagerAdapter stockPagerAdapter;
+    private String portfolioName;
 
     // Bundle passed into onCreate represents saved state
     // for situations where the activity is being restored
@@ -45,6 +46,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
 
         Bundle extras = getIntent().getExtras();
         stockUri = (Uri)extras.get(StockContentProvider.CONTENT_ITEM_TYPE);
+        portfolioName = extras.getString(HomeActivity.PORTFOLIO);
 
         stockCursor = getContentResolver().query(stockUri, null, null, null, null);
 
@@ -139,7 +141,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete:
-                DeleteDialog.create(this, stockUri, symbol);
+                DeleteDialog.create(this, stockUri, symbol, portfolioName);
                 return true;
             case R.id.set_buy_price:
                 BuyDialog.create(this, symbol, stockPagerAdapter);

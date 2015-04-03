@@ -57,7 +57,7 @@ public class DeletePortfolioDialog {
                 for(String symbolToDelete : portfolioToDelete.getSymbols()) {
                     for (Map.Entry<String, Portfolio> curEntry : portfolios.entrySet()) {
                         if (curEntry.getValue().getSymbols().contains(symbolToDelete)) {
-                            //todo this is not performan - should fix
+                            //todo this is not performant - should fix
                             ProfileManager.removeSymbolFromPortfolio(parentActivity, curEntry.getKey(), symbolToDelete);
                         }
                     }
