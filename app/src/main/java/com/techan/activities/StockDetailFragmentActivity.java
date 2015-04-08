@@ -1,5 +1,6 @@
 package com.techan.activities;
 
+import android.app.ActionBar;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -32,6 +33,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
 
     private ViewPager viewPager;
     private StockPagerAdapter stockPagerAdapter;
+    private String portfolioName;
 
     // Bundle passed into onCreate represents saved state
     // for situations where the activity is being restored
@@ -44,6 +46,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
 
         Bundle extras = getIntent().getExtras();
         stockUri = (Uri)extras.get(StockContentProvider.CONTENT_ITEM_TYPE);
+        portfolioName = extras.getString(HomeActivity.PORTFOLIO);
 
         stockCursor = getContentResolver().query(stockUri, null, null, null, null);
 
@@ -67,7 +70,12 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.stock_pager_title_strip);
         pagerTabStrip.setTabIndicatorColor(Color.parseColor(Constants.ANDROID_BLUE));
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setTitle(null);
+        }
     }
 
     void populateGeneralView() {
@@ -133,7 +141,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete:
-                DeleteDialog.create(this, stockUri, symbol);
+                DeleteDialog.create(this, stockUri, symbol, portfolioName);
                 return true;
             case R.id.set_buy_price:
                 BuyDialog.create(this, symbol, stockPagerAdapter);
@@ -148,7 +156,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
                 StopLossDialog.create(this, symbol, stockUri, stockPagerAdapter);
                 return true;
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
         }
 

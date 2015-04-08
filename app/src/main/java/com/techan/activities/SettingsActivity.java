@@ -1,5 +1,6 @@
 package com.techan.activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,6 +10,9 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.techan.R;
@@ -18,7 +22,6 @@ public class SettingsActivity extends Activity {
     public static final String AUTO_REFRESH_KEY = "autoRefresh";
     public static final String REFRESH_INTERVAL_KEY ="refreshInterval";
     public static final String REFRESH_WIFI_ONLY_KEY = "refreshWifiOnly";
-    public static final String ALL_NOTIFICATIONS_KEY = "allNotifications";
     public static final String SHOW_COST_BASIS = "showCostBasis";
     public static final int STOP_LOSS_DEFAULT = 25;
 
@@ -27,6 +30,13 @@ public class SettingsActivity extends Activity {
         super.onCreate(bundle);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
 
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
@@ -50,10 +60,6 @@ public class SettingsActivity extends Activity {
             final SwitchPreference refreshPref = (SwitchPreference) getPreferenceManager().findPreference(AUTO_REFRESH_KEY);
             final ListPreference refreshPreferenceList = (ListPreference)getPreferenceManager().findPreference(REFRESH_INTERVAL_KEY);
             handleRefreshes(getActivity().getApplicationContext(), refreshPref, refreshPreferenceList);
-
-            final SwitchPreference allNotificationsPref = (SwitchPreference)getPreferenceManager().findPreference(ALL_NOTIFICATIONS_KEY);
-
-            handleAllNotifications(allNotificationsPref);
         }
     }
 
@@ -91,15 +97,6 @@ public class SettingsActivity extends Activity {
 
     }
 
-    private static void handleAllNotifications(final SwitchPreference allNotificationsPref) {
-        allNotificationsPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                return true;
-            }
-        });
-    }
-
     public static void activateAutoRefresh(Activity parent) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(parent);
         boolean autoRefreshEnabled = sharedPreferences.getBoolean(AUTO_REFRESH_KEY, false);
@@ -120,5 +117,15 @@ public class SettingsActivity extends Activity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(SettingsActivity.SHOW_COST_BASIS, showCostBasis);
         editor.commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

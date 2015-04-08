@@ -3,6 +3,7 @@
     <string name="app_name">Asanecon</string>
     <string name="no_stocks">No Stocks</string>
     <string name="stock_add_hint">Input stock symbol here</string>
+    <string name="portfolio_add_hint">Input portfolio name here</string>
     <string name="stock_add_button">Add</string>
     <string name="pe_target">PE Target</string>
     <string name="stop_loss">Stop Loss</string>
@@ -12,4 +13,5 @@
     <string name="target">Target</string>
     <string name="showCostBasis">Show Cost Basis</string>
     <string name="showCurrentPrice">Show Current Price</string>
+    <string name="blank">""</string>
 </resources>

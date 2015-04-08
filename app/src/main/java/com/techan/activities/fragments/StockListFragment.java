@@ -1,6 +1,6 @@
-package com.techan.activities;
+package com.techan.activities.fragments;
 
-import android.app.ListActivity;
+import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -12,48 +12,56 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
+
 import com.techan.R;
+import com.techan.activities.HomeActivity;
+import com.techan.activities.SettingsActivity;
+import com.techan.activities.StockDetailFragmentActivity;
 import com.techan.activities.dialogs.AddDialog;
+import com.techan.activities.dialogs.DeleteAllStocksDialog;
 import com.techan.activities.dialogs.DeletePortfolioDialog;
-import com.techan.custom.StockCursorAdapter;
 import com.techan.contentProvider.StockContentProvider;
+import com.techan.custom.StockCursorAdapter;
 import com.techan.database.StocksTable;
+import com.techan.profile.Portfolio;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.ContentValuesFactory;
 import com.techan.stockDownload.RefreshTask;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
-/**
- * Cursor - access to the result of a database query.
- * Loaders - loads data in an activity or fragment asynchronously,
- * LoaderManager - manages one or more loader instances within an activity or fragment.
- * There is only one LoaderManager per activity/fragment.
- */
-public class StockHomeActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class StockListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /////////////////////
     // Construction
     /////////////////////
 
+    public static final Integer LOADER_ID = 1;
     // Maps columns from a cursor to TextViews or ImageViews defined in an XML file.
     private StockCursorAdapter adapter;
+    private String portfolioName;
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        portfolioName = this.getArguments().getString(HomeActivity.PORTFOLIO);
+        return inflater.inflate(R.layout.stock_list, container, false);
+    }
 
-        // If nothing to display, use a text view to print out the fact that there is nothing in db.
-        // If there is stuff in db, use a list view to display the stocks.
-        // Using androids infrastructure that does the handling of empty vs not empty using the
-        // android ids in the layout xml.
-        setContentView(R.layout.stock_list);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         // sets the gap between each item in the list.
         this.getListView().setDividerHeight(2);
@@ -69,18 +77,18 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         registerForContextMenu(getListView());
 
         //ProfileManager.forceDelete(this);
-        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+        PreferenceManager.setDefaultValues(getActivity(), R.xml.settings, false);
 
-        SettingsActivity.activateAutoRefresh(this);
+        SettingsActivity.activateAutoRefresh(getActivity());
     }
 
     private void loadFromProfile() {
-        ContentResolver cr = this.getContentResolver();
+        ContentResolver cr = getActivity().getContentResolver();
         String[] projection = {StocksTable.COLUMN_SYMBOL};
         Cursor cursor = cr.query(StockContentProvider.CONTENT_URI, projection, null, null, null);
         if(cursor.getCount() == 0) {
             // Nothing in db. Lets see if we find something in the from the profile manager.
-            Collection<SymbolProfile> symbolProfiles = ProfileManager.getSymbols(getApplicationContext());
+            Collection<SymbolProfile> symbolProfiles = ProfileManager.getSymbols(getActivity());
             if(symbolProfiles.size() != 0) {
                 for(SymbolProfile symbolProfile : symbolProfiles) {
                     ContentValues values = ContentValuesFactory.createValuesForRecovery(symbolProfile);
@@ -90,19 +98,19 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         }
     }
 
-    private void fillData() {
+    public void fillData() {
         // Initialize loader for this activity. Loads stuff from data base asynchronously.
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
 
         // Create a cursor that maps each stock symbol to the appropriate field on the UI.
         String[] from = new String[] {StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_CHANGE};
         int[] to = new int[] { R.id.listSymbol, R.id.listPrice, R.id.listChange};
-        adapter = new StockCursorAdapter(this, R.layout.stock_row, null, from, to, 0);
+        adapter = new StockCursorAdapter(getActivity(), R.layout.stock_row, null, from, to, 0);
 
         setListAdapter(adapter);
 
         // Update from the network.
-        (new RefreshTask(getApplicationContext(), this.getContentResolver(), false)).download();
+        (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
     }
 
     /////////////////////
@@ -117,10 +125,36 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
         // The cursors id will be _id.
         String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_CHANGE};
 
-        // CONTENT_URI = "content://com.techan.contentprovider/stocks"
-        return new CursorLoader(this, StockContentProvider.CONTENT_URI, projection,
-                                                     null, null, null);
-   }
+        if(portfolioName.equals(HomeActivity.ALL_STOCKS)) {
+            // CONTENT_URI = "content://com.techan.contentprovider/stocks"
+            return new CursorLoader(getActivity(), StockContentProvider.CONTENT_URI, projection,
+                                    null, null, null);
+        } else {
+            Set<String> symbols = Collections.emptySet();
+            Map<String, Portfolio> portfolios = ProfileManager.getPortfolios(getActivity());
+            for(Map.Entry<String, Portfolio> curPortfolioEntry : portfolios.entrySet()) {
+                if(curPortfolioEntry.getKey().equals(portfolioName)) {
+                    symbols = curPortfolioEntry.getValue().getSymbols();
+                    break;
+                }
+            }
+
+            int argcount = symbols.size(); // number of IN arguments
+            StringBuilder inList = new StringBuilder(argcount * 2);
+            for (int i = 0; i < argcount; i++) {
+                if (i > 0) inList.append(",");
+                inList.append("?");
+            }
+
+            // CONTENT_URI = "content://com.techan.contentprovider/stocks"
+            return new CursorLoader(getActivity(),
+                    StockContentProvider.CONTENT_URI,
+                    projection,
+                    "sym IN (" + inList.toString() + ")",
+                    symbols.toArray(new String[0]),
+                    null);
+        }
+    }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -140,18 +174,26 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
 
     // Create the menu based on the XML defintion
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.listmenu, menu);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean showCostBasis = prefs.getBoolean(SettingsActivity.SHOW_COST_BASIS, false);
-        MenuItem item = menu.findItem(R.id.showCostBasis);
+        MenuItem costVsCurrentItem = menu.findItem(R.id.showCostBasis);
         if(showCostBasis) {
-            item.setTitle(getString(R.string.showCurrentPrice));
+            costVsCurrentItem.setTitle(getString(R.string.showCurrentPrice));
         } else {
-            item.setTitle(getString(R.string.showCostBasis));
+            costVsCurrentItem.setTitle(getString(R.string.showCostBasis));
         }
-        return true;
+
+        MenuItem deleteAllStocksItem = menu.findItem(R.id.deleteAllStocks);
+        MenuItem deletePortfolioItem = menu.findItem(R.id.deletePortfolio);
+        if(portfolioName.equals(HomeActivity.ALL_STOCKS)) {
+            deleteAllStocksItem.setVisible(true);
+            deletePortfolioItem.setVisible(false);
+        } else {
+            deleteAllStocksItem.setVisible(false);
+            deletePortfolioItem.setVisible(true);
+        }
     }
 
     // Reaction to the menu selection
@@ -159,16 +201,16 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.insert:
-                AddDialog.create(this);
+                AddDialog.create(this, portfolioName, getLoaderManager());
                 return true;
             case R.id.refresh:
-                (new RefreshTask(getApplicationContext(), this.getContentResolver(), false)).download();
+                (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
                 return true;
             case R.id.settings:
                 settings();
                 return true;
             case R.id.showCostBasis:
-                boolean showCostBasis = SettingsActivity.getCostBasisSetting(this);
+                boolean showCostBasis = SettingsActivity.getCostBasisSetting(getActivity());
                 if(showCostBasis) {
                     item.setTitle(getString(R.string.showCurrentPrice));
                     showCostBasis = false;
@@ -176,34 +218,36 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
                     item.setTitle(getString(R.string.showCostBasis));
                     showCostBasis = true;
                 }
-                SettingsActivity.setCostBasisSetting(this, showCostBasis);
+                SettingsActivity.setCostBasisSetting(getActivity(), showCostBasis);
                 adapter.notifyDataSetInvalidated();
-                invalidateOptionsMenu();
+                getActivity().invalidateOptionsMenu();
                 return true;
-            case R.id.deletePort:
-                DeletePortfolioDialog.create(this);
+            case R.id.deletePortfolio:
+                DeletePortfolioDialog.create(getActivity(), portfolioName);
+                return true;
+            case R.id.deleteAllStocks:
+                DeleteAllStocksDialog.create(getActivity());
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void settings() {
-        Intent i = new Intent(this, SettingsActivity.class);
-        startActivityForResult(i, ACTIVITY_CREATE);
+        Intent i = new Intent(getActivity(), SettingsActivity.class);
+        startActivity(i);
     }
 
     /////////////////////////////////////////////////////////////////////
     // List Item Click Response
     /////////////////////////////////////////////////////////////////////
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(ListView l, View v, int position, long id) {
         // the id is the id of the cursor row which is _id from the database by convention.
         super.onListItemClick(l,v, position, id);
 
         // Create an intent. Like an action.
-//        Intent i = new Intent(this, StockDetailActivity.class);
-        Intent i = new Intent(this, StockDetailFragmentActivity.class);
-
+        Intent i = new Intent(getActivity(), StockDetailFragmentActivity.class);
+        i.putExtra(HomeActivity.PORTFOLIO, portfolioName);
 
         // StockContentProvider.CONTENT_ITEM_TYPE is the key for the extra info
         // being placed in the intent.
@@ -217,7 +261,7 @@ public class StockHomeActivity extends ListActivity implements LoaderManager.Loa
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         // A negative value (RESULT_OK) is invoked which causes startActivity to get called.
         // Nothing special to do here.
         super.onActivityResult(requestCode, resultCode, intent);

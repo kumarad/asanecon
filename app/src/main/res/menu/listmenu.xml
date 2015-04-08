@@ -32,9 +32,16 @@
     </item>
 
     <item
-            android:id="@+id/deletePort"
+            android:id="@+id/deletePortfolio"
             android:showAsAction="collapseActionView"
             android:title="Delete Portfolio"
+            >
+    </item>
+
+    <item
+            android:id="@+id/deleteAllStocks"
+            android:showAsAction="collapseActionView"
+            android:title="Delete Everything"
             >
     </item>
 
