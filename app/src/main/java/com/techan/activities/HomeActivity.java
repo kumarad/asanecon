@@ -18,6 +18,11 @@ import android.widget.ListView;
 
 import com.techan.R;
 import com.techan.activities.dialogs.AddPortfolio;
+import com.techan.activities.drawer.DrawerMenuAddItem;
+import com.techan.activities.drawer.DrawerMenuItem;
+import com.techan.activities.drawer.DrawerMenuListAdapter;
+import com.techan.activities.drawer.DrawerSubMenuItem;
+import com.techan.activities.drawer.IDrawerMenuItem;
 import com.techan.activities.fragments.StockListFragment;
 import com.techan.profile.Portfolio;
 import com.techan.profile.ProfileManager;
@@ -35,10 +40,10 @@ public class HomeActivity extends Activity {
     private ListView drawerListView;
     private ActionBarDrawerToggle drawerToggle;
     private boolean isDrawerOpen = false;
-    private List<String> portfolios = new ArrayList<>();
     private ActionBar actionBar;
     private boolean resetDrawer = false;
     private String actionBarTitle = null;
+    private List<IDrawerMenuItem> menuItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +63,20 @@ public class HomeActivity extends Activity {
     }
 
     private void loadDrawerItems() {
+        menuItems.clear();
+        menuItems.add(new DrawerMenuItem(ALL_STOCKS));
+        menuItems.add(new DrawerMenuAddItem(ADD_PORTFOLIO));
         Map<String, Portfolio> portfolios = ProfileManager.getPortfolios(this);
-        this.portfolios.clear();
-        this.portfolios.add(ALL_STOCKS);
         for(String curPortfolioName : portfolios.keySet()) {
-            this.portfolios.add(curPortfolioName);
+            menuItems.add(new DrawerSubMenuItem(curPortfolioName));
         }
-        this.portfolios.add(ADD_PORTFOLIO);
     }
 
     private void setupDrawer() {
         drawerLayout = (DrawerLayout) findViewById(R.id.homeDrawer);
 
         drawerListView = (ListView) findViewById(R.id.homeLeftDrawerList);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, portfolios);
+        final DrawerMenuListAdapter adapter = new DrawerMenuListAdapter(this, menuItems);
         drawerListView.setAdapter(adapter);
 
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.blank, R.string.blank) {
@@ -117,17 +122,17 @@ public class HomeActivity extends Activity {
     }
 
     private void displayFragment(int position) {
-        if(portfolios.get(position).equals(ADD_PORTFOLIO)) {
+        if(menuItems.get(position).getText().equals(ADD_PORTFOLIO)) {
             AddPortfolio.create(this);
         } else {
             StockListFragment fragment = new StockListFragment();
+            String portfolioName = menuItems.get(position).getText();
 
-            String portfolioName = portfolios.get(position);
             actionBar.setTitle(portfolioName);
             actionBarTitle = portfolioName;
 
             Bundle bundle = new Bundle();
-            bundle.putString(PORTFOLIO, portfolios.get(position));
+            bundle.putString(PORTFOLIO, portfolioName);
             fragment.setArguments(bundle);
 
             FragmentManager fragmentManager = getFragmentManager();
