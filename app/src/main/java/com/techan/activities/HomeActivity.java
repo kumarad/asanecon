@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.crashlytics.android.Crashlytics;
 import com.techan.R;
 import com.techan.activities.dialogs.AddPortfolio;
 import com.techan.activities.drawer.DrawerMenuAddItem;
@@ -27,6 +28,7 @@ import com.techan.activities.fragments.StockListFragment;
 import com.techan.profile.Portfolio;
 import com.techan.profile.ProfileManager;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +50,7 @@ public class HomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
 
         setContentView(R.layout.stock_home);
 

@@ -53,5 +53,8 @@
         <service
                 android:name=".alarm.DownloaderService">
         </service>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="f09845b58e8c6dbf596be29aca3d15c7f15084ba" />
     </application>
 </manifest>
