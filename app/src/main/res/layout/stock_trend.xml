@@ -2,7 +2,7 @@
 
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:saund="http://schemas.android.com/apk/res/com.techan"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent" android:layout_height="fill_parent">
 
     <RelativeLayout android:layout_width="fill_parent"
@@ -22,8 +22,8 @@
                     android:layout_marginTop="10dp"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    saund:offset="3dp"
-                    saund:textSize="7sp"
+                    custom:offset="3dp"
+                    custom:textSize="7sp"
                     style="@style/Widget.ProgressBar.RegularProgressBar"
                     android:layout_marginBottom="5dp"
                     />
@@ -98,8 +98,8 @@
                     android:layout_marginTop="10dp"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    saund:offset="3dp"
-                    saund:textSize="7sp"
+                    custom:offset="3dp"
+                    custom:textSize="7sp"
                     style="@style/Widget.ProgressBar.RegularProgressBar"
                     android:layout_marginBottom="5dp"
                     />
@@ -232,8 +232,8 @@
                 android:layout_height="8dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                saund:offset="3dp"
-                saund:textSize="7sp"
+                custom:offset="3dp"
+                custom:textSize="7sp"
                 style="@style/Widget.ProgressBar.RegularProgressBar"
                 android:layout_below="@id/upTrendCountRow"
                 />
@@ -255,8 +255,8 @@
                 android:layout_height="8dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                saund:offset="3dp"
-                saund:textSize="7sp"
+                custom:offset="3dp"
+                custom:textSize="7sp"
                 style="@style/Widget.ProgressBar.RegularProgressBar"
                 android:layout_below="@id/div3"
                 />
