@@ -10,15 +10,8 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:paddingBottom="10dp"
                 android:id="@+id/highLowPlotRow"
-                android:background="@drawable/rounded_cell">
+                style="@style/stockCell">
 
                 <com.techan.progressbar.LimitProgressBar
                         android:id="@+id/highLowBar"
@@ -69,16 +62,9 @@
         </RelativeLayout>
 
         <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
                 android:layout_below="@id/highLowPlotRow"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:paddingBottom="10dp"
                 android:id="@+id/avgBarRow"
-                android:background="@drawable/rounded_cell">
+                style="@style/stockCell">
 
                 <com.techan.progressbar.LimitProgressBar
                         android:id="@+id/movAvgBar"
@@ -149,17 +135,10 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:paddingBottom="10dp"
             android:layout_below="@id/avgBarRow"
             android:id="@+id/upTrendCountRow"
-            android:background="@drawable/rounded_cell">
+            style="@style/stockCell">
 
                 <LinearLayout
                         android:layout_width="fill_parent"
@@ -204,17 +183,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:paddingBottom="10dp"
             android:layout_below="@id/upTrendCountRow"
             android:id="@+id/avgCell"
-            android:background="@drawable/rounded_cell">
+            style="@style/stockCell">
 
 
                 <com.techan.progressbar.LimitProgressBar
@@ -262,23 +234,16 @@
         </LinearLayout>
 
         <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="1.0"
                 android:layout_below="@id/avgCell"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
+                android:weightSum="1.0"
                 android:id="@+id/pegRow"
-                android:background="@drawable/rounded_cell">
+                style="@style/stockCell">
 
             <TextView
                 android:id="@+id/pegDetail"
                 android:layout_width="0dp"
                 android:layout_weight=".7"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="15dp"
                 android:layout_height="wrap_content"/>
 

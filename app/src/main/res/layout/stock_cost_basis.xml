@@ -6,13 +6,12 @@
     android:layout_width="fill_parent" android:layout_height="fill_parent">
 
     <RelativeLayout android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                    android:layout_height="wrap_content">
 
         <TextView
                 android:id="@+id/costWarning"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content"/>
 
         <TextView
                 android:id="@+id/costBasisVal"
@@ -20,8 +19,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold"/>
 
 
         <LinearLayout
@@ -29,8 +27,7 @@
                 android:layout_height="40sp"
                 android:weightSum="1.0"
                 android:layout_below="@id/costBasisVal"
-                android:id="@+id/costBasisChangeRow"
-                >
+                android:id="@+id/costBasisChangeRow">
 
             <TextView
                     android:id="@+id/costBasisChange"
@@ -38,8 +35,7 @@
                     android:layout_weight=".3"
                     android:layout_height="wrap_content"
                     android:textSize="25sp"
-                    android:layout_marginLeft="5dp"
-                    />
+                    android:layout_marginLeft="5dp"/>
 
             <TextView
                     android:id="@+id/costBasisChangeVal"
@@ -47,8 +43,7 @@
                     android:layout_weight=".7"
                     android:layout_height="wrap_content"
                     android:textSize="25sp"
-                    android:gravity="right"
-                    />
+                    android:gravity="right"/>
 
         </LinearLayout>
 
@@ -59,8 +54,7 @@
                 android:id="@+id/costRow"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_below="@id/costBasisChangeRow"
-                >
+                android:layout_below="@id/costBasisChangeRow">
 
             <TextView
                     android:id="@+id/detailCost"
@@ -69,24 +63,21 @@
                     android:layout_height="fill_parent"
                     android:gravity="center_vertical"
                     android:text="Cost/Share: "
-                    android:layout_marginLeft="5dp"
-                    />
+                    android:layout_marginLeft="5dp"/>
 
             <TextView
                     android:id="@+id/detailCostVal"
                     android:layout_width="0dp"
                     android:layout_weight=".25"
                     android:layout_height="fill_parent"
-                    android:gravity="center_vertical"
-                    />
+                    android:gravity="center_vertical"/>
 
             <TextView
                     android:id="@+id/detailCount"
                     android:layout_width="0dp"
                     android:layout_weight=".20"
                     android:layout_height="fill_parent"
-                    android:text="Shares:  "
-                    />
+                    android:text="Shares:  "/>
 
             <TextView
                     android:id="@+id/detailCountVal"
@@ -103,7 +94,6 @@
             android:layout_width="match_parent"
             android:layout_height=".3dp"
             android:background="@android:color/darker_gray" />
-
 
         <RelativeLayout android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -130,8 +120,7 @@
                 android:layout_height="wrap_content"
                 android:weightSum="1.0"
                 android:id="@+id/slDateRow"
-                android:layout_below="@id/slprogressbar"
-                >
+                android:layout_below="@id/slprogressbar">
 
                 <TextView
                     android:id="@+id/slDate"
@@ -140,16 +129,14 @@
                     android:layout_height="fill_parent"
                     android:gravity="center_vertical"
                     android:text="Stop Loss Date: "
-                    android:layout_marginLeft="5dp"
-                    />
+                    android:layout_marginLeft="5dp"/>
 
                 <TextView
                     android:id="@+id/slDateVal"
                     android:layout_width="0dp"
                     android:layout_weight=".7"
                     android:layout_height="fill_parent"
-                    android:gravity="center_vertical"
-                    />
+                    android:gravity="center_vertical"/>
             </LinearLayout>
 
         </RelativeLayout>
@@ -159,7 +146,7 @@
             android:layout_below="@id/stopLossView"
             android:layout_width="match_parent"
             android:layout_height=".3dp"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -168,8 +155,7 @@
             android:layout_marginBottom="10dp"
             android:weightSum="1.0"
             android:layout_below="@id/cbDiv2"
-            android:id="@+id/targetPriceView"
-            >
+            android:id="@+id/targetPriceView">
 
             <TextView
                 android:id="@+id/targetText"
@@ -178,8 +164,7 @@
                 android:text="Target Price:"
                 android:layout_marginLeft="5dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                />
+                android:layout_gravity="center_vertical"/>
 
             <TextView
                 android:id="@+id/targetLowVal"
@@ -188,8 +173,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="right"
-                android:layout_marginRight="15dp"
-                />
+                android:layout_marginRight="15dp"/>
 
             <com.techan.progressbar.SaundProgressBar
                 android:id="@+id/targetBar"
@@ -198,8 +182,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:layout_marginLeft="5dp"
-                style="@style/Widget.ProgressBar.RegularProgressBar"
-                />
+                style="@style/Widget.ProgressBar.RegularProgressBar"/>
 
 
             <TextView
@@ -208,8 +191,7 @@
                 android:layout_weight=".26"
                 android:layout_height="fill_parent"
                 android:gravity="left"
-                android:layout_marginLeft="15dp"
-                />
+                android:layout_marginLeft="15dp"/>
 
         </LinearLayout>
 
@@ -218,7 +200,7 @@
             android:layout_below="@id/targetPriceView"
             android:layout_width="match_parent"
             android:layout_height=".3dp"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -228,8 +210,7 @@
             android:layout_marginBottom="10dp"
             android:layout_below="@id/cbDiv3"
             android:id="@+id/peTargetView"
-            android:layout_marginLeft="5dp"
-            >
+            android:layout_marginLeft="5dp">
 
             <TextView
                 android:id="@+id/targetPeText"
@@ -237,8 +218,7 @@
                 android:layout_weight=".20"
                 android:text="PE Target:"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                />
+                android:layout_gravity="center_vertical"/>
 
             <TextView
                 android:id="@+id/peLowVal"
@@ -247,8 +227,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="right"
-                android:layout_marginRight="15dp"
-                />
+                android:layout_marginRight="15dp"/>
 
             <com.techan.progressbar.SaundProgressBar
                 android:id="@+id/peTargetBar"
@@ -256,8 +235,7 @@
                 android:layout_weight=".3"
                 android:layout_height="8dp"
                 android:layout_marginTop="6dp"
-                style="@style/Widget.ProgressBar.RegularProgressBar"
-                />
+                style="@style/Widget.ProgressBar.RegularProgressBar"/>
 
 
             <TextView
@@ -267,8 +245,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="left"
-                android:layout_marginLeft="15dp"
-                />
+                android:layout_marginLeft="15dp"/>
         </LinearLayout>
 
     </RelativeLayout>
