@@ -145,7 +145,6 @@
                         android:layout_height="wrap_content"
                         android:weightSum="1.0"
                         android:layout_marginRight="5dp"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:id="@+id/upTrendLabelAlertRow">
 
@@ -243,7 +242,6 @@
                 android:id="@+id/pegDetail"
                 android:layout_width="0dp"
                 android:layout_weight=".7"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="15dp"
                 android:layout_height="wrap_content"/>
 
