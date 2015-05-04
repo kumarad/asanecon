@@ -1,327 +1,286 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:layout_width="fill_parent" android:layout_height="fill_parent">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-    <RelativeLayout android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
         <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingBottom="10dp"
                 android:id="@+id/highLowPlotRow"
-                >
+                android:background="@drawable/rounded_cell">
 
-            <com.techan.progressbar.LimitProgressBar
-                    android:id="@+id/highLowBar"
-                    android:layout_width="fill_parent"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    custom:offset="3dp"
-                    custom:textSize="7sp"
-                    style="@style/Widget.ProgressBar.RegularProgressBar"
-                    android:layout_marginBottom="5dp"
-                    />
+                <com.techan.progressbar.LimitProgressBar
+                        android:id="@+id/highLowBar"
+                        android:layout_width="fill_parent"
+                        android:layout_height="8dp"
+                        android:layout_marginTop="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        custom:offset="3dp"
+                        custom:textSize="7sp"
+                        style="@style/Widget.ProgressBar.RegularProgressBar"
+                        android:layout_marginBottom="5dp"/>
 
-            <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="1.0"
-                    android:id="@+id/lowAlertRow"
-                    android:layout_below="@id/highLowBar"
-                    >
-
-                <TextView
-                        android:id="@+id/low90Day"
-                        android:layout_width="0dp"
-                        android:layout_weight=".7"
+                <LinearLayout
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        />
+                        android:weightSum="1.0"
+                        android:id="@+id/lowAlertRow"
+                        android:layout_marginLeft="15dp"
+                        android:layout_below="@id/highLowBar">
+
+                        <TextView
+                                android:id="@+id/low90Day"
+                                android:layout_width="0dp"
+                                android:layout_weight=".7"
+                                android:layout_height="wrap_content"/>
+
+                        <TextView
+                                android:id="@+id/highLowAlert"
+                                android:layout_width="0dp"
+                                android:layout_weight=".2"
+                                android:layout_height="10dp"
+                                android:gravity="center"
+                                android:layout_marginRight="3dp"
+                                android:textColor="#FFFFFFFF"
+                                android:textSize="8sp"
+                                android:background="@drawable/rounded_edges"/>
+
+                </LinearLayout>
 
                 <TextView
-                        android:id="@+id/highLowAlert"
-                        android:layout_width="0dp"
-                        android:layout_weight=".2"
-                        android:layout_height="10dp"
-                        android:gravity="center"
-                        android:layout_marginRight="3dp"
-                        android:textColor="#FFFFFFFF"
-                        android:textSize="8sp"
-                        android:background="@drawable/rounded_edges"
-                        />
+                        android:id="@+id/high60Day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/lowAlertRow"
+                        android:layout_marginLeft="15dp"/>
 
-            </LinearLayout>
-
-            <!--<com.androidplot.xy.XYPlot-->
-                    <!--android:id="@+id/highLowPlot"-->
-                    <!--android:layout_width="70dp"-->
-                    <!--android:layout_height="fill_parent"-->
-                    <!--android:layout_marginTop="10dp"-->
-                    <!--android:layout_marginLeft="10dp"-->
-                    <!--android:layout_marginRight="10dp"-->
-                    <!--title="Test"/>-->
-
-            <TextView
-                    android:id="@+id/high60Day"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/lowAlertRow"
-                    />
         </RelativeLayout>
-
-        <View
-                android:id="@+id/div1"
-                android:layout_below="@id/highLowPlotRow"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
-                android:layout_width="match_parent"
-                android:layout_height=".3dp"
-                android:background="@android:color/darker_gray" />
 
         <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/div1"
+                android:layout_below="@id/highLowPlotRow"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingBottom="10dp"
                 android:id="@+id/avgBarRow"
-                >
+                android:background="@drawable/rounded_cell">
 
-            <com.techan.progressbar.LimitProgressBar
-                    android:id="@+id/movAvgBar"
-                    android:layout_width="fill_parent"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    custom:offset="3dp"
-                    custom:textSize="7sp"
-                    style="@style/Widget.ProgressBar.RegularProgressBar"
-                    android:layout_marginBottom="5dp"
-                    />
+                <com.techan.progressbar.LimitProgressBar
+                        android:id="@+id/movAvgBar"
+                        android:layout_width="fill_parent"
+                        android:layout_height="8dp"
+                        android:layout_marginTop="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        custom:offset="3dp"
+                        custom:textSize="7sp"
+                        style="@style/Widget.ProgressBar.RegularProgressBar"
+                        android:layout_marginBottom="5dp"/>
 
-            <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="1.0"
-                    android:id="@+id/mov50AvgAlertRow"
-                    android:layout_below="@id/movAvgBar"
-                    >
-
-                <TextView
-                        android:id="@+id/movAvg50"
-                        android:layout_width="0dp"
-                        android:layout_weight=".7"
+                <LinearLayout
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        />
+                        android:weightSum="1.0"
+                        android:id="@+id/mov50AvgAlertRow"
+                        android:layout_below="@id/movAvgBar">
 
-                <TextView
-                        android:id="@+id/movAvg50Alert"
-                        android:layout_width="0dp"
-                        android:layout_weight=".2"
-                        android:layout_height="10dp"
-                        android:gravity="center"
-                        android:layout_marginRight="3dp"
-                        android:textColor="#FFFFFFFF"
-                        android:textSize="8sp"
-                        android:background="@drawable/rounded_edges"
-                        />
+                        <TextView
+                                android:id="@+id/movAvg50"
+                                android:layout_width="0dp"
+                                android:layout_weight=".7"
+                                android:layout_marginLeft="15dp"
+                                android:layout_height="wrap_content"/>
+
+                        <TextView
+                                android:id="@+id/movAvg50Alert"
+                                android:layout_width="0dp"
+                                android:layout_weight=".2"
+                                android:layout_height="10dp"
+                                android:gravity="center"
+                                android:layout_marginRight="3dp"
+                                android:textColor="#FFFFFFFF"
+                                android:textSize="8sp"
+                                android:background="@drawable/rounded_edges"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="1.0"
+                        android:id="@+id/mov200AvgAlertRow"
+                        android:layout_below="@id/mov50AvgAlertRow">
+
+                        <TextView
+                                android:id="@+id/movAvg200"
+                                android:layout_width="0dp"
+                                android:layout_weight=".7"
+                                android:layout_marginLeft="15dp"
+                                android:layout_height="wrap_content"/>
+
+                        <TextView
+                                android:id="@+id/mov200AvgAlert"
+                                android:layout_width="0dp"
+                                android:layout_weight=".2"
+                                android:layout_height="10dp"
+                                android:gravity="center"
+                                android:layout_marginRight="3dp"
+                                android:textColor="#FFFFFFFF"
+                                android:textSize="8sp"
+                                android:background="@drawable/rounded_edges"/>
 
             </LinearLayout>
 
-            <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="1.0"
-                    android:id="@+id/mov200AvgAlertRow"
-                    android:layout_below="@id/mov50AvgAlertRow"
-                    >
-
-                <TextView
-                        android:id="@+id/movAvg200"
-                        android:layout_width="0dp"
-                        android:layout_weight=".7"
-                        android:layout_height="wrap_content"
-                        />
-
-                <TextView
-                        android:id="@+id/mov200AvgAlert"
-                        android:layout_width="0dp"
-                        android:layout_weight=".2"
-                        android:layout_height="10dp"
-                        android:gravity="center"
-                        android:layout_marginRight="3dp"
-                        android:textColor="#FFFFFFFF"
-                        android:textSize="8sp"
-                        android:background="@drawable/rounded_edges"
-                        />
-
-            </LinearLayout>
         </RelativeLayout>
 
-
-
-        <!--<LinearLayout-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@id/avgPlotRow"-->
-                <!--android:id="@+id/avgBarRow"-->
-                <!-->-->
-
-            <!--<com.techan.progressbar.LimitProgressBar-->
-                    <!--android:id="@+id/avgBar"-->
-                    <!--android:layout_width="fill_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginTop="15dp"-->
-                    <!--android:paddingLeft="15dp"-->
-                    <!--android:paddingRight="15dp"-->
-                    <!--saund:offset="3dp"-->
-                    <!--saund:textSize="7sp"-->
-                    <!--style="@style/Widget.ProgressBar.RegularProgressBar"-->
-                    <!--/>-->
-
-        <!--</LinearLayout>-->
-
-
-        <View
-                android:id="@+id/div2"
-                android:layout_below="@id/avgBarRow"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
-                android:layout_width="match_parent"
-                android:layout_height=".3dp"
-                android:background="@android:color/darker_gray" />
-
-
         <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="1.0"
-                android:layout_below="@id/div2"
-                android:layout_marginLeft="5dp"
-                android:id="@+id/upTrendCountRow"
-                >
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:paddingBottom="10dp"
+            android:layout_below="@id/avgBarRow"
+            android:id="@+id/upTrendCountRow"
+            android:background="@drawable/rounded_cell">
 
-            <TextView
-                    android:id="@+id/upTrendCount"
-                    android:layout_width="0dp"
-                    android:layout_weight=".7"
-                    android:layout_height="wrap_content"
-                    />
+                <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="1.0"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:id="@+id/upTrendLabelAlertRow">
 
-            <TextView
-                    android:id="@+id/upTrendAlert"
-                    android:layout_width="0dp"
-                    android:layout_weight=".2"
-                    android:layout_height="10dp"
-                    android:gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="8sp"
-                    android:background="@drawable/rounded_edges"
-                    />
+                        <TextView
+                                android:id="@+id/upTrendCount"
+                                android:layout_width="0dp"
+                                android:layout_weight=".7"
+                                android:layout_marginLeft="15dp"
+                                android:layout_height="wrap_content"/>
+
+                        <TextView
+                                android:id="@+id/upTrendAlert"
+                                android:layout_width="0dp"
+                                android:layout_weight=".2"
+                                android:layout_height="10dp"
+                                android:gravity="center"
+                                android:layout_marginRight="3dp"
+                                android:textColor="#FFFFFFFF"
+                                android:textSize="8sp"
+                                android:background="@drawable/rounded_edges"/>
+
+                </LinearLayout>
+
+                <com.techan.progressbar.SaundProgressBar
+                        android:id="@+id/upTrendBar"
+                        android:layout_width="fill_parent"
+                        android:layout_height="8dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        custom:offset="3dp"
+                        custom:textSize="7sp"
+                        style="@style/Widget.ProgressBar.RegularProgressBar"
+                        android:layout_below="@id/upTrendLabelAlertRow"/>
+
         </LinearLayout>
 
-        <com.techan.progressbar.SaundProgressBar
-                android:id="@+id/upTrendBar"
-                android:layout_width="fill_parent"
-                android:layout_height="8dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                custom:offset="3dp"
-                custom:textSize="7sp"
-                style="@style/Widget.ProgressBar.RegularProgressBar"
-                android:layout_below="@id/upTrendCountRow"
-                />
-
-
-        <View
-                android:id="@+id/div3"
-                android:layout_below="@id/upTrendBar"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
-                android:layout_width="match_parent"
-                android:layout_height=".3dp"
-                android:background="@android:color/darker_gray" />
-
-
-        <com.techan.progressbar.LimitProgressBar
-                android:id="@+id/avgBar"
-                android:layout_width="fill_parent"
-                android:layout_height="8dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                custom:offset="3dp"
-                custom:textSize="7sp"
-                style="@style/Widget.ProgressBar.RegularProgressBar"
-                android:layout_below="@id/div3"
-                />
-
-        <TextView
-                android:id="@+id/avgVolDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_below="@id/avgBar"
-                />
-
         <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="1.0"
-                android:layout_below="@id/avgVolDetail"
-                android:layout_marginLeft="5dp"
-                android:id="@+id/volRow"
-                >
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:paddingBottom="10dp"
+            android:layout_below="@id/upTrendCountRow"
+            android:id="@+id/avgCell"
+            android:background="@drawable/rounded_cell">
 
-            <TextView
-                    android:id="@+id/volDetail"
-                    android:layout_width="0dp"
-                    android:layout_weight=".7"
-                    android:layout_height="wrap_content"
-                    />
 
-            <TextView
-                    android:id="@+id/volAlert"
-                    android:layout_width="0dp"
-                    android:layout_weight=".2"
-                    android:layout_height="10dp"
-                    android:gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="8sp"
-                    android:background="@drawable/rounded_edges"
-                    />
+                <com.techan.progressbar.LimitProgressBar
+                        android:id="@+id/avgBar"
+                        android:layout_width="fill_parent"
+                        android:layout_height="8dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:layout_marginTop="10dp"
+                        custom:offset="3dp"
+                        custom:textSize="7sp"
+                        style="@style/Widget.ProgressBar.RegularProgressBar"/>
+
+                <TextView
+                        android:id="@+id/avgVolDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"/>
+
+                <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="1.0"
+                        android:layout_marginLeft="15dp"
+                        android:id="@+id/volRow">
+
+                        <TextView
+                                android:id="@+id/volDetail"
+                                android:layout_width="0dp"
+                                android:layout_weight=".7"
+                                android:layout_height="wrap_content"/>
+
+                        <TextView
+                                android:id="@+id/volAlert"
+                                android:layout_width="0dp"
+                                android:layout_weight=".2"
+                                android:layout_height="10dp"
+                                android:gravity="center"
+                                android:layout_marginRight="3dp"
+                                android:textColor="#FFFFFFFF"
+                                android:textSize="8sp"
+                                android:background="@drawable/rounded_edges"/>
+                </LinearLayout>
+
         </LinearLayout>
 
-        <View
-                android:id="@+id/div4"
-                android:layout_below="@id/volRow"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
-                android:layout_width="match_parent"
-                android:layout_height=".3dp"
-                android:background="@android:color/darker_gray" />
-
         <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:weightSum="1.0"
-                android:layout_below="@id/div4"
+                android:layout_below="@id/avgCell"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
                 android:id="@+id/pegRow"
-                >
+                android:background="@drawable/rounded_cell">
 
             <TextView
-                    android:id="@+id/pegDetail"
-                    android:layout_width="0dp"
-                    android:layout_weight=".7"
-                    android:layout_height="wrap_content"
-                    />
+                android:id="@+id/pegDetail"
+                android:layout_width="0dp"
+                android:layout_weight=".7"
+                android:layout_marginLeft="15dp"
+                android:layout_height="wrap_content"/>
 
             <TextView
                     android:id="@+id/pegAlert"
@@ -332,8 +291,8 @@
                     android:layout_marginRight="3dp"
                     android:textColor="#FFFFFFFF"
                     android:textSize="8sp"
-                    android:background="@drawable/rounded_edges"
-                    />
+                    android:background="@drawable/rounded_edges"/>
+
         </LinearLayout>
 
     </RelativeLayout>
