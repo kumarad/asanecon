@@ -11,7 +11,7 @@
 
         <TextView
             android:id="@+id/costWarning"
-            android:layout_marginLeft="15dp"
+            android:paddingLeft="15dp"
             style="@style/stockCell"/>
 
         <LinearLayout
