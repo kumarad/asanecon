@@ -49,10 +49,14 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
     }
 
     protected Fragment createCostBasisFragment() {
-        Fragment fragment = new StockCostBasisFragment();
+        StockCostBasisFragment fragment = new StockCostBasisFragment();
+        fragment.setStockPagerAdapter(this);
         Bundle args = new Bundle();
 
         String symbol = createCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
+
+        args.putString(StockCostBasisFragment.SYMBOL, symbol);
+
         SymbolProfile profile = ProfileManager.getSymbolData(ctx, symbol);
         if(profile.buyPrice != null) {
             args.putDouble(StockCostBasisFragment.COST_VAL, profile.buyPrice);

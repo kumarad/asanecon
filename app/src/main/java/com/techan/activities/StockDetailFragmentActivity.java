@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -144,7 +143,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
                 DeleteDialog.create(this, stockUri, symbol, portfolioName);
                 return true;
             case R.id.set_buy_price:
-                BuyDialog.create(this, symbol, stockPagerAdapter);
+                BuyDialog.create(this, getLayoutInflater(), symbol, stockPagerAdapter);
                 return true;
             case R.id.set_target_price:
                 TargetDialog.create(this, symbol, stockPagerAdapter);

@@ -12,11 +12,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.techan.R;
+import com.techan.activities.StockPagerAdapter;
+import com.techan.activities.dialogs.BuyDialog;
 import com.techan.custom.Util;
 import com.techan.profile.SymbolProfile;
 import com.techan.progressbar.SaundProgressBar;
 
 public class StockCostBasisFragment extends Fragment {
+    public static final String SYMBOL = "SYMBOL";
     public static final String COST_VAL = "COST_VAL";
     public static final String SL_TRACKING_START_DATE = "SL_TRACKING_START_DATE";
     public static final String COUNT_VAL = "COUNT_VAL";
@@ -53,6 +56,12 @@ public class StockCostBasisFragment extends Fragment {
     TextView peLowVal;
     SaundProgressBar peTargetBar;
     TextView peHighVal;
+
+    StockPagerAdapter stockPagerAdapter;
+
+    public void setStockPagerAdapter(StockPagerAdapter stockPagerAdapter) {
+        this.stockPagerAdapter = stockPagerAdapter;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -100,6 +109,15 @@ public class StockCostBasisFragment extends Fragment {
                 args.getBoolean(TARGET_LESS_THAN_EQUAL),
                 args.getDouble(TARGET_PE),
                 args.getDouble(CUR_PE));
+
+        final String symbol = args.getString(SYMBOL);
+        final LayoutInflater finalLayoutInflater = inflater;
+        warningView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BuyDialog.create(view.getContext(), finalLayoutInflater , symbol, stockPagerAdapter);
+            }
+        });
 
         return rootView;
     }

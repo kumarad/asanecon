@@ -2,6 +2,7 @@ package com.techan.activities.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -14,17 +15,18 @@ import com.techan.custom.Util;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 
+import java.util.zip.Inflater;
+
 public class BuyDialog {
 
-    public static void create(final Activity parentActivity, final String symbol, final StockPagerAdapter stockPagerAdapter) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
+    public static void create(final Context context, final LayoutInflater inflater, final String symbol, final StockPagerAdapter stockPagerAdapter) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle("Add purchase info");
 
         // Get layout inflater
-        LayoutInflater inflater = parentActivity.getLayoutInflater();
         final View view = inflater.inflate(R.layout.set_buy_price, null);
 
-        final SymbolProfile profile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), symbol);
+        final SymbolProfile profile = ProfileManager.getSymbolData(context, symbol);
         final EditText buyPriceText = (EditText)view.findViewById(R.id.set_buy_price);
         if(profile.buyPrice != null) {
             buyPriceText.setText(Double.toString(profile.buyPrice));
@@ -42,13 +44,13 @@ public class BuyDialog {
         alertDialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                doAdd(parentActivity, profile, buyPriceText, shareCountText, stockPagerAdapter);
+                doAdd(context, profile, buyPriceText, shareCountText, stockPagerAdapter);
             }
         });
         alertDialog.setNegativeButton("Clear", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                doClear(parentActivity, profile, stockPagerAdapter);
+                doClear(context, profile, stockPagerAdapter);
             }
         });
 
@@ -56,7 +58,7 @@ public class BuyDialog {
 
     }
 
-    private static void doAdd(Activity activity, SymbolProfile profile, EditText buyPriceText, EditText shareCountText, StockPagerAdapter stockPagerAdapter) {
+    private static void doAdd(Context context, SymbolProfile profile, EditText buyPriceText, EditText shareCountText, StockPagerAdapter stockPagerAdapter) {
         boolean showStopLossToast = false;
         String buyPriceStr = buyPriceText.getText().toString();
         String shareCountStr = shareCountText.getText().toString();
@@ -98,11 +100,11 @@ public class BuyDialog {
         stockPagerAdapter.updateCostBasisFragment(profile);
 
         if(showStopLossToast) {
-            Util.showErrorToast(activity, "Stop loss information has been reset. Please update.");
+            Util.showErrorToast(context, "Stop loss information has been reset. Please update.");
         }
     }
 
-    private static void doClear(Activity activity, SymbolProfile profile, StockPagerAdapter stockPagerAdapter) {
+    private static void doClear(Context context, SymbolProfile profile, StockPagerAdapter stockPagerAdapter) {
         boolean showStopLossToast = false;
         if(profile.stopLossPercent != null) {
             showStopLossToast = true;
@@ -119,6 +121,6 @@ public class BuyDialog {
         stockPagerAdapter.updateCostBasisFragment(profile);
 
         if(showStopLossToast)
-            Util.showErrorToast(activity, "Stop loss information has been reset. Please update.");
+            Util.showErrorToast(context, "Stop loss information has been reset. Please update.");
     }
 }

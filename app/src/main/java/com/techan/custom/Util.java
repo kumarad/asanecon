@@ -162,8 +162,8 @@ public class Util {
     }
 
     // Provides feedback in a small pop up black window.
-    public static void showErrorToast(Activity activity, String error) {
-        Toast.makeText(activity, error, Toast.LENGTH_LONG).show();
+    public static void showErrorToast(Context context, String error) {
+        Toast.makeText(context, error, Toast.LENGTH_LONG).show();
     }
 
     public static ConnectionStatus isOnline(Context ctx) {
