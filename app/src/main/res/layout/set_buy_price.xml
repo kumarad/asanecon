@@ -8,8 +8,7 @@
     <TextView
             android:id="@+id/buy_divider"
             android:layout_width="fill_parent"
-            android:layout_height="10dip"
-            />
+            android:layout_height="10dp"/>
 
 
     <LinearLayout
@@ -18,7 +17,9 @@
             android:weightSum="1.0"
             android:layout_below="@id/buy_divider"
             android:id="@+id/buy_price_row"
-            >
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+        >
 
         <TextView
                 android:id="@+id/buy_price"
@@ -44,7 +45,9 @@
             android:weightSum="1.0"
             android:layout_below="@id/buy_price_row"
             android:id="@+id/share_count_row"
-            >
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+        >
 
         <TextView
                 android:id="@+id/share_count"

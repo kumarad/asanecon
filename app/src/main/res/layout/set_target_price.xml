@@ -18,7 +18,9 @@
             android:weightSum="1.0"
             android:layout_below="@id/target_divider"
             android:id="@+id/target_price_row"
-            >
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+        >
 
         <TextView
                 android:id="@+id/target_price"

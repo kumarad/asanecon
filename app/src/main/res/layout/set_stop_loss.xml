@@ -9,6 +9,8 @@
             android:layout_width="fill_parent"
             android:layout_height="150sp"
             android:weightSum="1.0"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:id="@+id/edit_stop_loss_percent"
             >
 
@@ -42,7 +44,9 @@
         android:id="@+id/dpText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Date:"
+        android:text="Purchase Date:"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_below="@id/date_divider"
         />
 
