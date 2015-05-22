@@ -1,6 +1,6 @@
 package com.techan.activities.fragments;
 
-import android.app.ListFragment;
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -12,12 +12,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.techan.R;
@@ -28,6 +30,7 @@ import com.techan.activities.dialogs.AddDialog;
 import com.techan.activities.dialogs.DeleteAllStocksDialog;
 import com.techan.activities.dialogs.DeletePortfolioDialog;
 import com.techan.contentProvider.StockContentProvider;
+import com.techan.custom.ISwipeRefreshDelegate;
 import com.techan.custom.StockCursorAdapter;
 import com.techan.database.StocksTable;
 import com.techan.profile.Portfolio;
@@ -35,13 +38,14 @@ import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.ContentValuesFactory;
 import com.techan.stockDownload.RefreshTask;
+import com.techan.thirdparty.EmptyViewSwipeRefreshLayout;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-public class StockListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class StockListFragment extends Fragment implements ISwipeRefreshDelegate, LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
     /////////////////////
     // Construction
@@ -51,12 +55,32 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
     // Maps columns from a cursor to TextViews or ImageViews defined in an XML file.
     private StockCursorAdapter adapter;
     private String portfolioName;
+    protected EmptyViewSwipeRefreshLayout swipeView;
+    protected StockListFragment me = this;
+    protected View rootView;
+
+    protected ListView listView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.stock_list, container, false);
         setHasOptionsMenu(true);
         portfolioName = this.getArguments().getString(HomeActivity.PORTFOLIO);
-        return inflater.inflate(R.layout.stock_list, container, false);
+
+
+
+        swipeView = (EmptyViewSwipeRefreshLayout)rootView.findViewById(R.id.stockListNonEmptySwipeLayout);
+        swipeView.setSwipeableChildren(R.id.stockListScrollView, R.id.stockListView);
+        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeView.setRefreshing(true);
+                (new RefreshTask(getActivity(), getActivity().getContentResolver(), false, me)).download();
+            }
+        });
+
+
+        return rootView;
     }
 
     @Override
@@ -64,7 +88,11 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
         super.onActivityCreated(savedInstanceState);
 
         // sets the gap between each item in the list.
-        this.getListView().setDividerHeight(2);
+        listView = (ListView)rootView.findViewById(R.id.stockListView);
+        listView.setDividerHeight(2);
+
+        listView.setEmptyView(rootView.findViewById(R.id.stockListEmptyText));
+        listView.setOnItemClickListener(this);
 
         // Check to see if profile data needs to be loaded into db.
         loadFromProfile();
@@ -74,7 +102,7 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
 
         // Registers a context menu to be shown for the given view.
         // getListView() gets the activity's list view widget.
-        registerForContextMenu(getListView());
+        //registerForContextMenu(listView);
 
         //ProfileManager.forceDelete(this);
         PreferenceManager.setDefaultValues(getActivity(), R.xml.settings, false);
@@ -107,7 +135,7 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
         int[] to = new int[] { R.id.listSymbol, R.id.listPrice, R.id.listChange};
         adapter = new StockCursorAdapter(getActivity(), R.layout.stock_row, null, from, to, 0);
 
-        setListAdapter(adapter);
+        listView.setAdapter(adapter);
 
         // Update from the network.
         (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
@@ -203,9 +231,6 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
             case R.id.insert:
                 AddDialog.create(this, portfolioName, getLoaderManager());
                 return true;
-            case R.id.refresh:
-                (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
-                return true;
             case R.id.settings:
                 settings();
                 return true;
@@ -241,9 +266,8 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
     // List Item Click Response
     /////////////////////////////////////////////////////////////////////
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // the id is the id of the cursor row which is _id from the database by convention.
-        super.onListItemClick(l,v, position, id);
 
         // Create an intent. Like an action.
         Intent i = new Intent(getActivity(), StockDetailFragmentActivity.class);
@@ -265,6 +289,13 @@ public class StockListFragment extends ListFragment implements LoaderManager.Loa
         // A negative value (RESULT_OK) is invoked which causes startActivity to get called.
         // Nothing special to do here.
         super.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    @Override
+    public void done() {
+        if(swipeView.isRefreshing()) {
+            swipeView.setRefreshing(false);
+        }
     }
 
 }

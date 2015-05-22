@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import com.techan.activities.SettingsActivity;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.ConnectionStatus;
+import com.techan.custom.ISwipeRefreshDelegate;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
 import com.techan.profile.ProfileManager;
@@ -43,6 +44,12 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
     }
 
     final Map<String, DownloadInfo> downloadInfoMap = new HashMap<>();
+    private ISwipeRefreshDelegate delegate = null;
+
+    public RefreshTask(Context ctx, ContentResolver contentResolver, boolean autoRefresh, ISwipeRefreshDelegate delegate) {
+        this(ctx, contentResolver, autoRefresh);
+        this.delegate = delegate;
+    }
 
     // Refresh all.
     public RefreshTask(Context ctx, ContentResolver contentResolver, boolean autoRefresh) {
@@ -170,9 +177,12 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
             action.execute();
             action = null;
         }
+
+        if(delegate != null)
+            delegate.done();
     }
 
-    // Used when we should only be doing stuff on the wiki network. Auto refresh etc uses this.
+    // Used when we should only be doing stuff on the wifi network. Auto refresh etc uses this.
     public void download() {
         if(autoRefresh) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -191,6 +201,10 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
 
         if(symbols.size() != 0) {
             execute();
+        } else {
+            if(delegate != null) {
+                delegate.done();
+            }
         }
     }
 }

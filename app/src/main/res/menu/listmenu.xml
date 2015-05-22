@@ -8,15 +8,7 @@
             android:icon="@drawable/ic_menu_add"
             >
     </item>
-
-    <item
-            android:id="@+id/refresh"
-            android:showAsAction="ifRoom"
-            android:title="Refresh"
-            android:icon="@drawable/ic_menu_refresh"
-            >
-    </item>
-
+    
     <item
             android:id="@+id/settings"
             android:showAsAction="collapseActionView"
