@@ -50,7 +50,6 @@ public class AddDialog {
         });
 
         alertDialog.create().show();
-
     }
 
     private static void doAdd(StockListFragment stockListFragment, View view, String portfolioName, LoaderManager loaderManager) {

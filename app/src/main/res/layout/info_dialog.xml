@@ -16,14 +16,17 @@
         />
 
     <TextView
-        android:id="@+id/info_dialog_Ack"
+        android:id="@+id/info_dialog_ack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginEnd="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/blue"
+        android:textColor="#33B5E5"
         android:text="OK"
         />
 </LinearLayout>

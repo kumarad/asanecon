@@ -43,11 +43,11 @@
                                 android:id="@+id/highLowAlert"
                                 android:layout_width="0dp"
                                 android:layout_weight=".2"
-                                android:layout_height="10dp"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:layout_marginRight="3dp"
                                 android:textColor="#FFFFFFFF"
-                                android:textSize="8sp"
+                                android:textSize="10sp"
                                 android:background="@drawable/rounded_edges"/>
 
                 </LinearLayout>
@@ -96,11 +96,11 @@
                                 android:id="@+id/movAvg50Alert"
                                 android:layout_width="0dp"
                                 android:layout_weight=".2"
-                                android:layout_height="10dp"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:layout_marginRight="3dp"
                                 android:textColor="#FFFFFFFF"
-                                android:textSize="8sp"
+                                android:textSize="10sp"
                                 android:background="@drawable/rounded_edges"/>
 
                 </LinearLayout>
@@ -123,11 +123,11 @@
                                 android:id="@+id/mov200AvgAlert"
                                 android:layout_width="0dp"
                                 android:layout_weight=".2"
-                                android:layout_height="10dp"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:layout_marginRight="3dp"
                                 android:textColor="#FFFFFFFF"
-                                android:textSize="8sp"
+                                android:textSize="10sp"
                                 android:background="@drawable/rounded_edges"/>
 
             </LinearLayout>
@@ -159,11 +159,11 @@
                                 android:id="@+id/upTrendAlert"
                                 android:layout_width="0dp"
                                 android:layout_weight=".2"
-                                android:layout_height="10dp"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:layout_marginRight="3dp"
                                 android:textColor="#FFFFFFFF"
-                                android:textSize="8sp"
+                                android:textSize="10sp"
                                 android:background="@drawable/rounded_edges"/>
 
                 </LinearLayout>
@@ -177,7 +177,7 @@
                         custom:offset="3dp"
                         custom:textSize="7sp"
                         style="@style/Widget.ProgressBar.RegularProgressBar"
-                        android:layout_below="@id/upTrendLabelAlertRow"/>
+                        />
 
         </LinearLayout>
 
@@ -222,11 +222,11 @@
                                 android:id="@+id/volAlert"
                                 android:layout_width="0dp"
                                 android:layout_weight=".2"
-                                android:layout_height="10dp"
+                                android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:layout_marginRight="3dp"
                                 android:textColor="#FFFFFFFF"
-                                android:textSize="8sp"
+                                android:textSize="10sp"
                                 android:background="@drawable/rounded_edges"/>
                 </LinearLayout>
 
@@ -249,11 +249,11 @@
                     android:id="@+id/pegAlert"
                     android:layout_width="0dp"
                     android:layout_weight=".2"
-                    android:layout_height="10dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:layout_marginRight="3dp"
                     android:textColor="#FFFFFFFF"
-                    android:textSize="8sp"
+                    android:textSize="10sp"
                     android:background="@drawable/rounded_edges"/>
 
         </LinearLayout>

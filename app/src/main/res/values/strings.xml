@@ -20,9 +20,10 @@
     <string name="distribution_light">The stock is experiencing light trading volume on an up day. Indicates its being sold by the big money managers.</string>
     <string name="breakout">The stock has hit its highest closing price in the last 60 days. Indicates a possible positive trend change.</string>
     <string name="downside">The stock has hit its lowest price in the last 90 days. Indicates a possible negative trend change.</string>
-    <string name="bear_trend">The stock is trading above its 200 day moving average. Signals a possible bull trend.</string>
-    <string name="bull_trend">The stock is trading below its 200 day moving average. Signals a possible bear trend.</string>
+    <string name="bull_trend">The stock is trading above its 200 day moving average. Signals a possible bull trend.</string>
+    <string name="bear_trend">The stock is trading below its 200 day moving average. Signals a possible bear trend.</string>
     <string name="up_trend">The stocks closing price has increased for 10 straight days. Indicates a possible positive breakout.</string>
     <string name="high_valuation">A PEG value greater than 2 signals a high valuation.</string>
     <string name="trailing_stop_loss">The stop loss defines the maximum percentage loss that is acceptable before a stock should be sold. A trailing stop loss protects gains by triggering when a stock closes the specified percentage below its highest price.</string>
+    <string name="down_price_action">The stock is trading below its 50 day moving average indicating a momentum shift towards a bear trend.</string>
 </resources>
