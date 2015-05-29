@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.techan.R;
 import com.techan.activities.dialogs.InfoDialog;
+import com.techan.custom.Util;
 import com.techan.progressbar.LimitProgressBar;
 import com.techan.progressbar.SaundProgressBar;
 
@@ -32,6 +33,7 @@ public class StockTrendFragment extends Fragment {
         Bundle args = getArguments();
 
         double curPrice = args.getDouble(CUR_PRICE);
+        curPrice = Util.roundTwoDecimals(curPrice);
 
         handleHighLowSection(rootView, inflater, curPrice, args.getDouble(HIGH_60_DAY), args.getDouble(LOW_90_DAY));
         handleMovingAverages(rootView, inflater, curPrice, args.getDouble(MOV_50_VAL), args.getDouble(MOV_200_VAL));
@@ -44,9 +46,11 @@ public class StockTrendFragment extends Fragment {
 
     protected void handleHighLowSection(View rootView, final LayoutInflater inflater, double curPrice, double high60Day, double low90Day) {
         TextView high60DayView = (TextView) rootView.findViewById(R.id.high60Day);
+        high60Day = Util.roundTwoDecimals(high60Day);
         high60DayView.setText("60 day high: " + Double.toString(high60Day));
 
         TextView low90DayView = (TextView) rootView.findViewById(R.id.low90Day);
+        low90Day = Util.roundTwoDecimals(low90Day);
         low90DayView.setText("90 day low: " + Double.toString(low90Day));
 
         LimitProgressBar highLowBar = (LimitProgressBar) rootView.findViewById(R.id.highLowBar);
@@ -66,9 +70,11 @@ public class StockTrendFragment extends Fragment {
 
     protected void handleMovingAverages(View rootView, final LayoutInflater inflater, double curPrice, double mov50Avg, double mov200Avg) {
         TextView mov50AvgView = (TextView) rootView.findViewById(R.id.movAvg50);
+        mov50Avg = Util.roundTwoDecimals(mov50Avg);
         mov50AvgView.setText("50 day moving average: " + Double.toString(mov50Avg));
 
         TextView mov200AvgView = (TextView) rootView.findViewById(R.id.movAvg200);
+        mov200Avg = Util.roundTwoDecimals(mov200Avg);
         mov200AvgView.setText("200 day moving average: " + Double.toString(mov200Avg));
 
         LimitProgressBar movAvgBar = (LimitProgressBar) rootView.findViewById(R.id.movAvgBar);

@@ -92,7 +92,9 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         Util.showChange(changeView, change, price, null);
 
         double low = stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_DAYS_LOW));
+        low = Util.roundTwoDecimals(low);
         double high = stockCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_DAYS_HIGH));
+        high = Util.roundTwoDecimals(high);
 
         TextView lowView = (TextView) this.findViewById(R.id.detailLow);
         lowView.setText(Double.toString(low));

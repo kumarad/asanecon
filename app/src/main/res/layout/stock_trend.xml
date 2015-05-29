@@ -25,32 +25,26 @@
                         style="@style/Widget.ProgressBar.RegularProgressBar"
                         android:layout_marginBottom="5dp"/>
 
-                <LinearLayout
+                <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="1.0"
                         android:id="@+id/lowAlertRow"
                         android:layout_marginLeft="15dp"
                         android:layout_below="@id/highLowBar">
 
                         <TextView
                                 android:id="@+id/low90Day"
-                                android:layout_width="0dp"
-                                android:layout_weight=".7"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"/>
 
                         <TextView
                                 android:id="@+id/highLowAlert"
-                                android:layout_width="0dp"
-                                android:layout_weight=".2"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:layout_marginRight="3dp"
-                                android:textColor="#FFFFFFFF"
-                                android:textSize="10sp"
-                                android:background="@drawable/rounded_edges"/>
+                                android:layout_alignParentEnd="true"
+                                style="@style/stockAlert"/>
 
-                </LinearLayout>
+                </RelativeLayout>
 
                 <TextView
                         android:id="@+id/high60Day"
@@ -78,59 +72,47 @@
                         style="@style/Widget.ProgressBar.RegularProgressBar"
                         android:layout_marginBottom="5dp"/>
 
-                <LinearLayout
+                <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="1.0"
                         android:id="@+id/mov50AvgAlertRow"
                         android:layout_below="@id/movAvgBar">
 
                         <TextView
                                 android:id="@+id/movAvg50"
-                                android:layout_width="0dp"
-                                android:layout_weight=".7"
+                                android:layout_width="wrap_content"
                                 android:layout_marginLeft="15dp"
                                 android:layout_height="wrap_content"/>
 
                         <TextView
                                 android:id="@+id/movAvg50Alert"
-                                android:layout_width="0dp"
-                                android:layout_weight=".2"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:layout_marginRight="3dp"
-                                android:textColor="#FFFFFFFF"
-                                android:textSize="10sp"
-                                android:background="@drawable/rounded_edges"/>
+                                android:layout_alignParentEnd="true"
+                                style="@style/stockAlert"/>
 
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
+                <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="1.0"
                         android:id="@+id/mov200AvgAlertRow"
                         android:layout_below="@id/mov50AvgAlertRow">
 
                         <TextView
                                 android:id="@+id/movAvg200"
-                                android:layout_width="0dp"
-                                android:layout_weight=".7"
+                                android:layout_width="wrap_content"
                                 android:layout_marginLeft="15dp"
                                 android:layout_height="wrap_content"/>
 
                         <TextView
                                 android:id="@+id/mov200AvgAlert"
-                                android:layout_width="0dp"
-                                android:layout_weight=".2"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:layout_marginRight="3dp"
-                                android:textColor="#FFFFFFFF"
-                                android:textSize="10sp"
-                                android:background="@drawable/rounded_edges"/>
+                                android:layout_alignParentEnd="true"
+                                style="@style/stockAlert"/>
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </RelativeLayout>
 
@@ -140,33 +122,27 @@
             android:id="@+id/upTrendCountRow"
             style="@style/stockCell">
 
-                <LinearLayout
+                <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="1.0"
                         android:layout_marginRight="5dp"
                         android:layout_marginBottom="10dp"
                         android:id="@+id/upTrendLabelAlertRow">
 
                         <TextView
                                 android:id="@+id/upTrendCount"
-                                android:layout_width="0dp"
-                                android:layout_weight=".7"
+                                android:layout_width="wrap_content"
                                 android:layout_marginLeft="15dp"
                                 android:layout_height="wrap_content"/>
 
                         <TextView
                                 android:id="@+id/upTrendAlert"
-                                android:layout_width="0dp"
-                                android:layout_weight=".2"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:layout_marginRight="3dp"
-                                android:textColor="#FFFFFFFF"
-                                android:textSize="10sp"
-                                android:background="@drawable/rounded_edges"/>
+                                android:layout_alignParentEnd="true"
+                                style="@style/stockAlert"/>
 
-                </LinearLayout>
+                </RelativeLayout>
 
                 <com.techan.progressbar.SaundProgressBar
                         android:id="@+id/upTrendBar"
@@ -205,58 +181,45 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"/>
 
-                <LinearLayout
+                <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="1.0"
                         android:layout_marginLeft="15dp"
                         android:id="@+id/volRow">
 
                         <TextView
                                 android:id="@+id/volDetail"
-                                android:layout_width="0dp"
-                                android:layout_weight=".7"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"/>
 
                         <TextView
                                 android:id="@+id/volAlert"
-                                android:layout_width="0dp"
-                                android:layout_weight=".2"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:layout_marginRight="3dp"
-                                android:textColor="#FFFFFFFF"
-                                android:textSize="10sp"
-                                android:background="@drawable/rounded_edges"/>
-                </LinearLayout>
+                                android:layout_alignParentEnd="true"
+                                style="@style/stockAlert"/>
+                </RelativeLayout>
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
                 android:layout_below="@id/avgCell"
-                android:weightSum="1.0"
                 android:id="@+id/pegRow"
                 style="@style/stockCell">
 
             <TextView
                 android:id="@+id/pegDetail"
-                android:layout_width="0dp"
-                android:layout_weight=".7"
+                android:layout_width="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_height="wrap_content"/>
 
             <TextView
                     android:id="@+id/pegAlert"
-                    android:layout_width="0dp"
-                    android:layout_weight=".2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="10sp"
-                    android:background="@drawable/rounded_edges"/>
-
-        </LinearLayout>
+                    android:layout_alignParentEnd="true"
+                    style="@style/stockAlert"/>
+        </RelativeLayout>
 
     </RelativeLayout>
 

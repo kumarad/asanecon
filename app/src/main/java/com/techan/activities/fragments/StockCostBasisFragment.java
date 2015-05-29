@@ -135,18 +135,23 @@ public class StockCostBasisFragment extends Fragment {
                curPE);
     }
 
-    protected void update(final Double curPrice,
-                       final Double buyPrice,
-                       final String slTrackingStartDate,
-                       final Integer stockCount,
-                       final Integer slPercent,
-                       final Double highPrice,
-                       final Double targetPrice,
-                       final Boolean lessThanEqual,
-                       final Double targetPE,
-                       final Double curPE) {
+    protected void update(Double curPrice,
+                       Double buyPrice,
+                       String slTrackingStartDate,
+                       Integer stockCount,
+                       Integer slPercent,
+                       Double highPrice,
+                       Double targetPrice,
+                       Boolean lessThanEqual,
+                       Double targetPE,
+                       Double curPE) {
+        curPrice = Util.roundTwoDecimals(curPrice);
+        highPrice = Util.roundTwoDecimals(highPrice);
+        targetPrice = Util.roundTwoDecimals(targetPrice);
+
         boolean warningSet = false;
         if((buyPrice != null && buyPrice != 0)) {
+            buyPrice = Util.roundTwoDecimals(buyPrice);
             costValView.setText(Double.toString(buyPrice));
             clearWarning();
         } else {

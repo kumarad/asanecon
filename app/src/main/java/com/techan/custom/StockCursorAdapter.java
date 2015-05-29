@@ -48,6 +48,7 @@ public class StockCursorAdapter extends SimpleCursorAdapter {
         boolean showCostBasis = prefs.getBoolean(SettingsActivity.SHOW_COST_BASIS, false);
 
         Double price = c.getDouble(2);
+        price = Util.roundTwoDecimals(price);
         Double change = c.getDouble(3);
         if(!showCostBasis) {
             priceView.setText(Double.toString(price));

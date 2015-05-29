@@ -57,4 +57,13 @@ limitations under the License.
         <item name="android:background">@drawable/rounded_cell</item>
     </style>
 
+    <style name="stockAlert">
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:background">@drawable/rounded_edges</item>
+        <item name="android:layout_marginBottom">3dp</item>
+    </style>
+
 </resources>
