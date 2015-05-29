@@ -145,9 +145,14 @@ public class StockCostBasisFragment extends Fragment {
                        Boolean lessThanEqual,
                        Double targetPE,
                        Double curPE) {
-        curPrice = Util.roundTwoDecimals(curPrice);
-        highPrice = Util.roundTwoDecimals(highPrice);
-        targetPrice = Util.roundTwoDecimals(targetPrice);
+        if(curPrice != null)
+            curPrice = Util.roundTwoDecimals(curPrice);
+
+        if(highPrice != null)
+            highPrice = Util.roundTwoDecimals(highPrice);
+        
+        if(targetPrice != null)
+            targetPrice = Util.roundTwoDecimals(targetPrice);
 
         boolean warningSet = false;
         if((buyPrice != null && buyPrice != 0)) {
