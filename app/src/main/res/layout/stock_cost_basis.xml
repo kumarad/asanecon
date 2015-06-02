@@ -29,30 +29,29 @@
                 android:textStyle="bold"/>
 
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="40sp"
-                android:weightSum="1.0"
+                android:layout_height="wrap_content"
                 android:id="@+id/costBasisChangeRow">
 
                 <TextView
                     android:id="@+id/costBasisChange"
-                    android:layout_width="0dp"
-                    android:layout_weight=".3"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="25sp"
                     android:layout_marginLeft="15dp"/>
 
                 <TextView
                     android:id="@+id/costBasisChangeVal"
-                    android:layout_width="0dp"
-                    android:layout_weight=".7"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="25sp"
-                    android:layout_marginRight="15dp"
-                    android:gravity="end"/>
+                    android:layout_alignParentEnd="true"
+                    android:gravity="end"
+                    android:layout_toEndOf="@id/costBasisChange"
+                    android:layout_marginRight="15dp"/>
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                     android:layout_width="fill_parent"

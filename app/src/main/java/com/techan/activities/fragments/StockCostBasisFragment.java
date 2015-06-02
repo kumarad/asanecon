@@ -35,7 +35,7 @@ public class StockCostBasisFragment extends Fragment {
 
     TextView costBasisView;
 
-    LinearLayout costBasisChangeRow;
+    RelativeLayout costBasisChangeRow;
     TextView costBasisChangeView;
     TextView costBasisChangeValView;
 
@@ -70,7 +70,7 @@ public class StockCostBasisFragment extends Fragment {
 
         warningView = (TextView)rootView.findViewById(R.id.costWarning);
         costBasisView = (TextView)rootView.findViewById(R.id.costBasisVal);
-        costBasisChangeRow = (LinearLayout)rootView.findViewById(R.id.costBasisChangeRow);
+        costBasisChangeRow = (RelativeLayout)rootView.findViewById(R.id.costBasisChangeRow);
         costBasisChangeView = (TextView)rootView.findViewById(R.id.costBasisChange);
         costBasisChangeValView = (TextView)rootView.findViewById(R.id.costBasisChangeVal);
 
@@ -150,7 +150,7 @@ public class StockCostBasisFragment extends Fragment {
 
         if(highPrice != null)
             highPrice = Util.roundTwoDecimals(highPrice);
-        
+
         if(targetPrice != null)
             targetPrice = Util.roundTwoDecimals(targetPrice);
 
