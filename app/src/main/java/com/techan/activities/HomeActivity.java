@@ -32,10 +32,10 @@ import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class HomeActivity extends Activity {
     public static String PORTFOLIO = "PORTFOLIO";
+    public static String APP_START_UP = "APP_START_UP";
     public static String ALL_STOCKS = "All stocks";
     public static String ADD_PORTFOLIO = "Add portfolio";
     private DrawerLayout drawerLayout;
@@ -62,7 +62,7 @@ public class HomeActivity extends Activity {
 
         loadDrawerItems();
         setupDrawer();
-        displayFragment(0);
+        displayFragment(0, true);
     }
 
     private void loadDrawerItems() {
@@ -119,12 +119,12 @@ public class HomeActivity extends Activity {
         drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                displayFragment(position);
+                displayFragment(position, false);
             }
         });
     }
 
-    private void displayFragment(int position) {
+    private void displayFragment(int position, boolean appStartup) {
         if(menuItems.get(position).getText().equals(ADD_PORTFOLIO)) {
             AddPortfolio.create(this);
         } else {
@@ -136,6 +136,7 @@ public class HomeActivity extends Activity {
 
             Bundle bundle = new Bundle();
             bundle.putString(PORTFOLIO, portfolioName);
+            bundle.putBoolean(APP_START_UP, appStartup);
             fragment.setArguments(bundle);
 
             FragmentManager fragmentManager = getFragmentManager();

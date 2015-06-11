@@ -58,6 +58,7 @@ public class StockListFragment extends Fragment implements ISwipeRefreshDelegate
     protected EmptyViewSwipeRefreshLayout swipeView;
     protected StockListFragment me = this;
     protected View rootView;
+    boolean appStartup = false;
 
     protected ListView listView;
 
@@ -66,8 +67,7 @@ public class StockListFragment extends Fragment implements ISwipeRefreshDelegate
         rootView = inflater.inflate(R.layout.stock_list, container, false);
         setHasOptionsMenu(true);
         portfolioName = this.getArguments().getString(HomeActivity.PORTFOLIO);
-
-
+        appStartup = this.getArguments().getBoolean(HomeActivity.APP_START_UP);
 
         swipeView = (EmptyViewSwipeRefreshLayout)rootView.findViewById(R.id.stockListNonEmptySwipeLayout);
         swipeView.setSwipeableChildren(R.id.stockListScrollView, R.id.stockListView);
@@ -138,7 +138,9 @@ public class StockListFragment extends Fragment implements ISwipeRefreshDelegate
         listView.setAdapter(adapter);
 
         // Update from the network.
-        (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
+        if(appStartup) {
+            (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
+        }
     }
 
     /////////////////////
