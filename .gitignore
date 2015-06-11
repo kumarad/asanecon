@@ -27,6 +27,7 @@ local.properties
 .idea/tasks.xml
 .idea/datasources.xml
 .idea/dataSources.ids
+.idea/scopes/
 
 app/src/main/assets/crashlytics-build.properties
 app/manifest-merger-release-report.txt
