@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.crashlytics.android.Crashlytics;
@@ -23,6 +22,7 @@ import com.techan.activities.drawer.DrawerMenuAddItem;
 import com.techan.activities.drawer.DrawerMenuItem;
 import com.techan.activities.drawer.DrawerMenuListAdapter;
 import com.techan.activities.drawer.DrawerSubMenuItem;
+import com.techan.activities.drawer.IDrawerActivity;
 import com.techan.activities.drawer.IDrawerMenuItem;
 import com.techan.activities.fragments.StockListFragment;
 import com.techan.profile.Portfolio;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends Activity implements IDrawerActivity {
     public static String PORTFOLIO = "PORTFOLIO";
     public static String APP_START_UP = "APP_START_UP";
     public static String ALL_STOCKS = "All stocks";
@@ -129,6 +129,7 @@ public class HomeActivity extends Activity {
             AddPortfolio.create(this);
         } else {
             StockListFragment fragment = new StockListFragment();
+            fragment.setParentActivity(this);
             String portfolioName = menuItems.get(position).getText();
 
             actionBar.setTitle(portfolioName);
@@ -187,6 +188,7 @@ public class HomeActivity extends Activity {
         moveTaskToBack(true);
     }
 
+    @Override
     public void resetDrawer() {
         resetDrawer = true;
     }

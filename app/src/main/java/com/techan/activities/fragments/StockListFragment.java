@@ -29,11 +29,12 @@ import com.techan.activities.StockDetailFragmentActivity;
 import com.techan.activities.dialogs.AddDialog;
 import com.techan.activities.dialogs.DeleteAllStocksDialog;
 import com.techan.activities.dialogs.DeletePortfolioDialog;
+import com.techan.activities.drawer.IDrawerActivity;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.ISwipeRefreshDelegate;
 import com.techan.custom.StockCursorAdapter;
+import com.techan.database.CursorUtil;
 import com.techan.database.StocksTable;
-import com.techan.profile.Portfolio;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.ContentValuesFactory;
@@ -41,9 +42,6 @@ import com.techan.stockDownload.RefreshTask;
 import com.techan.thirdparty.EmptyViewSwipeRefreshLayout;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
 
 public class StockListFragment extends Fragment implements ISwipeRefreshDelegate, LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
@@ -61,6 +59,7 @@ public class StockListFragment extends Fragment implements ISwipeRefreshDelegate
     boolean appStartup = false;
 
     protected ListView listView;
+    protected IDrawerActivity drawerActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -160,29 +159,7 @@ public class StockListFragment extends Fragment implements ISwipeRefreshDelegate
             return new CursorLoader(getActivity(), StockContentProvider.CONTENT_URI, projection,
                                     null, null, null);
         } else {
-            Set<String> symbols = Collections.emptySet();
-            Map<String, Portfolio> portfolios = ProfileManager.getPortfolios(getActivity());
-            for(Map.Entry<String, Portfolio> curPortfolioEntry : portfolios.entrySet()) {
-                if(curPortfolioEntry.getKey().equals(portfolioName)) {
-                    symbols = curPortfolioEntry.getValue().getSymbols();
-                    break;
-                }
-            }
-
-            int argcount = symbols.size(); // number of IN arguments
-            StringBuilder inList = new StringBuilder(argcount * 2);
-            for (int i = 0; i < argcount; i++) {
-                if (i > 0) inList.append(",");
-                inList.append("?");
-            }
-
-            // CONTENT_URI = "content://com.techan.contentprovider/stocks"
-            return new CursorLoader(getActivity(),
-                    StockContentProvider.CONTENT_URI,
-                    projection,
-                    "sym IN (" + inList.toString() + ")",
-                    symbols.toArray(new String[0]),
-                    null);
+           return CursorUtil.getCursorLoader(getActivity(), portfolioName, projection);
         }
     }
 
@@ -298,6 +275,19 @@ public class StockListFragment extends Fragment implements ISwipeRefreshDelegate
         if(swipeView.isRefreshing()) {
             swipeView.setRefreshing(false);
         }
+
+        if(drawerActivity != null) {
+            drawerActivity.resetDrawer();
+        }
+    }
+
+    public void setParentActivity(IDrawerActivity activity) {
+        drawerActivity = activity;
+    }
+
+    public void resetDrawer() {
+        if(drawerActivity != null)
+            drawerActivity.resetDrawer();
     }
 
 }
