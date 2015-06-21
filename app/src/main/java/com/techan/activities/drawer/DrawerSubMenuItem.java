@@ -43,12 +43,15 @@ public class DrawerSubMenuItem implements IDrawerMenuItem {
             TextView textView = (TextView) view.findViewById(R.id.menuSubItemText);
             textView.setText(text);
 
+            TextView changeView = (TextView) view.findViewById(R.id.menuSubItemSubText);
+            changeView.setText(Double.toString(overallChange) + "%");
+
             if(overallChange > 0) {
-                textView.setTextColor(Color.GREEN);
+                changeView.setTextColor(Color.GREEN);
             } else if(overallChange < 0) {
-                textView.setTextColor(Color.RED);
+                changeView.setTextColor(Color.RED);
             } else {
-                textView.setTextColor(Color.GRAY);
+                changeView.setVisibility(View.GONE);
             }
 
         }
