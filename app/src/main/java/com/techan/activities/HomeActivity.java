@@ -151,7 +151,7 @@ public class HomeActivity extends Activity implements IDrawerActivity {
         if(menuItems.get(position).getText() == null) {
             return;
         }
-        
+
         if(menuItems.get(position).getText().equals(ADD_PORTFOLIO)) {
             AddPortfolio.create(this);
         } else {
