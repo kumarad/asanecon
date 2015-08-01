@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +20,7 @@ import com.crashlytics.android.Crashlytics;
 import com.techan.R;
 import com.techan.activities.dialogs.AddPortfolio;
 import com.techan.activities.drawer.DrawerMenuAddItem;
+import com.techan.activities.drawer.DrawerMenuGoldItem;
 import com.techan.activities.drawer.DrawerMenuItem;
 import com.techan.activities.drawer.DrawerMenuListAdapter;
 import com.techan.activities.drawer.DrawerSubMenuItem;
@@ -47,6 +49,8 @@ public class HomeActivity extends Activity implements IDrawerActivity {
     private String actionBarTitle = null;
     private List<IDrawerMenuItem> menuItems = new ArrayList<>();
 
+    private boolean drawerSetup = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +67,30 @@ public class HomeActivity extends Activity implements IDrawerActivity {
         loadDrawerItems();
         setupDrawer();
         displayFragment(0, true);
+        drawerSetup = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(!drawerSetup) {
+            loadDrawerItems();
+            setupDrawer();
+            displayFragment(0, true);
+        } else {
+            drawerSetup = false;
+        }
     }
 
     private void loadDrawerItems() {
         menuItems.clear();
         menuItems.add(new DrawerMenuItem(ALL_STOCKS));
+
+        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SettingsActivity.ENABLE_GOLD_TRACKER, false)) {
+            menuItems.add(new DrawerMenuGoldItem());
+        }
+
         menuItems.add(new DrawerMenuAddItem(ADD_PORTFOLIO));
         Map<String, Portfolio> portfolios = ProfileManager.getPortfolios(this);
         for(String curPortfolioName : portfolios.keySet()) {
@@ -125,6 +148,10 @@ public class HomeActivity extends Activity implements IDrawerActivity {
     }
 
     private void displayFragment(int position, boolean appStartup) {
+        if(menuItems.get(position).getText() == null) {
+            return;
+        }
+        
         if(menuItems.get(position).getText().equals(ADD_PORTFOLIO)) {
             AddPortfolio.create(this);
         } else {

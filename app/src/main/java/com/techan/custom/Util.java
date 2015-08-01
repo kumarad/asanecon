@@ -80,7 +80,8 @@ public class Util {
         return Double.toString(d);
     }
 
-    public static SimpleDateFormat FORMATER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static SimpleDateFormat DATE_TIME_FORMATER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static SimpleDateFormat DATE_ONLY_FORMATER = new SimpleDateFormat("yyyy-MM-dd");
 
     public static String getCalStrFromNoTimeStr(String date) {
         return date + " 00:00:00";
@@ -113,12 +114,12 @@ public class Util {
 
     public static String getDateStrForDb(Calendar cal) {
         Date curDate = cal.getTime();
-        return Util.FORMATER.format(curDate);
+        return Util.DATE_TIME_FORMATER.format(curDate);
     }
 
     public static Calendar getCal(final String lastUpdate) {
         try {
-            Date date = FORMATER.parse(lastUpdate);
+            Date date = DATE_TIME_FORMATER.parse(lastUpdate);
             Calendar cal = new GregorianCalendar();
             cal.setTime(date);
             return cal;
@@ -126,6 +127,18 @@ public class Util {
             throw new RuntimeException("Exception parsing date from db.", e);
         }
     }
+
+    public static Calendar getCalForDateOnly(final String lastUpdate) {
+        try {
+            Date date = DATE_ONLY_FORMATER.parse(lastUpdate);
+            Calendar cal = new GregorianCalendar();
+            cal.setTime(date);
+            return cal;
+        } catch(ParseException e) {
+            throw new RuntimeException("Exception parsing date from db.", e);
+        }
+    }
+
 
     public static boolean isDateSame(String lastUpdate, Calendar curCal) {
         if(lastUpdate != null) {

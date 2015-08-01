@@ -3,11 +3,12 @@ package com.techan.activities.drawer;
 import android.view.View;
 
 public interface IDrawerMenuItem {
-    public static final Integer MENU_ITEM_TYPE_ID = 0;
-    public static final Integer MENU_SUB_ITEM_TYPE_ID = 1;
-    public static final Integer MENU_ADD_ITEM_TYPE_ID = 2;
+    Integer MENU_ITEM_TYPE_ID = 0;
+    Integer MENU_SUB_ITEM_TYPE_ID = 1;
+    Integer MENU_ADD_ITEM_TYPE_ID = 2;
+    Integer MENU_GOLD_ITEM_TYPE_ID = 3;
 
-    public static final Integer DRAWER_MENU_ITEM_TYPE_COUNT = 3;
+    Integer DRAWER_MENU_ITEM_TYPE_COUNT = 4;
 
     int getItemTypeId();
     int getLayoutId();

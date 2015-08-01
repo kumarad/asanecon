@@ -31,14 +31,15 @@
 
         </PreferenceCategory>
 
-    <!--<PreferenceCategory-->
-            <!--android:title="Notifications">-->
+    <PreferenceCategory
+            android:title="Miscellaneous">
 
-        <!--<SwitchPreference-->
-            <!--android:key="allNotifications"-->
-            <!--android:title="Notifications"-->
-            <!--android:defaultValue="false"-->
-            <!--/>-->
+        <SwitchPreference
+            android:key="goldTracker"
+            android:title="Gold Tracker"
+            android:summary="Enable gold price tracking."
+            android:defaultValue="false"
+            />
 
-    <!--</PreferenceCategory>-->
+    </PreferenceCategory>
 </PreferenceScreen>         

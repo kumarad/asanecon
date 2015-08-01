@@ -22,7 +22,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.squareup.otto.Subscribe;
 import com.techan.R;
+import com.techan.activities.BusService;
 import com.techan.activities.HomeActivity;
 import com.techan.activities.SettingsActivity;
 import com.techan.activities.StockDetailFragmentActivity;
@@ -31,7 +33,6 @@ import com.techan.activities.dialogs.DeleteAllStocksDialog;
 import com.techan.activities.dialogs.DeletePortfolioDialog;
 import com.techan.activities.drawer.IDrawerActivity;
 import com.techan.contentProvider.StockContentProvider;
-import com.techan.custom.ISwipeRefreshDelegate;
 import com.techan.custom.StockCursorAdapter;
 import com.techan.database.CursorUtil;
 import com.techan.database.StocksTable;
@@ -43,7 +44,7 @@ import com.techan.thirdparty.EmptyViewSwipeRefreshLayout;
 
 import java.util.Collection;
 
-public class StockListFragment extends Fragment implements ISwipeRefreshDelegate, LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
+public class StockListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
     /////////////////////
     // Construction
@@ -54,7 +55,6 @@ public class StockListFragment extends Fragment implements ISwipeRefreshDelegate
     private StockCursorAdapter adapter;
     private String portfolioName;
     protected EmptyViewSwipeRefreshLayout swipeView;
-    protected StockListFragment me = this;
     protected View rootView;
     boolean appStartup = false;
 
@@ -74,7 +74,7 @@ public class StockListFragment extends Fragment implements ISwipeRefreshDelegate
             @Override
             public void onRefresh() {
                 swipeView.setRefreshing(true);
-                (new RefreshTask(getActivity(), getActivity().getContentResolver(), false, me)).download();
+                (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
             }
         });
 
@@ -107,6 +107,31 @@ public class StockListFragment extends Fragment implements ISwipeRefreshDelegate
         PreferenceManager.setDefaultValues(getActivity(), R.xml.settings, false);
 
         SettingsActivity.activateAutoRefresh(getActivity());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        BusService.getInstance().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BusService.getInstance().unregister(this);
+    }
+
+    public static class RefreshCompleteEvent {}
+
+    @Subscribe
+    public void refreshComplete(RefreshCompleteEvent event) {
+        if(swipeView.isRefreshing()) {
+            swipeView.setRefreshing(false);
+        }
+
+        if(drawerActivity != null) {
+            drawerActivity.resetDrawer();
+        }
     }
 
     private void loadFromProfile() {
@@ -268,17 +293,6 @@ public class StockListFragment extends Fragment implements ISwipeRefreshDelegate
         // A negative value (RESULT_OK) is invoked which causes startActivity to get called.
         // Nothing special to do here.
         super.onActivityResult(requestCode, resultCode, intent);
-    }
-
-    @Override
-    public void done() {
-        if(swipeView.isRefreshing()) {
-            swipeView.setRefreshing(false);
-        }
-
-        if(drawerActivity != null) {
-            drawerActivity.resetDrawer();
-        }
     }
 
     public void setParentActivity(IDrawerActivity activity) {

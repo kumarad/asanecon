@@ -10,8 +10,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
@@ -23,6 +21,7 @@ public class SettingsActivity extends Activity {
     public static final String REFRESH_INTERVAL_KEY ="refreshInterval";
     public static final String REFRESH_WIFI_ONLY_KEY = "refreshWifiOnly";
     public static final String SHOW_COST_BASIS = "showCostBasis";
+    public static final String ENABLE_GOLD_TRACKER = "goldTracker";
     public static final int STOP_LOSS_DEFAULT = 25;
 
     @Override
@@ -60,7 +59,27 @@ public class SettingsActivity extends Activity {
             final SwitchPreference refreshPref = (SwitchPreference) getPreferenceManager().findPreference(AUTO_REFRESH_KEY);
             final ListPreference refreshPreferenceList = (ListPreference)getPreferenceManager().findPreference(REFRESH_INTERVAL_KEY);
             handleRefreshes(getActivity().getApplicationContext(), refreshPref, refreshPreferenceList);
+
+            final SwitchPreference goldTrackerPref = (SwitchPreference) getPreferenceManager().findPreference(ENABLE_GOLD_TRACKER);
+            handleGoldTracker(goldTrackerPref, getActivity().getApplicationContext());
         }
+    }
+
+    private static void handleGoldTracker(SwitchPreference goldTrackerPref, final Context context) {
+        goldTrackerPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if ((Boolean) o) {
+                    editor.putBoolean(ENABLE_GOLD_TRACKER, true);
+                } else {
+                    editor.putBoolean(ENABLE_GOLD_TRACKER, false);
+                }
+                editor.apply();
+                return true;
+            }
+        });
     }
 
     private static void handleRefreshes(final Context appContext, final SwitchPreference refreshPref,

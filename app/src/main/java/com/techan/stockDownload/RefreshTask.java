@@ -9,31 +9,39 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
+import com.squareup.otto.Subscribe;
+import com.techan.activities.BusService;
 import com.techan.activities.SettingsActivity;
+import com.techan.activities.fragments.StockListFragment;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.ConnectionStatus;
-import com.techan.custom.ISwipeRefreshDelegate;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
+import com.techan.memrepo.GoldRepo;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.actions.PostRefreshAction;
+import com.techan.stockDownload.retro.GoldDownloader;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 // Don't need to worry about thread safety when accessing the ContentProvider
 // because the SQLiteDatabase backing the content provider is thread safe!
 
 public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
 
-    final Context ctx;
-    final ContentResolver contentResolver;
-    final boolean autoRefresh;
+    Context ctx;
+    ContentResolver contentResolver;
+    boolean autoRefresh;
 
     final Calendar curCal;
     final String curDateStr;
 
     final List<String> symbols = new ArrayList<>();
+    final boolean shouldRefreshGold;
+    final AtomicBoolean refreshingGoldData = new AtomicBoolean(false);
+    final AtomicBoolean refreshingStockData = new AtomicBoolean(false);
 
     static class DownloadInfo {
         Uri uri;
@@ -44,18 +52,20 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
     }
 
     final Map<String, DownloadInfo> downloadInfoMap = new HashMap<>();
-    private ISwipeRefreshDelegate delegate = null;
 
-    public RefreshTask(Context ctx, ContentResolver contentResolver, boolean autoRefresh, ISwipeRefreshDelegate delegate) {
-        this(ctx, contentResolver, autoRefresh);
-        this.delegate = delegate;
-    }
-
-    // Refresh all.
-    public RefreshTask(Context ctx, ContentResolver contentResolver, boolean autoRefresh) {
+    private void initialize(Context ctx, ContentResolver contentResolver, boolean autoRefresh) {
+        BusService.getInstance().register(this);
+        this.refreshingStockData.set(false);
+        this.refreshingGoldData.set(false);
         this.ctx = ctx;
         this.contentResolver = contentResolver;
         this.autoRefresh = autoRefresh;
+    }
+
+    // Refresh everything.
+    public RefreshTask(Context ctx, ContentResolver contentResolver, boolean autoRefresh) {
+        initialize(ctx, contentResolver, autoRefresh);
+        shouldRefreshGold = true;
 
         String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_LAST_UPDATE, StocksTable.COLUMN_SL_HIGEST_PRICE, StocksTable.COLUMN_SL_LOWEST_PRICE};
         Cursor cursor = contentResolver.query(StockContentProvider.CONTENT_URI, projection, null, null, null);
@@ -89,9 +99,8 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
 
     // Refresh for particular stock.
     public RefreshTask(Context ctx, ContentResolver contentResolver, Uri uri, String symbol, boolean isAdd) {
-        this.ctx = ctx;
-        this.contentResolver = contentResolver;
-        this.autoRefresh = false;
+        initialize(ctx, contentResolver, false);
+        shouldRefreshGold = false;
 
         DownloadInfo info = new DownloadInfo();
 
@@ -164,6 +173,8 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
     @Override
     protected void onPostExecute(List<StockData> dataList) {
         if(isCancelled()) {
+            refreshingStockData.set(false);
+            endRefresh();
             return;
         }
 
@@ -178,32 +189,56 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
             action = null;
         }
 
-        if(delegate != null)
-            delegate.done();
+        refreshingStockData.set(false);
+        endRefresh();
+    }
+
+    @Subscribe
+    public void goldRefreshCompleted(GoldDownloader.GoldDownloaderComplete event) {
+        refreshingGoldData.set(false);
+        endRefresh();
+    }
+
+    public void endRefresh() {
+        if(!refreshingStockData.get() && !refreshingGoldData.get()) {
+            BusService.getInstance().post(new StockListFragment.RefreshCompleteEvent());
+            BusService.getInstance().unregister(this);
+        } // else one of the two hasn't compeleted wait for endRefresh to get called again.
     }
 
     // Used when we should only be doing stuff on the wifi network. Auto refresh etc uses this.
+    // Also used when loading the stock list fragment
     public void download() {
         if(autoRefresh) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
             boolean refreshWifiOnly = sharedPref.getBoolean(SettingsActivity.REFRESH_WIFI_ONLY_KEY, false);
             ConnectionStatus connStatus = Util.isOnline(ctx);
             if(connStatus == ConnectionStatus.OFFLINE) {
+                endRefresh();
                 return;
             }
 
             // We are online!
 
             if(refreshWifiOnly && connStatus != ConnectionStatus.ONLINE_WIFI) {
+                endRefresh();
                 return;
             }
         }
 
+        boolean kickedOffGoldRefresh = false;
+        if(shouldRefreshGold && PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean(SettingsActivity.ENABLE_GOLD_TRACKER, false)) {
+            kickedOffGoldRefresh = true;
+            refreshingGoldData.set(true);
+            GoldDownloader.get(GoldRepo.get().getLatestPriceDate());
+        }
+
         if(symbols.size() != 0) {
+            refreshingStockData.set(true);
             execute();
         } else {
-            if(delegate != null) {
-                delegate.done();
+            if(!kickedOffGoldRefresh) {
+                endRefresh();
             }
         }
     }

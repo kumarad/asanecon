@@ -11,6 +11,7 @@ public class CostBasisPostRefreshAction implements PostRefreshAction {
         this.stockPagerAdapter = stockPagerAdapter;
         this.profile = profile;
     }
+
     @Override
     public void execute() {
         stockPagerAdapter.updateCostBasisFragment(profile);

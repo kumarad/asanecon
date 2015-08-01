@@ -22,7 +22,7 @@ public class UtilTest {
         Calendar cal2 = (Calendar)curCal.clone();
 
         Date date1 = cal1.getTime();
-        String dateStr1 = Util.FORMATER.format(date1);
+        String dateStr1 = Util.DATE_TIME_FORMATER.format(date1);
 
         assertThat(Util.isDateSame(dateStr1, cal2), equalTo(true));
     }
@@ -35,7 +35,7 @@ public class UtilTest {
 
         cal1.add(Calendar.DAY_OF_MONTH,1);
         Date date1 = cal1.getTime();
-        String dateStr1 = Util.FORMATER.format(date1);
+        String dateStr1 = Util.DATE_TIME_FORMATER.format(date1);
 
         assertThat(!Util.isDateSame(dateStr1, cal2), equalTo(true));
     }

@@ -125,7 +125,7 @@ public class StopLossDialog {
             // Need to refresh historical data for this stock.
             RefreshTask rt = new RefreshTask(parentActivity, parentActivity.getContentResolver(), stockUri, profile.symbol, false);
             rt.addAction(new CostBasisPostRefreshAction(stockPagerAdapter, profile));
-            rt.execute();
+            rt.download();
         } else {
             // Start tracking stop loss from todays date.
             ContentValues values = ContentValuesFactory.createSlAddValuesSameDate(curPrice, profile.buyPrice);
