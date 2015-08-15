@@ -85,7 +85,6 @@ public class HomeActivity extends Activity implements IDrawerActivity {
         if(!drawerSetup) {
             loadDrawerItems();
             setupDrawer();
-            displayFragment(currentPosition, true);
         } else {
             drawerSetup = false;
         }

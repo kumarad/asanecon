@@ -299,13 +299,6 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
         startActivityForResult(i, ACTIVITY_EDIT);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        // A negative value (RESULT_OK) is invoked which causes startActivity to get called.
-        // Nothing special to do here.
-        super.onActivityResult(requestCode, resultCode, intent);
-    }
-
     public void setParentActivity(IDrawerActivity activity) {
         drawerActivity = activity;
     }
