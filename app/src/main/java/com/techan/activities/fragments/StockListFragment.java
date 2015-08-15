@@ -59,6 +59,8 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
     boolean appStartup = false;
 
     protected ListView listView;
+    private View progressView;
+
     protected IDrawerActivity drawerActivity;
 
     @Override
@@ -68,6 +70,7 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
         portfolioName = this.getArguments().getString(HomeActivity.PORTFOLIO);
         appStartup = this.getArguments().getBoolean(HomeActivity.APP_START_UP);
 
+        progressView = rootView.findViewById(R.id.homeActivityProgress);
         swipeView = (EmptyViewSwipeRefreshLayout)rootView.findViewById(R.id.stockListNonEmptySwipeLayout);
         swipeView.setSwipeableChildren(R.id.stockListScrollView, R.id.stockListView);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -132,6 +135,9 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
         if(drawerActivity != null) {
             drawerActivity.resetDrawer();
         }
+
+        swipeView.setVisibility(View.VISIBLE);
+        progressView.setVisibility(View.INVISIBLE);
     }
 
     private void loadFromProfile() {
@@ -163,7 +169,12 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
 
         // Update from the network.
         if(appStartup) {
+            swipeView.setVisibility(View.INVISIBLE);
+            progressView.setVisibility(View.VISIBLE);
             (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
+        } else {
+            swipeView.setVisibility(View.VISIBLE);
+            progressView.setVisibility(View.INVISIBLE);
         }
     }
 
