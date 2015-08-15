@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.crashlytics.android.Crashlytics;
+import com.squareup.otto.Subscribe;
 import com.techan.R;
 import com.techan.activities.dialogs.AddPortfolio;
 import com.techan.activities.drawer.DrawerMenuAddItem;
@@ -81,6 +82,7 @@ public class HomeActivity extends Activity implements IDrawerActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        BusService.getInstance().register(this);
 
         if(!drawerSetup) {
             loadDrawerItems();
@@ -89,6 +91,18 @@ public class HomeActivity extends Activity implements IDrawerActivity {
             drawerSetup = false;
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BusService.getInstance().unregister(this);
+    }
+
+    @Subscribe
+    public void refreshComplete(StockListFragment.RefreshCompleteEvent event) {
+        loadDrawerItems();
+    }
+
 
     private void loadDrawerItems() {
         menuItems.clear();
