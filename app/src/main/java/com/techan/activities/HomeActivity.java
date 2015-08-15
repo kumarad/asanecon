@@ -3,6 +3,7 @@ package com.techan.activities;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -50,6 +51,8 @@ public class HomeActivity extends Activity implements IDrawerActivity {
     private List<IDrawerMenuItem> menuItems = new ArrayList<>();
 
     private boolean drawerSetup = false;
+    private int currentPosition = 0;
+    private final static String CURRENT_POSITION = "CURRENT_POSITION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +67,15 @@ public class HomeActivity extends Activity implements IDrawerActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
+        if(savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt(CURRENT_POSITION);
+        } else {
+            currentPosition = 0;
+        }
+
         loadDrawerItems();
         setupDrawer();
-        displayFragment(0, true);
+        displayFragment(currentPosition, true);
         drawerSetup = true;
     }
 
@@ -77,7 +86,7 @@ public class HomeActivity extends Activity implements IDrawerActivity {
         if(!drawerSetup) {
             loadDrawerItems();
             setupDrawer();
-            displayFragment(0, true);
+            displayFragment(currentPosition, true);
         } else {
             drawerSetup = false;
         }
@@ -148,6 +157,7 @@ public class HomeActivity extends Activity implements IDrawerActivity {
     }
 
     private void displayFragment(int position, boolean appStartup) {
+        currentPosition = position;
         if(menuItems.get(position).getText() == null) {
             return;
         }
@@ -218,5 +228,12 @@ public class HomeActivity extends Activity implements IDrawerActivity {
     @Override
     public void resetDrawer() {
         resetDrawer = true;
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_POSITION, currentPosition);
     }
 }

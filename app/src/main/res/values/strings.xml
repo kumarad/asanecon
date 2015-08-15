@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Asanecon</string>
+    <string name="app_name">asanecon</string>
     <string name="no_stocks">No Stocks</string>
     <string name="stock_add_hint">Input stock symbol here</string>
     <string name="portfolio_add_hint">Input portfolio name here</string>

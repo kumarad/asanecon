@@ -35,7 +35,7 @@ public class DrawerSubMenuItem implements IDrawerMenuItem {
             cursor.moveToFirst();
             double overallChange = 0;
             while(!cursor.isAfterLast()) {
-                double changePercent = Util.roundTwoDecimals((cursor.getDouble(1) * 100/cursor.getDouble(0)));
+                double changePercent = cursor.getDouble(1) * 100/cursor.getDouble(0);
                 overallChange += changePercent;
                 cursor.moveToNext();
             }
@@ -44,7 +44,7 @@ public class DrawerSubMenuItem implements IDrawerMenuItem {
             textView.setText(text);
 
             TextView changeView = (TextView) view.findViewById(R.id.menuSubItemSubText);
-            changeView.setText(Double.toString(overallChange) + "%");
+            changeView.setText(Double.toString(Util.roundTwoDecimals(overallChange)) + "%");
 
             if(overallChange > 0) {
                 changeView.setTextColor(Color.GREEN);
