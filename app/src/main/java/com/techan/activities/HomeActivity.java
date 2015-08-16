@@ -2,6 +2,7 @@ package com.techan.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.techan.activities.drawer.DrawerMenuListAdapter;
 import com.techan.activities.drawer.DrawerSubMenuItem;
 import com.techan.activities.drawer.IDrawerActivity;
 import com.techan.activities.drawer.IDrawerMenuItem;
+import com.techan.activities.fragments.GoldFragment;
 import com.techan.activities.fragments.StockListFragment;
 import com.techan.profile.Portfolio;
 import com.techan.profile.ProfileManager;
@@ -41,6 +43,7 @@ public class HomeActivity extends Activity implements IDrawerActivity {
     public static String APP_START_UP = "APP_START_UP";
     public static String ALL_STOCKS = "All stocks";
     public static String ADD_PORTFOLIO = "Add portfolio";
+    public static String GOLD = "Gold";
     private DrawerLayout drawerLayout;
     private ListView drawerListView;
     private ActionBarDrawerToggle drawerToggle;
@@ -177,17 +180,26 @@ public class HomeActivity extends Activity implements IDrawerActivity {
         if(menuItems.get(position).getText().equals(ADD_PORTFOLIO)) {
             AddPortfolio.create(this);
         } else {
-            StockListFragment fragment = new StockListFragment();
-            fragment.setParentActivity(this);
-            String portfolioName = menuItems.get(position).getText();
+            Fragment fragment;
+            if (menuItems.get(position).getText().equals(GOLD)) {
+                fragment = new GoldFragment();
+                actionBar.setTitle(GOLD);
+                actionBarTitle = GOLD;
+            } else {
+                StockListFragment stockListFragment = new StockListFragment();
+                stockListFragment.setParentActivity(this);
+                String portfolioName = menuItems.get(position).getText();
 
-            actionBar.setTitle(portfolioName);
-            actionBarTitle = portfolioName;
+                actionBar.setTitle(portfolioName);
+                actionBarTitle = portfolioName;
 
-            Bundle bundle = new Bundle();
-            bundle.putString(PORTFOLIO, portfolioName);
-            bundle.putBoolean(APP_START_UP, appStartup);
-            fragment.setArguments(bundle);
+                Bundle bundle = new Bundle();
+                bundle.putString(PORTFOLIO, portfolioName);
+                bundle.putBoolean(APP_START_UP, appStartup);
+                stockListFragment.setArguments(bundle);
+
+                fragment = stockListFragment;
+            }
 
             FragmentManager fragmentManager = getFragmentManager();
             android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();

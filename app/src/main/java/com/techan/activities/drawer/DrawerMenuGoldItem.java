@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.techan.R;
+import com.techan.activities.HomeActivity;
 import com.techan.custom.Util;
 import com.techan.memrepo.GoldRepo;
 
@@ -34,7 +35,7 @@ public class DrawerMenuGoldItem implements IDrawerMenuItem {
 
     @Override
     public String getText() {
-        return null;
+        return HomeActivity.GOLD;
     }
 
 }
