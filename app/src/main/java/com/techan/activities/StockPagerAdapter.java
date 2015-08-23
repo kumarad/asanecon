@@ -29,16 +29,18 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
     private Map<String, Fragment> fragments = new HashMap<String,Fragment>();
     private Uri stockUri;
     private Context ctx;
+    private String portfolioName;
 
     // Only use for create not update.
     private Cursor createCursor;
 
-    public StockPagerAdapter(FragmentManager fm, Uri stockUri, Context ctx) {
+    public StockPagerAdapter(FragmentManager fm, Uri stockUri, Context ctx, String portfolioName) {
         super(fm);
         this.stockUri = stockUri;
         this.ctx = ctx;
         createCursor = ctx.getContentResolver().query(stockUri, null, null, null, null);
         createCursor.moveToFirst();
+        this.portfolioName = portfolioName;
     }
 
     @Override
@@ -50,11 +52,12 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
 
     protected Fragment createCostBasisFragment() {
         StockCostBasisFragment fragment = new StockCostBasisFragment();
+        fragment.setPortfolioName(portfolioName);
         fragment.setStockPagerAdapter(this);
         Bundle args = new Bundle();
 
         String symbol = createCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
-
+        fragment.setSymbol(symbol);
         args.putString(StockCostBasisFragment.SYMBOL, symbol);
 
         SymbolProfile profile = ProfileManager.getSymbolData(ctx, symbol);

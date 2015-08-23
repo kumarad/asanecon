@@ -3,4 +3,6 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="blue">#01608e</color>
+    <color name="symbolInPie">#A3FFE0</color>
+    <color name="restInPie">#FDDB94</color>
 </resources>

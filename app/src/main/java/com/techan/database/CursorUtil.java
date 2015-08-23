@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.database.Cursor;
 
+import com.techan.activities.HomeActivity;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.profile.Portfolio;
 import com.techan.profile.ProfileManager;
+import com.techan.profile.SymbolProfile;
+import com.techan.profile.SymbolProfileManager;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,7 +43,15 @@ public class CursorUtil {
     }
 
     private static Set<String> getSymbols(Context context, String portfolioName) {
-        Set<String> symbols = Collections.emptySet();
+        if(portfolioName.equals(HomeActivity.ALL_STOCKS)) {
+            Set<String> symbols = new HashSet<>();
+            for(SymbolProfile cur : ProfileManager.getSymbols(context)) {
+                symbols.add(cur.symbol);
+            }
+            return symbols;
+        }
+
+        Set<String> symbols = new HashSet<>();
         Map<String, Portfolio> portfolios = ProfileManager.getPortfolios(context);
         for(Map.Entry<String, Portfolio> curPortfolioEntry : portfolios.entrySet()) {
             if(curPortfolioEntry.getKey().equals(portfolioName)) {

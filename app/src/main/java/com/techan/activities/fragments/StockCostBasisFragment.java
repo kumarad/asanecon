@@ -1,5 +1,6 @@
 package com.techan.activities.fragments;
 
+import android.database.Cursor;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,12 +12,25 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.techan.R;
 import com.techan.activities.StockPagerAdapter;
 import com.techan.activities.dialogs.BuyDialog;
 import com.techan.custom.Util;
+import com.techan.database.CursorUtil;
+import com.techan.database.StocksTable;
+import com.techan.profile.PortfolioManager;
+import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
+import com.techan.profile.SymbolProfileManager;
 import com.techan.progressbar.SaundProgressBar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StockCostBasisFragment extends Fragment {
     public static final String SYMBOL = "SYMBOL";
@@ -58,14 +72,25 @@ public class StockCostBasisFragment extends Fragment {
     TextView peHighVal;
 
     StockPagerAdapter stockPagerAdapter;
+    String portfolioName;
+    View rootView;
+    String symbol;
 
     public void setStockPagerAdapter(StockPagerAdapter stockPagerAdapter) {
         this.stockPagerAdapter = stockPagerAdapter;
     }
 
+    public void setPortfolioName(String portfolioName) {
+        this.portfolioName = portfolioName;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.stock_cost_basis, container, false);
+        rootView = inflater.inflate(R.layout.stock_cost_basis, container, false);
         Bundle args = getArguments();
 
         warningView = (TextView)rootView.findViewById(R.id.costWarning);
@@ -115,7 +140,7 @@ public class StockCostBasisFragment extends Fragment {
         warningView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BuyDialog.create(view.getContext(), finalLayoutInflater , symbol, stockPagerAdapter);
+                BuyDialog.create(view.getContext(), finalLayoutInflater, symbol, stockPagerAdapter);
             }
         });
 
@@ -166,6 +191,7 @@ public class StockCostBasisFragment extends Fragment {
 
         if(stockCount != null && stockCount != 0) {
             countValView.setText(Integer.toString(stockCount));
+            setupPieChart(rootView);
             showCostBasisViews();
             updateCostBasis(curPrice, buyPrice, stockCount);
         } else {
@@ -243,7 +269,7 @@ public class StockCostBasisFragment extends Fragment {
                 peLowVal.setText(Double.toString(targetPE));
                 peHighVal.setVisibility(View.GONE);
                 double factor = 100 - (targetPE/curPE) * 100;
-                peTargetBar.setProgress((int)factor);
+                peTargetBar.setProgress((int) factor);
                 peTargetBar.setProgressDrawable(getResources().getDrawable(R.drawable.blue_progressbar));
             } else if(targetPE > curPE) {
                 peLowVal.setVisibility(View.GONE);
@@ -267,6 +293,7 @@ public class StockCostBasisFragment extends Fragment {
     private void hideCostBasisViews() {
         costBasisView.setVisibility(View.GONE);
         costBasisChangeRow.setVisibility(View.GONE);
+        rootView.findViewById(R.id.costBasisDistribution).setVisibility(View.GONE);
     }
 
     private void showCostBasisViews() {
@@ -296,5 +323,61 @@ public class StockCostBasisFragment extends Fragment {
 
         costRow.setVisibility(View.VISIBLE);
         stopLossView.setVisibility(View.VISIBLE);
+    }
+
+    private void setupPieChart(View rootView) {
+        PieChart pieChart = (PieChart)rootView.findViewById(R.id.costBasisDistribution);
+
+        String[] projection = {StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE};
+        Cursor cursor = CursorUtil.getCursor(rootView.getContext(), portfolioName, projection);
+        cursor.moveToFirst();
+
+        List<String> xVals = new ArrayList<>();
+        List<Entry> yVals = new ArrayList<>();
+
+        xVals.add(symbol);
+        xVals.add("");
+
+        double symbolAmount = 0;
+        double restAmount = 0;
+        while(!cursor.isAfterLast()) {
+            String curSymbol = cursor.getString(0);
+            Double curPrice = cursor.getDouble(1);
+            SymbolProfile profile = ProfileManager.getSymbolData(rootView.getContext(), curSymbol);
+            if(profile.stockCount != null) {
+                if (curSymbol.equals(this.symbol)) {
+                    symbolAmount = profile.stockCount * curPrice;
+                } else {
+                    restAmount += profile.stockCount * curPrice;
+                }
+            }
+
+            cursor.moveToNext();
+        }
+
+        yVals.add(new Entry(new Float(symbolAmount), 0));
+        yVals.add(new Entry(new Float(restAmount), 1));
+
+
+        PieDataSet pieDataSet = new PieDataSet(yVals, "Dist");
+        List<Integer> colors = new ArrayList<>();
+        colors.add(getResources().getColor(R.color.symbolInPie));
+        colors.add(getResources().getColor(R.color.restInPie));
+        pieDataSet.setColors(colors);
+        pieDataSet.setDrawValues(false);
+
+        PieData pieData = new PieData(xVals, pieDataSet);
+        pieChart.setData(pieData);
+        pieChart.setDescription("");
+        pieChart.getLegend().setEnabled(false);
+        pieChart.setUsePercentValues(true);
+        pieChart.setHoleRadius(0);
+        pieChart.setTransparentCircleAlpha(0);
+
+        if(symbolAmount == 0) {
+            pieChart.setVisibility(View.GONE);
+        } else {
+            pieChart.setVisibility(View.VISIBLE);
+        }
     }
 }
