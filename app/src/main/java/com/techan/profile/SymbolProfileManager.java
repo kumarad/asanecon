@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 
-// Uses persistence manager to get file contents as a string and maps it to SymbolProfile
+// Uses persistence manager to getGoldRepo file contents as a string and maps it to SymbolProfile
 public class SymbolProfileManager {
     private static final String symboleProfileFileName = "techan_profile";
     private final ObjectMapper objectMapper = new ObjectMapper();

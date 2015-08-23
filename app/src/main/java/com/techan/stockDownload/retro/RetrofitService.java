@@ -12,6 +12,11 @@ public class RetrofitService {
                                                                 .setClient(new OkClient(createHttpClient()))
                                                                 .build();
 
+    public static final RestAdapter yahooRestAdapter = new RestAdapter.Builder()
+            .setEndpoint("http://ichart.yahoo.com")
+            .setConverter(new YahooCSVConverter())
+            .build();
+
     private static OkHttpClient createHttpClient() {
         OkHttpClient client = new OkHttpClient();
         client.setFollowSslRedirects(true);

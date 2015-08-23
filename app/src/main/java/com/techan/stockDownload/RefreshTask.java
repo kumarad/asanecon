@@ -17,11 +17,12 @@ import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.ConnectionStatus;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
-import com.techan.memrepo.GoldRepo;
+import com.techan.memrepo.HistoryRepo;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.actions.PostRefreshAction;
 import com.techan.stockDownload.retro.GoldDownloader;
+import com.techan.stockDownload.retro.SPDownloader;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,8 +41,10 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
 
     final List<String> symbols = new ArrayList<>();
     final boolean shouldRefreshGold;
+    final boolean shouldRefreshSP;
     final AtomicBoolean refreshingGoldData = new AtomicBoolean(false);
     final AtomicBoolean refreshingStockData = new AtomicBoolean(false);
+    final AtomicBoolean refreshingSPData = new AtomicBoolean(false);
 
     static class DownloadInfo {
         Uri uri;
@@ -57,6 +60,7 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
         BusService.getInstance().register(this);
         this.refreshingStockData.set(false);
         this.refreshingGoldData.set(false);
+        this.refreshingSPData.set(false);
         this.ctx = ctx;
         this.contentResolver = contentResolver;
         this.autoRefresh = autoRefresh;
@@ -66,6 +70,7 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
     public RefreshTask(Context ctx, ContentResolver contentResolver, boolean autoRefresh) {
         initialize(ctx, contentResolver, autoRefresh);
         shouldRefreshGold = true;
+        shouldRefreshSP = true;
 
         String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_LAST_UPDATE, StocksTable.COLUMN_SL_HIGEST_PRICE, StocksTable.COLUMN_SL_LOWEST_PRICE};
         Cursor cursor = contentResolver.query(StockContentProvider.CONTENT_URI, projection, null, null, null);
@@ -101,6 +106,7 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
     public RefreshTask(Context ctx, ContentResolver contentResolver, Uri uri, String symbol, boolean isAdd) {
         initialize(ctx, contentResolver, false);
         shouldRefreshGold = false;
+        shouldRefreshSP = false;
 
         DownloadInfo info = new DownloadInfo();
 
@@ -199,11 +205,17 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
         endRefresh();
     }
 
+    @Subscribe
+    public void spRefreshCompleted(SPDownloader.SPDownloaderComplete event) {
+        refreshingSPData.set(false);
+        endRefresh();
+    }
+
     public void endRefresh() {
-        if(!refreshingStockData.get() && !refreshingGoldData.get()) {
+        if(!refreshingStockData.get() && !refreshingGoldData.get() && !refreshingSPData.get()) {
             BusService.getInstance().post(new StockListFragment.RefreshCompleteEvent());
             BusService.getInstance().unregister(this);
-        } // else one of the two hasn't compeleted wait for endRefresh to get called again.
+        } // else one of the three hasn't completed wait for endRefresh to getGoldRepo called again.
     }
 
     // Used when we should only be doing stuff on the wifi network. Auto refresh etc uses this.
@@ -227,17 +239,25 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
         }
 
         boolean kickedOffGoldRefresh = false;
-        if(shouldRefreshGold && PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean(SettingsActivity.ENABLE_GOLD_TRACKER, false)) {
+        boolean goldTrackingEnabled = PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean(SettingsActivity.ENABLE_GOLD_TRACKER, false);
+        if(shouldRefreshGold && goldTrackingEnabled) {
             kickedOffGoldRefresh = true;
             refreshingGoldData.set(true);
-            GoldDownloader.get(GoldRepo.get().getLatestPriceDate());
+            GoldDownloader.getInstance().get(HistoryRepo.getGoldRepo().getLatestPriceDate());
+        }
+
+        boolean kickedOffSPRefresh = false;
+        if(shouldRefreshSP && goldTrackingEnabled) {
+            kickedOffSPRefresh = true;
+            refreshingSPData.set(true);
+            SPDownloader.getInstance().get(HistoryRepo.getSPRepo().getLatestPriceDate());
         }
 
         if(symbols.size() != 0) {
             refreshingStockData.set(true);
             execute();
         } else {
-            if(!kickedOffGoldRefresh) {
+            if(!kickedOffGoldRefresh && !kickedOffSPRefresh) {
                 endRefresh();
             }
         }

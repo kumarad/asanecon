@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.techan.activities.BusService;
 import com.techan.custom.Util;
-import com.techan.memrepo.GoldRepo;
+import com.techan.memrepo.HistoryRepo;
 
 import java.util.Calendar;
 
@@ -12,32 +12,25 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class GoldDownloader {
+public class GoldDownloader extends HistoryDownloader {
 
-    private static final int DAYS_TO_GO_BACK = 30;
+    private static final GoldDownloader INSTANCE = new GoldDownloader();
+
+    public static GoldDownloader getInstance() {
+        return INSTANCE;
+    }
 
     public static class GoldDownloaderComplete {}
 
-    public static void get(String lastUpdateDateStr) {
-        Calendar curDate = Calendar.getInstance();
-        String endDateStr = Util.getDate(curDate);
-
-        int daysSinceLastUpdate = DAYS_TO_GO_BACK;
-        if(lastUpdateDateStr != null) {
-            Calendar lastUpdateDate = Util.getCalForDateOnly(lastUpdateDateStr);
-            daysSinceLastUpdate = Util.dateDiff(lastUpdateDate, curDate);
-            if (daysSinceLastUpdate > DAYS_TO_GO_BACK) {
-                daysSinceLastUpdate = DAYS_TO_GO_BACK;
-            }
-        }
-
-        curDate.add(Calendar.DAY_OF_MONTH, -daysSinceLastUpdate);
-        String startDateStr = Util.getDate(curDate);
+    @Override
+    public void download(Calendar startDate, Calendar endDate) {
+        String startDateStr = Util.getDate(startDate);
+        String endDateStr = Util.getDate(endDate);
 
         RetrofitService.quandlRestAdapter.create(QuandlService.class).getGoldPrice(startDateStr, endDateStr, new Callback<GoldData>() {
             @Override
             public void success(GoldData goldData, Response response) {
-                GoldRepo goldRepo = GoldRepo.get();
+                HistoryRepo goldRepo = HistoryRepo.getGoldRepo();
                 for(String[] cur : goldData.data) {
                     goldRepo.update(cur[0], Double.valueOf(cur[1]));
                 }

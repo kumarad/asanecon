@@ -54,7 +54,7 @@ public class SaundProgressBar extends ProgressBar {
         m_textPaint.setTextSize(10);
         m_textPaint.setFakeBoldText(true);
 
-        // get the styleable attributes as defined in the xml
+        // getGoldRepo the styleable attributes as defined in the xml
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SaundProgressBar, defStyle, 0);
 
         if (a != null) {
@@ -240,7 +240,7 @@ public class SaundProgressBar extends ProgressBar {
             canvas.save();
             int dx = 0;
 
-            // get the position of the progress bar's right end
+            // getGoldRepo the position of the progress bar's right end
             if (progressDrawable != null && progressDrawable instanceof LayerDrawable) {
                 LayerDrawable d = (LayerDrawable) progressDrawable;
                 Drawable progressBar = d.findDrawableByLayerId(R.id.progress);
@@ -311,7 +311,7 @@ public class SaundProgressBar extends ProgressBar {
 
             final float scale = getScale(getProgress());
 
-            // get the progress bar and update it's size
+            // getGoldRepo the progress bar and update it's size
             Drawable progressBar = d.findDrawableByLayerId(R.id.progress);
 
             final int width = d.getBounds().right - d.getBounds().left;
@@ -322,7 +322,7 @@ public class SaundProgressBar extends ProgressBar {
                 progressBar.setBounds(progressBarBounds);
             }
 
-            // get the pattern overlay
+            // getGoldRepo the pattern overlay
             Drawable patternOverlay = d.findDrawableByLayerId(R.id.pattern);
 
             if (patternOverlay != null) {

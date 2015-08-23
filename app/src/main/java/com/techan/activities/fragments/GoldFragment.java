@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.androidplot.ui.TableModel;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -18,11 +17,13 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.techan.R;
-import com.techan.memrepo.GoldRepo;
+import com.techan.custom.Util;
+import com.techan.memrepo.HistoryRepo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class GoldFragment extends Fragment {
 
@@ -37,10 +38,33 @@ public class GoldFragment extends Fragment {
         int color = getActivity().getResources().getColor(R.color.blue);
         float borderWidth = 2;
 
-        final TextView selectionView = (TextView) getActivity().findViewById(R.id.goldChartSelection);
+        Map<String, Double> goldPriceMap = HistoryRepo.getGoldRepo().getPrices();
 
-        final LineChart chart = (LineChart) getActivity().findViewById(R.id.goldChart);
+        final TextView goldSelectionView = (TextView) getActivity().findViewById(R.id.goldChartSelection);
+        final LineChart goldChart = (LineChart) getActivity().findViewById(R.id.goldChart);
+        buildChart(color, borderWidth, goldChart, goldSelectionView, goldPriceMap, "Gold", "Price");
 
+
+        Map<String, Double> spPriceMap = HistoryRepo.getSPRepo().getPrices();
+        Map<String, Double> ratioMap = new TreeMap<>();
+        for(Map.Entry<String, Double> curGoldEntry : goldPriceMap.entrySet()) {
+            Double spValue = spPriceMap.get(curGoldEntry.getKey());
+            if(spValue != null) {
+                ratioMap.put(curGoldEntry.getKey(), curGoldEntry.getValue() / spValue);
+            }
+        }
+        final TextView goldSPSelectionView = (TextView) getActivity().findViewById(R.id.goldSPChartSelection);
+        final LineChart goldSPChart = (LineChart) getActivity().findViewById(R.id.goldSPChart);
+        buildChart(color, borderWidth, goldSPChart, goldSPSelectionView, ratioMap, "Gold/S&P Ratio", "Gold/S&P Ratio");
+    }
+
+    private void buildChart(int color,
+                            float borderWidth,
+                            LineChart chart,
+                            final TextView selectionView,
+                            Map<String, Double> valueMap,
+                            String label,
+                            final String valueLabel) {
         // Y Axis setup
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
@@ -65,22 +89,22 @@ public class GoldFragment extends Fragment {
         xAxis.setAxisLineWidth(borderWidth);
 
         // Set data.
-        Map<String, Double> priceMap = GoldRepo.get().getPrices();
         final List<String> dates = new ArrayList<>();
         List<Entry> yEntryList = new ArrayList<>();
         int i = 0;
-        for(Map.Entry<String, Double> curEntry : priceMap.entrySet()) {
+        for(Map.Entry<String, Double> curEntry : valueMap.entrySet()) {
             Double value = curEntry.getValue();
             yEntryList.add(new Entry(value.floatValue(), i++));
             dates.add(curEntry.getKey());
         }
 
-        LineDataSet yDataSet = new LineDataSet(yEntryList, "Gold");
+        LineDataSet yDataSet = new LineDataSet(yEntryList, label);
         yDataSet.setCircleColorHole(color);
         yDataSet.setCircleColor(color);
+        yDataSet.setCircleSize(0);
         yDataSet.setColor(color);
 
-        LineData data = new LineData(new ArrayList<>(priceMap.keySet()), yDataSet);
+        LineData data = new LineData(new ArrayList<>(valueMap.keySet()), yDataSet);
         data.setDrawValues(false);
         data.setHighlightEnabled(true);
 
@@ -96,7 +120,8 @@ public class GoldFragment extends Fragment {
         chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-                selectionView.setText(String.format("Date:%s     Price:%s", dates.get(e.getXIndex()), Float.toString(e.getVal())));
+                double doubleVal = Util.roundTwoDecimals(e.getVal());
+                selectionView.setText(String.format("Date:  %s     %s:  %s", dates.get(e.getXIndex()), valueLabel, Double.toString(doubleVal)));
             }
 
             @Override
@@ -105,5 +130,7 @@ public class GoldFragment extends Fragment {
             }
         });
     }
+
+
 
 }
