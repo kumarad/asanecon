@@ -8,6 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold"
+        android:text= "Gold Prices"
+        android:layout_marginTop="10dp"
+        />
+
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/goldChart"
         android:layout_width="fill_parent"
@@ -22,9 +31,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:text= "Tap graph to select day/price."
+        android:background="@drawable/rounded_cell"
+        android:padding="5dp"
         />
 
-    <com.github.mikephil.charting.charts.LineChart
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold"
+        android:text= "Gold to S&amp;P 500 Ratio"
+        android:layout_marginTop="10dp"
+        />
+
+        <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/goldSPChart"
         android:layout_width="fill_parent"
         android:layout_height="200dp"
@@ -38,6 +58,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:text= "Tap graph to select day/ratio."
+        android:background="@drawable/rounded_cell"
+        android:padding="5dp"
+        android:layout_marginBottom="10dp"
         />
     </LinearLayout>
 
