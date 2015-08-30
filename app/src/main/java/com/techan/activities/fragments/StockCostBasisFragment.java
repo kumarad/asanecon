@@ -16,17 +16,14 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.techan.R;
 import com.techan.activities.StockPagerAdapter;
 import com.techan.activities.dialogs.BuyDialog;
 import com.techan.custom.Util;
 import com.techan.database.CursorUtil;
 import com.techan.database.StocksTable;
-import com.techan.profile.PortfolioManager;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
-import com.techan.profile.SymbolProfileManager;
 import com.techan.progressbar.SaundProgressBar;
 
 import java.util.ArrayList;

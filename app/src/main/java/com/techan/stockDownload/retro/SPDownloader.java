@@ -1,18 +1,9 @@
 package com.techan.stockDownload.retro;
 
-import android.util.Log;
-
 import com.techan.activities.BusService;
 import com.techan.memrepo.HistoryRepo;
 
-import java.util.Calendar;
-import java.util.SortedMap;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
-public class SPDownloader extends HistoryDownloader {
+public class SPDownloader extends AbstractStockHistoryDownloader {
 
     private static final SPDownloader INSTANCE = new SPDownloader();
 
@@ -23,39 +14,16 @@ public class SPDownloader extends HistoryDownloader {
     public static class SPDownloaderComplete {}
 
     @Override
-    public void download(Calendar startDate, Calendar endDate) {
-        int endDay = endDate.get(Calendar.DAY_OF_MONTH);
-        int endMonth = endDate.get(Calendar.MONTH);
-        int endYear = endDate.get(Calendar.YEAR);
+    public void done() {
+        BusService.getInstance().post(new SPDownloaderComplete());
+    }
 
-        int startDay = startDate.get(Calendar.DAY_OF_MONTH);
-        int startMonth = startDate.get(Calendar.MONTH);
-        int startYear = startDate.get(Calendar.YEAR);
+    @Override
+    public HistoryRepo getRepo(String symbol) {
+        return HistoryRepo.getSPRepo();
+    }
 
-        endDay = endDay -1;
-
-        RetrofitService.yahooRestAdapter.create(YahooService.class).getHistory("^GSPC",
-                startMonth,
-                startDay,
-                startYear,
-                endMonth,
-                endDay,
-                endYear,
-                new Callback<SortedMap<String, Double>>() {
-                    @Override
-                    public void success(SortedMap<String, Double> prices, Response response) {
-                        HistoryRepo spRepo = HistoryRepo.getSPRepo();
-                        spRepo.setHistory(prices);
-
-                        BusService.getInstance().post(new SPDownloaderComplete());
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.e("SP", error.getMessage());
-                        BusService.getInstance().post(new SPDownloaderComplete());
-                    }
-                });
-
+    public void get(String lastUpdatedStr) {
+        getInternal("^GSPC", lastUpdatedStr);
     }
 }

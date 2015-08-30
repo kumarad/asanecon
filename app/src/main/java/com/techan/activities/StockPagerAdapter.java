@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import com.techan.activities.fragments.StockCostBasisFragment;
+import com.techan.activities.fragments.StockHistoryFragment;
 import com.techan.activities.fragments.StockTrendFragment;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
@@ -21,26 +22,29 @@ import java.util.Map;
 
 // Returns a fragment corresponding to one of the sections/tabs/pages.
 public class StockPagerAdapter extends FragmentPagerAdapter {
-    public static final int FRAGMENT_COUNT = 2;
+    public static final int FRAGMENT_COUNT = 3;
     public static final String COST_BASIS = "Cost Basis";
     public static final String TREND = "Trends";
+    public static final String HISTORY = "History";
 
     private String[] fragmentTypes = new String[FRAGMENT_COUNT];
     private Map<String, Fragment> fragments = new HashMap<String,Fragment>();
     private Uri stockUri;
     private Context ctx;
     private String portfolioName;
+    private String symbol;
 
     // Only use for create not update.
     private Cursor createCursor;
 
-    public StockPagerAdapter(FragmentManager fm, Uri stockUri, Context ctx, String portfolioName) {
+    public StockPagerAdapter(FragmentManager fm, Uri stockUri, Context ctx, String portfolioName, String symbol) {
         super(fm);
         this.stockUri = stockUri;
         this.ctx = ctx;
         createCursor = ctx.getContentResolver().query(stockUri, null, null, null, null);
         createCursor.moveToFirst();
         this.portfolioName = portfolioName;
+        this.symbol = symbol;
     }
 
     @Override
@@ -122,6 +126,13 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         return fragment;
     }
 
+    protected Fragment createHistoryFragment() {
+        StockHistoryFragment fragment = new StockHistoryFragment();
+        fragment.setSymbol(symbol);
+        return fragment;
+
+    }
+
     @Override
     public Fragment getItem(int position) {
         switch(position) {
@@ -129,6 +140,8 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
                 return createTrendFragment();
             case 1:
                 return createCostBasisFragment();
+            case 2:
+                return createHistoryFragment();
         }
 
         return null;
@@ -146,6 +159,8 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
                 return (fragmentTypes[position] = TREND);
             case 1:
                 return (fragmentTypes[position] = COST_BASIS);
+            case 2:
+                return (fragmentTypes[position] = HISTORY);
         }
 
         return null;

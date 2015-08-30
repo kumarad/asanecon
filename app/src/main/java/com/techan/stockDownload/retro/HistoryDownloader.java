@@ -7,7 +7,7 @@ import java.util.Calendar;
 public abstract class HistoryDownloader {
     private static final int DAYS_TO_GO_BACK = 360;
 
-    public void get(String lastUpdateDateStr) {
+    protected void getInternal(String symbol, String lastUpdateDateStr) {
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
 
@@ -22,8 +22,8 @@ public abstract class HistoryDownloader {
 
         startDate.add(Calendar.DAY_OF_MONTH, -daysSinceLastUpdate);
 
-        download(startDate, endDate);
+        download(symbol, startDate, endDate);
     }
 
-    public abstract void download(Calendar startDate, Calendar endDate);
+    public abstract void download(String symbol, Calendar startDate, Calendar endDate);
 }

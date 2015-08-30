@@ -62,7 +62,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         symbol = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
         populateGeneralView();
 
-        stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockUri, getApplicationContext(), portfolioName);
+        stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockUri, getApplicationContext(), portfolioName, symbol);
         viewPager = (ViewPager)findViewById(R.id.stock_pager);
         viewPager.setAdapter(stockPagerAdapter);
 

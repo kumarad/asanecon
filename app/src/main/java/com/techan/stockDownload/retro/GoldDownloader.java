@@ -22,8 +22,12 @@ public class GoldDownloader extends HistoryDownloader {
 
     public static class GoldDownloaderComplete {}
 
+    public void get(String lastUpdateStr) {
+        getInternal(null, lastUpdateStr);
+    }
+
     @Override
-    public void download(Calendar startDate, Calendar endDate) {
+    public void download(String symbol, Calendar startDate, Calendar endDate) {
         String startDateStr = Util.getDate(startDate);
         String endDateStr = Util.getDate(endDate);
 

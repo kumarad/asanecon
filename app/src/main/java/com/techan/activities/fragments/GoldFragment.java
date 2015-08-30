@@ -58,7 +58,7 @@ public class GoldFragment extends Fragment {
         buildChart(color, borderWidth, goldSPChart, goldSPSelectionView, ratioMap, "Gold/S&P Ratio", "Gold/S&P Ratio");
     }
 
-    private void buildChart(int color,
+    public static void buildChart(int color,
                             float borderWidth,
                             LineChart chart,
                             final TextView selectionView,

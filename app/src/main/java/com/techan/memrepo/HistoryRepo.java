@@ -1,5 +1,7 @@
 package com.techan.memrepo;
 
+import android.util.LruCache;
+
 import java.util.NoSuchElementException;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -7,6 +9,7 @@ import java.util.TreeMap;
 public class HistoryRepo {
     private static final HistoryRepo GOLD_INSTANCE = new HistoryRepo();
     private static final HistoryRepo SP_INSTANCE = new HistoryRepo();
+    private static final LruCache<String, HistoryRepo> STOCK_CACHE = new LruCache(20);
 
     public static HistoryRepo getGoldRepo() {
         return GOLD_INSTANCE;
@@ -14,6 +17,16 @@ public class HistoryRepo {
 
     public static HistoryRepo getSPRepo() {
         return SP_INSTANCE;
+    }
+
+    public static HistoryRepo getStockRepo(String symbol) {
+        HistoryRepo historyRepo =  STOCK_CACHE.get(symbol);
+        if(historyRepo == null) {
+            historyRepo = new HistoryRepo();
+            STOCK_CACHE.put(symbol, historyRepo);
+        }
+
+        return historyRepo;
     }
 
     private SortedMap<String, Double> prices = new TreeMap<>();
