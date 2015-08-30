@@ -12,6 +12,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.squareup.otto.Subscribe;
 import com.techan.R;
 import com.techan.activities.BusService;
+import com.techan.custom.ChartBuilder;
 import com.techan.memrepo.HistoryRepo;
 import com.techan.stockDownload.retro.StockHistoryDownloader;
 
@@ -68,7 +69,7 @@ public class StockHistoryFragment extends Fragment {
 
         final TextView selectionView = (TextView) getActivity().findViewById(R.id.stockHistoryChartSelection);
         final LineChart chart = (LineChart) getActivity().findViewById(R.id.stockHistoryChart);
-        GoldFragment.buildChart(color, borderWidth, chart, selectionView, stockPriceMap, symbol, "Price");
+        ChartBuilder.build(color, borderWidth, chart, selectionView, stockPriceMap, symbol, "Price");
 
         progressView.setVisibility(View.INVISIBLE);
         chartView.setVisibility(View.VISIBLE);
