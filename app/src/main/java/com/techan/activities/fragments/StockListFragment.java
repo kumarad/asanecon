@@ -86,8 +86,9 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        BusService.getInstance().register(this);
 
         // sets the gap between each item in the list.
         listView = (ListView)rootView.findViewById(R.id.stockListView);
@@ -110,12 +111,6 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
         PreferenceManager.setDefaultValues(getActivity(), R.xml.settings, false);
 
         SettingsActivity.activateAutoRefresh(getActivity());
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        BusService.getInstance().register(this);
     }
 
     @Override
