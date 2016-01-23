@@ -17,6 +17,9 @@ public class RetrofitService {
             .setConverter(new YahooCSVConverter())
             .build();
 
+    public static final RestAdapter yahooScraper = new RestAdapter.Builder()
+            .setEndpoint("http://finance.yahoo.com").build();
+
     private static OkHttpClient createHttpClient() {
         OkHttpClient client = new OkHttpClient();
         client.setFollowSslRedirects(true);

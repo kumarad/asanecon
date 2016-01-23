@@ -3,6 +3,7 @@ package com.techan.stockDownload.retro;
 import java.util.SortedMap;
 
 import retrofit.Callback;
+import retrofit.client.Response;
 import retrofit.http.GET;
 import retrofit.http.Query;
 
@@ -16,4 +17,9 @@ public interface YahooService {
                     @Query("e") int endDay,
                     @Query("f") int endYear,
                     Callback<SortedMap<String, Double>> callback);
+
+    @GET("/q/ks")
+    void getKeyStats(@Query("s") String symbolPlusKeyStats,
+                     Callback<Response> callback);
+
 }

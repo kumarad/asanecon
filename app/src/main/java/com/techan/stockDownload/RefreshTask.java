@@ -238,6 +238,7 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
             }
         }
 
+        //KeyStatsDownloader.download("IBM");
         boolean kickedOffGoldRefresh = false;
         boolean goldTrackingEnabled = PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean(SettingsActivity.ENABLE_GOLD_TRACKER, false);
         if(shouldRefreshGold && goldTrackingEnabled) {
