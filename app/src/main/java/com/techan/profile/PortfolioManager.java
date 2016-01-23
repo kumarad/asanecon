@@ -88,7 +88,7 @@ public class PortfolioManager {
     public boolean deletePortfolio(String portfolioName, boolean deleteAllStocks) {
         Portfolio portfolio = portfolioMap.get(portfolioName);
         if(portfolio != null) {
-            if(deleteAllStocks) {
+            if(deleteAllStocks && portfolio.getSymbols() != null) {
                 // Delete the stocks in this portfolio across all other portfolios.
                 for(String curSymbol : portfolio.getSymbols()) {
                     for(Map.Entry<String, Portfolio> curEntry : portfolioMap.entrySet()) {
