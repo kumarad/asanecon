@@ -61,7 +61,7 @@ public class Util {
     public static double parseDouble(String s) {
         try {
             return Double.parseDouble(s);
-        } catch(NumberFormatException e) {
+        } catch(Exception e) {
             return 0.0;
         }
     }
