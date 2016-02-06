@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.techan.activities.fragments.StockCostBasisFragment;
 import com.techan.activities.fragments.StockHistoryFragment;
+import com.techan.activities.fragments.StockKeyStatsFragment;
 import com.techan.activities.fragments.StockTrendFragment;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
@@ -22,9 +23,10 @@ import java.util.Map;
 
 // Returns a fragment corresponding to one of the sections/tabs/pages.
 public class StockPagerAdapter extends FragmentPagerAdapter {
-    public static final int FRAGMENT_COUNT = 3;
+    public static final int FRAGMENT_COUNT = 4;
     public static final String COST_BASIS = "Cost Basis";
     public static final String TREND = "Trends";
+    public static final String KEY_STATS = "Key Statistics";
     public static final String HISTORY = "History";
 
     private String[] fragmentTypes = new String[FRAGMENT_COUNT];
@@ -133,6 +135,12 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
 
     }
 
+    protected Fragment createKeyStatsFragment() {
+        StockKeyStatsFragment fragment = new StockKeyStatsFragment();
+        fragment.setSymbolAndPrice(symbol, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE)));
+        return fragment;
+    }
+
     @Override
     public Fragment getItem(int position) {
         switch(position) {
@@ -141,6 +149,8 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return createCostBasisFragment();
             case 2:
+                return createKeyStatsFragment();
+            case 3:
                 return createHistoryFragment();
         }
 
@@ -160,6 +170,8 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return (fragmentTypes[position] = COST_BASIS);
             case 2:
+                return (fragmentTypes[position] = KEY_STATS);
+            case 3:
                 return (fragmentTypes[position] = HISTORY);
         }
 
