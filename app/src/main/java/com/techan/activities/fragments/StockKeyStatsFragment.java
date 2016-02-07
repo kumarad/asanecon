@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.squareup.otto.Subscribe;
 import com.techan.R;
 import com.techan.activities.BusService;
+import com.techan.activities.dialogs.InfoDialog;
 import com.techan.custom.Util;
 import com.techan.memrepo.KeyStatsRepo;
 import com.techan.stockDownload.KeyStatsDownloader;
@@ -22,6 +23,7 @@ public class StockKeyStatsFragment extends Fragment {
     private View progressView;
     private View statsView;
     private View rootView;
+    private LayoutInflater inflater;
 
     public void setSymbolAndPrice(String symbol, double stockPrice) {
         this.symbol = symbol;
@@ -31,6 +33,7 @@ public class StockKeyStatsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.stock_key_stats, container, false);
+        this.inflater = inflater;
 
         progressView = rootView.findViewById(R.id.stockKeyStatsProgress);
         statsView = rootView.findViewById(R.id.stockKeyStatsScrollView);
@@ -84,10 +87,12 @@ public class StockKeyStatsFragment extends Fragment {
             bookValueView.setText(Util.doubleToString(stats.getBookValue()));
             boolean bookValueUnderValued = Util.setPositiveColor(stockPrice, 0.0, true, stats.getBookValue(), false, bookValueView);
 
+            View undervaluedAlertView = rootView.findViewById(R.id.valuationAlert);
             if(evUnderValued || pegUnderValued || bookValueUnderValued) {
-                rootView.findViewById(R.id.valuationAlert).setVisibility(View.VISIBLE);
+                undervaluedAlertView.setVisibility(View.VISIBLE);
+                InfoDialog.setOnClickInfoDialog(undervaluedAlertView, inflater, rootView.getResources().getString(R.string.undervalued), true);
             } else {
-                rootView.findViewById(R.id.valuationAlert).setVisibility(View.INVISIBLE);
+                undervaluedAlertView.setVisibility(View.INVISIBLE);
             }
 
             final TextView currentRatioView = (TextView) rootView.findViewById(R.id.keyStatsCurrentRatio);
@@ -101,10 +106,12 @@ public class StockKeyStatsFragment extends Fragment {
             final TextView totalDebtToEquityView = (TextView) rootView.findViewById(R.id.keyStatsTotalDebtToEquity);
             totalDebtToEquityView.setText(Util.doubleToString(stats.getDebtToEquityRatio()));
 
+            View profitabilityAlertView = rootView.findViewById(R.id.profitabilityAlert);
             if(currentRatioBad || operatingMarginBad) {
-                rootView.findViewById(R.id.profitabilityAlert).setVisibility(View.VISIBLE);
+                profitabilityAlertView.setVisibility(View.VISIBLE);
+                InfoDialog.setOnClickInfoDialog(profitabilityAlertView, inflater, rootView.getResources().getString(R.string.profitability), true);
             } else {
-                rootView.findViewById(R.id.profitabilityAlert).setVisibility(View.INVISIBLE);
+                profitabilityAlertView.setVisibility(View.INVISIBLE);
             }
 
             final TextView roaView = (TextView) rootView.findViewById(R.id.keyStatsRoaValue);
@@ -115,18 +122,22 @@ public class StockKeyStatsFragment extends Fragment {
             roeView.setText(Util.doubleToString(stats.getRoe()));
             boolean roeBad = Util.setNegativeColor(stats.getRoe(), 0.0, true, 15, false, roeView);
 
+            View mgmtAlertView = rootView.findViewById(R.id.mgmtEffectivenessAlert);
             if(roaBad || roeBad) {
-                rootView.findViewById(R.id.mgmtEffectivenessAlert).setVisibility(View.VISIBLE);
+                mgmtAlertView.setVisibility(View.VISIBLE);
+                InfoDialog.setOnClickInfoDialog(mgmtAlertView, inflater, rootView.getResources().getString(R.string.management_effectiveness), true);
             } else {
-                rootView.findViewById(R.id.mgmtEffectivenessAlert).setVisibility(View.INVISIBLE);
+                mgmtAlertView.setVisibility(View.INVISIBLE);
             }
 
             final TextView betaView = (TextView) rootView.findViewById(R.id.keyStatsBeta);
             betaView.setText(Util.doubleToString(stats.getBeta()));
+            View volatilityAlertView = rootView.findViewById(R.id.volatilityAlert);
             if(Util.setPositiveColor(stats.getBeta(), 0.0, true, 1.0 , false, betaView)) {
-                rootView.findViewById(R.id.volatilityAlert).setVisibility(View.VISIBLE);
+                volatilityAlertView.setVisibility(View.VISIBLE);
+                InfoDialog.setOnClickInfoDialog(volatilityAlertView, inflater, String.format(rootView.getResources().getString(R.string.volatility), Integer.toString((int) ((1.0 - stats.getBeta()) * 100))));
             } else {
-                rootView.findViewById(R.id.volatilityAlert).setVisibility(View.INVISIBLE);
+                volatilityAlertView.setVisibility(View.INVISIBLE);
             }
         } // else should never happen.
 

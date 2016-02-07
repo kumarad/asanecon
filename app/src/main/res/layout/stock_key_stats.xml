@@ -39,14 +39,21 @@
                         android:textStyle="bold"
                         android:layout_marginLeft="5dp"/>
 
-                    <TextView
+                    <LinearLayout
                         android:id="@+id/valuationAlert"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="\u00A0\u2713\u00A0"
-                        android:textStyle="bold"
-                        style="@style/stockAlert"/>
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="5dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="\u00A0\u2713\u00A0"
+                            android:textStyle="bold"
+                            style="@style/stockAlert"/>
+                    </LinearLayout>
 
                 </RelativeLayout>
 
@@ -123,14 +130,23 @@
                         android:textStyle="bold"
                         android:layout_marginLeft="5dp"/>
 
-                    <TextView
+                    <LinearLayout
                         android:id="@+id/profitabilityAlert"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="\u00A0\u00A0!\u00A0\u00A0"
-                        android:textStyle="bold"
-                        style="@style/stockAlert"/>
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="\u00A0\u00A0!\u00A0\u00A0"
+                            android:textStyle="bold"
+                            style="@style/stockAlert"/>
+
+                    </LinearLayout>
 
                 </RelativeLayout>
 
@@ -207,14 +223,23 @@
                         android:textStyle="bold"
                         android:layout_marginLeft="5dp"/>
 
-                    <TextView
+                    <LinearLayout
                         android:id="@+id/mgmtEffectivenessAlert"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="\u00A0\u00A0!\u00A0\u00A0"
-                        android:textStyle="bold"
-                        style="@style/stockAlert"/>
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="\u00A0\u00A0!\u00A0\u00A0"
+                            android:textStyle="bold"
+                            style="@style/stockAlert"/>
+
+                    </LinearLayout>
 
                 </RelativeLayout>
 
@@ -273,13 +298,22 @@
                         android:textStyle="bold"
                         android:layout_marginLeft="5dp"/>
 
-                    <TextView
+                    <LinearLayout
                         android:id="@+id/volatilityAlert"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:text="\u00A0\u2713\u00A0"
-                        style="@style/stockAlert"/>
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="\u00A0\u2713\u00A0"
+                            style="@style/stockAlert"/>
+
+                    </LinearLayout>
 
                 </RelativeLayout>
 
