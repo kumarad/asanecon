@@ -55,14 +55,21 @@ public class Util {
         bar.setProgressDrawable(progress);
         bar.setBackground(fragment.getResources().getDrawable(android.R.drawable.progress_horizontal));
         bar.setProgress(progressInt);
-
     }
 
     public static double parseDouble(String s) {
         try {
             return Double.parseDouble(s);
-        } catch(NumberFormatException e) {
+        } catch(Exception e) {
             return 0.0;
+        }
+    }
+
+    public static String doubleToString(Double value) {
+        if(value == null) {
+            return "-";
+        } else {
+            return value.toString();
         }
     }
 
@@ -142,17 +149,25 @@ public class Util {
 
     public static boolean isDateSame(String lastUpdate, Calendar curCal) {
         if(lastUpdate != null) {
-            // Stock has been updated before.
             Calendar dbCal = getCal(lastUpdate);
-            if(dbCal.get(Calendar.DAY_OF_MONTH) == curCal.get(Calendar.DAY_OF_MONTH) &&
-                    dbCal.get(Calendar.MONTH) == curCal.get(Calendar.MONTH) &&
-                    dbCal.get(Calendar.YEAR) == curCal.get(Calendar.YEAR)) {
-                // Stock already updated today once.
-                return true;
-            }
+            return isDateSame(dbCal, curCal);
         }
 
         return false;
+    }
+
+    public static boolean isDateToday(long timestamp) {
+        Date date = new Date(timestamp);
+        Calendar timestampCal = Calendar.getInstance();
+        timestampCal.setTime(date);
+        return isDateSame(timestampCal, Calendar.getInstance());
+    }
+
+    public static boolean isDateSame(Calendar cal1, Calendar cal2) {
+        return cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH) &&
+                cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+
     }
 
     public static int dateDiff(Calendar someCal, Calendar curCal) {
@@ -205,10 +220,44 @@ public class Util {
 
         textView.setText(Double.toString(Util.roundTwoDecimals(change)));
 
-        double changePercent = Util.roundTwoDecimals((Math.abs(change)*100.0)/original);
+        double changePercent = Util.roundTwoDecimals((Math.abs(change) * 100.0) / original);
         textView.append(" (");
         textView.append(Double.toString(changePercent));
         textView.append("%)");
+    }
+
+    public static boolean setPositiveColor(Double value,
+                                           Double rangeStart,
+                                           boolean rangeStartCanBeEqual,
+                                           Double rangeEnd,
+                                           boolean rangeEndCanBeEqual,
+                                           TextView view) {
+        if(value != null && rangeStart != null && rangeEnd != null) {
+            boolean withinUpperBound = rangeEndCanBeEqual ? value <= rangeEnd : value < rangeEnd;
+            boolean withinLowerBound = rangeStartCanBeEqual ? value >= rangeStart : value > rangeStart;
+            if(withinLowerBound && withinUpperBound) {
+                view.setTextColor(Color.GREEN);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean setNegativeColor(Double value,
+                                           double rangeStart,
+                                           boolean rangeStartCanBeEqual,
+                                           double rangeEnd,
+                                           boolean rangeEndCanBeEqual,
+                                           TextView view) {
+        if(value != null) {
+            boolean withinUpperBound = rangeEndCanBeEqual ? value <= rangeEnd : value < rangeEnd;
+            boolean withinLowerBound = rangeStartCanBeEqual ? value >= rangeStart : value > rangeStart;
+            if(withinLowerBound && withinUpperBound) {
+                view.setTextColor(Color.RED);
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void setChange(TextView changeView, double change, double original) {

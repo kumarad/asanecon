@@ -26,4 +26,29 @@
     <string name="high_valuation">A PEG value greater than 2 signals a high valuation.</string>
     <string name="trailing_stop_loss">The stop loss defines the maximum percentage loss that is acceptable before a stock should be sold. A trailing stop loss protects gains by triggering when a stock closes the specified percentage below its highest price.</string>
     <string name="down_price_action">The stock is trading below its 50 day moving average indicating a momentum shift towards a bear trend.</string>
+    <string name="undervalued"><![CDATA[
+        The stock might be undervalued.
+        <ul>
+            <li>The enterprise value multiple (EV/EBITDA) indicates how long it would take an acquisition to earn enough to pay off its costs. A multiple of 10 or lower might indicate the stock is undervalued.</li>
+            <li>A Price/Earnings to Growth (PEG) ratio &lt; 1 indicates the stock might be undervalued.</li>
+            <li>A stock price lower than the book value per share might indicate the stock has been undervalued by the market.</li>
+        </ul>
+    ]]></string>
+    <string name="profitability"><![CDATA[
+        The company profitability/liquidity should be further analyzed.
+        <ul>
+            <li>A current ratio &lt 1 means the company might not meet its debt obligations. Not always the case though.</li>
+            <li>Its preferable for the operating margin to be &gt 15%.</li>
+            <li>A lower debt to equity ratio value means the company is less leveraged (has less debt).</li>
+        </ul>
+    ]]></string>
+    <string name="management_effectiveness" formatted="false"><![CDATA[
+        Management performance should be further analyzed.
+        <ul>
+            <li>The return on assets indicates how profitable a company is relative to assets and should be no less than 5%.</li>
+            <li>The return on equity indicates how effectively shareholder money is being used by management. A value between 15 to 20% is considered good.</li>
+        </ul>
+    ]]></string>
+    <string name="volatility">The stock is %1$s%% less volatile than the overall stock market.</string>
+
 </resources>
