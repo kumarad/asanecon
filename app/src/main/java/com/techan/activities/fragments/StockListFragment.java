@@ -153,14 +153,19 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
 
     public void fillData() {
         // Initialize loader for this activity. Loads stuff from data base asynchronously.
-        getLoaderManager().initLoader(LOADER_ID, null, this);
+        Loader loader = getLoaderManager().getLoader(LOADER_ID);
+        if(loader != null && loader.isStarted()) {
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
+        } else {
+            getLoaderManager().initLoader(LOADER_ID, null, this);
 
-        // Create a cursor that maps each stock symbol to the appropriate field on the UI.
-        String[] from = new String[] {StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_CHANGE};
-        int[] to = new int[] { R.id.listSymbol, R.id.listPrice, R.id.listChange};
-        adapter = new StockCursorAdapter(getActivity(), R.layout.stock_row, null, from, to, 0);
+            // Create a cursor that maps each stock symbol to the appropriate field on the UI.
+            String[] from = new String[] {StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_CHANGE};
+            int[] to = new int[] { R.id.listSymbol, R.id.listPrice, R.id.listChange};
+            adapter = new StockCursorAdapter(getActivity(), R.layout.stock_row, null, from, to, 0);
 
-        listView.setAdapter(adapter);
+            listView.setAdapter(adapter);
+        }
 
         // Update from the network.
         if(appStartup) {
