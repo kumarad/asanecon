@@ -74,6 +74,11 @@ public class StockKeyStatsFragment extends Fragment {
         statsView.setVisibility(View.VISIBLE);
 
         StockKeyStats stats = KeyStatsRepo.getRepo().get(symbol);
+        View undervaluedAlertView = rootView.findViewById(R.id.valuationAlert);
+        View profitabilityAlertView = rootView.findViewById(R.id.profitabilityAlert);
+        View mgmtAlertView = rootView.findViewById(R.id.mgmtEffectivenessAlert);
+        View volatilityAlertView = rootView.findViewById(R.id.volatilityAlert);
+
         if(stats != null) {
             final TextView evView = (TextView) rootView.findViewById(R.id.keyStatsEnterpriseValue);
             evView.setText(Util.doubleToString(stats.getEnterpriseValueMultiple()));
@@ -87,7 +92,6 @@ public class StockKeyStatsFragment extends Fragment {
             bookValueView.setText(Util.doubleToString(stats.getBookValue()));
             boolean bookValueUnderValued = Util.setPositiveColor(stockPrice, 0.0, true, stats.getBookValue(), false, bookValueView);
 
-            View undervaluedAlertView = rootView.findViewById(R.id.valuationAlert);
             if(evUnderValued || pegUnderValued || bookValueUnderValued) {
                 undervaluedAlertView.setVisibility(View.VISIBLE);
                 InfoDialog.setOnClickInfoDialog(undervaluedAlertView, inflater, rootView.getResources().getString(R.string.undervalued), true);
@@ -106,7 +110,6 @@ public class StockKeyStatsFragment extends Fragment {
             final TextView totalDebtToEquityView = (TextView) rootView.findViewById(R.id.keyStatsTotalDebtToEquity);
             totalDebtToEquityView.setText(Util.doubleToString(stats.getDebtToEquityRatio()));
 
-            View profitabilityAlertView = rootView.findViewById(R.id.profitabilityAlert);
             if(currentRatioBad || operatingMarginBad) {
                 profitabilityAlertView.setVisibility(View.VISIBLE);
                 InfoDialog.setOnClickInfoDialog(profitabilityAlertView, inflater, rootView.getResources().getString(R.string.profitability), true);
@@ -122,7 +125,6 @@ public class StockKeyStatsFragment extends Fragment {
             roeView.setText(Util.doubleToString(stats.getRoe()));
             boolean roeBad = Util.setNegativeColor(stats.getRoe(), 0.0, true, 15, false, roeView);
 
-            View mgmtAlertView = rootView.findViewById(R.id.mgmtEffectivenessAlert);
             if(roaBad || roeBad) {
                 mgmtAlertView.setVisibility(View.VISIBLE);
                 InfoDialog.setOnClickInfoDialog(mgmtAlertView, inflater, rootView.getResources().getString(R.string.management_effectiveness), true);
@@ -132,14 +134,18 @@ public class StockKeyStatsFragment extends Fragment {
 
             final TextView betaView = (TextView) rootView.findViewById(R.id.keyStatsBeta);
             betaView.setText(Util.doubleToString(stats.getBeta()));
-            View volatilityAlertView = rootView.findViewById(R.id.volatilityAlert);
             if(Util.setPositiveColor(stats.getBeta(), 0.0, true, 1.0 , false, betaView)) {
                 volatilityAlertView.setVisibility(View.VISIBLE);
                 InfoDialog.setOnClickInfoDialog(volatilityAlertView, inflater, String.format(rootView.getResources().getString(R.string.volatility), Integer.toString((int) ((1.0 - stats.getBeta()) * 100))));
             } else {
                 volatilityAlertView.setVisibility(View.INVISIBLE);
             }
-        } // else should never happen.
+        } else {
+            undervaluedAlertView.setVisibility(View.INVISIBLE);
+            profitabilityAlertView.setVisibility(View.INVISIBLE);
+            mgmtAlertView.setVisibility(View.INVISIBLE);
+            volatilityAlertView.setVisibility(View.INVISIBLE);
+        }
 
     }
 }
