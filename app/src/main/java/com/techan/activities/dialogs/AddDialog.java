@@ -120,6 +120,5 @@ public class AddDialog {
         }
 
         loaderManager.restartLoader(StockListFragment.LOADER_ID, null, stockListFragment);
-        stockListFragment.resetDrawer();
     }
 }

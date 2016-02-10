@@ -3,7 +3,6 @@ package com.techan.activities.dialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 
 import com.techan.activities.HomeActivity;
@@ -43,8 +42,6 @@ public class DeleteDialog {
         alertDialog.create().show();
     }
 
-    private static final int ACTIVITY_CREATE = 0;
-
     private static void deleteStock(Activity parentActivity, Uri stockUri, String symbol, String portfolioName, boolean deleteAll) {
         if(deleteAll) {
             parentActivity.getContentResolver().delete(stockUri, null, null);
@@ -76,7 +73,6 @@ public class DeleteDialog {
             }
         }
 
-        Intent i = new Intent(parentActivity, HomeActivity.class);
-        parentActivity.startActivityForResult(i, ACTIVITY_CREATE);
+        parentActivity.finish();
     }
 }

@@ -48,8 +48,10 @@ public class DrawerSubMenuItem implements IDrawerMenuItem {
 
             if(overallChange > 0) {
                 changeView.setTextColor(Color.GREEN);
+                changeView.setVisibility(View.VISIBLE);
             } else if(overallChange < 0) {
                 changeView.setTextColor(Color.RED);
+                changeView.setVisibility(View.VISIBLE);
             } else {
                 changeView.setVisibility(View.GONE);
             }
