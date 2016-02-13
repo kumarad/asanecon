@@ -82,15 +82,15 @@ public class KeyStatsDownloader {
 
                         if(keyStatsMap.size() != 0) {
                             StockKeyStats stats = new StockKeyStats(Calendar.getInstance().getTimeInMillis(),
-                                    Util.parseDouble(keyStatsMap.get(ENTERPRISE_VALUE_MULTIPLE)),
-                                    Util.parseDouble(keyStatsMap.get(PEG)),
-                                    Util.parseDouble(keyStatsMap.get(BOOK_VALUE)),
-                                    Util.parseDouble(keyStatsMap.get(BETA)),
-                                    Util.parseDouble(keyStatsMap.get(CURRENT_RATIO)),
-                                    Util.parseDouble(keyStatsMap.get(OPERATING_MARGIN).replace("%", "")),
-                                    Util.parseDouble(keyStatsMap.get(DEBT_TO_EQUITY_RATIO)),
-                                    Util.parseDouble(keyStatsMap.get(ROA).replace("%", "")),
-                                    Util.parseDouble(keyStatsMap.get(ROE).replace("%", "")));
+                                    Util.parseDoubleNullOnError(keyStatsMap.get(ENTERPRISE_VALUE_MULTIPLE)),
+                                    Util.parseDoubleNullOnError(keyStatsMap.get(PEG)),
+                                    Util.parseDoubleNullOnError(keyStatsMap.get(BOOK_VALUE)),
+                                    Util.parseDoubleNullOnError(keyStatsMap.get(BETA)),
+                                    Util.parseDoubleNullOnError(keyStatsMap.get(CURRENT_RATIO)),
+                                    Util.parseDoubleNullOnError(keyStatsMap.get(OPERATING_MARGIN).replace("%", "")),
+                                    Util.parseDoubleNullOnError(keyStatsMap.get(DEBT_TO_EQUITY_RATIO)),
+                                    Util.parseDoubleNullOnError(keyStatsMap.get(ROA).replace("%", "")),
+                                    Util.parseDoubleNullOnError(keyStatsMap.get(ROE).replace("%", "")));
                             KeyStatsRepo.getRepo().put(symbol, stats);
                         }
                         

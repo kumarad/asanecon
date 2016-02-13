@@ -172,6 +172,10 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
             swipeView.setVisibility(View.INVISIBLE);
             progressView.setVisibility(View.VISIBLE);
             (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
+
+            //Ensures we don't unnecessarily refresh stock quotes when we come back to this list
+            //from a stock detail fragment.
+            appStartup = false;
         } else {
             swipeView.setVisibility(View.VISIBLE);
             progressView.setVisibility(View.INVISIBLE);

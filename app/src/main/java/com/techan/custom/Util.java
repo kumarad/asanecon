@@ -65,6 +65,14 @@ public class Util {
         }
     }
 
+    public static Double parseDoubleNullOnError(String s) {
+        try {
+            return Double.parseDouble(s);
+        } catch(Exception e) {
+            return null;
+        }
+    }
+
     public static String doubleToString(Double value) {
         if(value == null) {
             return "-";

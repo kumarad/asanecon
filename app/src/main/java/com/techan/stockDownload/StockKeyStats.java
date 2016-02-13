@@ -2,26 +2,26 @@ package com.techan.stockDownload;
 
 public class StockKeyStats {
     private final long timestamp;
-    private final double enterpriseValueMultiple;
-    private final double peg;
-    private final double bookValue;
-    private final double beta;
-    private final double currentRatio;
-    private final double operatingMargin;
-    private final double debtToEquityRatio;
-    private final double roa;
-    private final double roe;
+    private final Double enterpriseValueMultiple;
+    private final Double peg;
+    private final Double bookValue;
+    private final Double beta;
+    private final Double currentRatio;
+    private final Double operatingMargin;
+    private final Double debtToEquityRatio;
+    private final Double roa;
+    private final Double roe;
 
     public StockKeyStats(long timestamp,
-                         double enterpriseValueMultiple,
-                         double peg,
-                         double bookValue,
-                         double beta,
-                         double currentRatio,
-                         double operatingMargin,
-                         double debtToEquityRatio,
-                         double roa,
-                         double roe) {
+                         Double enterpriseValueMultiple,
+                         Double peg,
+                         Double bookValue,
+                         Double beta,
+                         Double currentRatio,
+                         Double operatingMargin,
+                         Double debtToEquityRatio,
+                         Double roa,
+                         Double roe) {
         this.timestamp = timestamp;
         this.enterpriseValueMultiple = enterpriseValueMultiple;
         this.peg = peg;
@@ -38,39 +38,39 @@ public class StockKeyStats {
         return timestamp;
     }
 
-    public double getEnterpriseValueMultiple() {
+    public Double getEnterpriseValueMultiple() {
         return enterpriseValueMultiple;
     }
 
-    public double getPeg() {
+    public Double getPeg() {
         return peg;
     }
 
-    public double getBookValue() {
+    public Double getBookValue() {
         return bookValue;
     }
 
-    public double getBeta() {
+    public Double getBeta() {
         return beta;
     }
 
-    public double getCurrentRatio() {
+    public Double getCurrentRatio() {
         return currentRatio;
     }
 
-    public double getOperatingMargin() {
+    public Double getOperatingMargin() {
         return operatingMargin;
     }
 
-    public double getDebtToEquityRatio() {
+    public Double getDebtToEquityRatio() {
         return debtToEquityRatio;
     }
 
-    public double getRoa() {
+    public Double getRoa() {
         return roa;
     }
 
-    public double getRoe() {
+    public Double getRoe() {
         return roe;
     }
 }
