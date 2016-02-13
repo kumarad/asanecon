@@ -11,6 +11,19 @@
         style="@android:style/Widget.ProgressBar.Small"
         />
 
+    <LinearLayout
+        android:id="@+id/noKeyStatsView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Key statistics unavailable."/>
+
+    </LinearLayout>
+
     <ScrollView
         android:id="@+id/stockKeyStatsScrollView"
         android:layout_width="fill_parent"
