@@ -1,5 +1,7 @@
 package com.techan.stockDownload.retro;
 
+import com.techan.stockDownload.StockDayPriceInfo;
+
 import java.util.SortedMap;
 
 import retrofit.Callback;
@@ -16,7 +18,8 @@ public interface YahooService {
                     @Query("d") int endMonth,
                     @Query("e") int endDay,
                     @Query("f") int endYear,
-                    Callback<SortedMap<String, Double>> callback);
+                    @Query("g") String dailyInterval,
+                    Callback<SortedMap<String, StockDayPriceInfo>> callback);
 
     @GET("/q/ks")
     void getKeyStats(@Query("s") String symbolPlusKeyStats,

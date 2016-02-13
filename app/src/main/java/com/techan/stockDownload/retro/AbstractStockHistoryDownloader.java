@@ -3,6 +3,7 @@ package com.techan.stockDownload.retro;
 import android.util.Log;
 
 import com.techan.memrepo.HistoryRepo;
+import com.techan.stockDownload.StockDayPriceInfo;
 
 import java.util.Calendar;
 import java.util.SortedMap;
@@ -14,7 +15,7 @@ import retrofit.client.Response;
 public abstract class AbstractStockHistoryDownloader extends HistoryDownloader {
 
     public abstract void done();
-    public abstract HistoryRepo getRepo(String symbol);
+    public abstract void handleHistory(String symbol, SortedMap<String, StockDayPriceInfo> prices);
 
     @Override
     public void download(final String symbol, Calendar startDate, Calendar endDate) {
@@ -40,12 +41,11 @@ public abstract class AbstractStockHistoryDownloader extends HistoryDownloader {
                 endMonth,
                 endDay,
                 endYear,
-                new Callback<SortedMap<String, Double>>() {
+                "d",
+                new Callback<SortedMap<String, StockDayPriceInfo>>() {
                     @Override
-                    public void success(SortedMap<String, Double> prices, Response response) {
-                        getRepo(symbol).setHistory(prices);
-
-
+                    public void success(SortedMap<String, StockDayPriceInfo> prices, Response response) {
+                        handleHistory(symbol, prices);
                         done();
                     }
 
@@ -55,7 +55,5 @@ public abstract class AbstractStockHistoryDownloader extends HistoryDownloader {
                         done();
                     }
                 });
-
-
     }
 }

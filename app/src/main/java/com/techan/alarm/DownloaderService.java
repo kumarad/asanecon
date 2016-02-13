@@ -14,7 +14,8 @@ public class DownloaderService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        new RefreshTask(getApplicationContext(), this.getContentResolver(), true).download();
+        //todo might want to also refresh the stop loss info at this point ....
+        new RefreshTask(this.getContentResolver(), true).download(getApplicationContext());
 
         long cur = System.currentTimeMillis()/1000;
         long delta = (cur - last);

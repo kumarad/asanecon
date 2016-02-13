@@ -23,7 +23,7 @@ public class GoldDownloader extends HistoryDownloader {
     public static class GoldDownloaderComplete {}
 
     public void get(String lastUpdateStr) {
-        getInternal(null, lastUpdateStr);
+        getInternal(null, lastUpdateStr, 360);
     }
 
     @Override

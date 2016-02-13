@@ -31,13 +31,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 // because the SQLiteDatabase backing the content provider is thread safe!
 
 public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
-
-    Context ctx;
     ContentResolver contentResolver;
     boolean autoRefresh;
-
-    final Calendar curCal;
-    final String curDateStr;
 
     final List<String> symbols = new ArrayList<>();
     final boolean shouldRefreshGold;
@@ -48,93 +43,54 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
 
     static class DownloadInfo {
         Uri uri;
-        String lastUpdate;
-        Integer stopLossPercent;
-        Double historicalHigh;      // used for sl tracking
-        Double historicalLow;       // used for sl tracking
     }
 
     final Map<String, DownloadInfo> downloadInfoMap = new HashMap<>();
 
-    private void initialize(Context ctx, ContentResolver contentResolver, boolean autoRefresh) {
+    private void initialize(ContentResolver contentResolver, boolean autoRefresh) {
         BusService.getInstance().register(this);
         this.refreshingStockData.set(false);
         this.refreshingGoldData.set(false);
         this.refreshingSPData.set(false);
-        this.ctx = ctx;
         this.contentResolver = contentResolver;
         this.autoRefresh = autoRefresh;
     }
 
     // Refresh everything.
-    public RefreshTask(Context ctx, ContentResolver contentResolver, boolean autoRefresh) {
-        initialize(ctx, contentResolver, autoRefresh);
+    public RefreshTask(ContentResolver contentResolver, boolean autoRefresh) {
+        initialize(contentResolver, autoRefresh);
         shouldRefreshGold = true;
         shouldRefreshSP = true;
 
-        String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_LAST_UPDATE, StocksTable.COLUMN_SL_HIGEST_PRICE, StocksTable.COLUMN_SL_LOWEST_PRICE};
+        String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL};
         Cursor cursor = contentResolver.query(StockContentProvider.CONTENT_URI, projection, null, null, null);
 
         // Get all the symbols.
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
             DownloadInfo info = new DownloadInfo();
-
             info.uri = Uri.parse(StockContentProvider.STOCK_URI_STR + Integer.toString(cursor.getInt(0)));
+
             String symbol = cursor.getString(1);
-            info.lastUpdate = cursor.getString(2);
-
-            SymbolProfile symbolProfile = ProfileManager.getSymbolData(ctx, symbol);
-            info.stopLossPercent = symbolProfile.stopLossPercent;
-            if(info.stopLossPercent != null) {
-                info.historicalHigh = cursor.getDouble(3);
-                info.historicalLow = cursor.getDouble(4);
-            }
-
             downloadInfoMap.put(symbol, info);
+
             symbols.add(symbol);
 
             cursor.moveToNext();
         }
-
-        // Get current date and time.
-        curCal = (Calendar)Calendar.getInstance().clone();
-        curDateStr = Util.getDateStrForDb(curCal);
     }
 
     // Refresh for particular stock.
-    public RefreshTask(Context ctx, ContentResolver contentResolver, Uri uri, String symbol, boolean isAdd) {
-        initialize(ctx, contentResolver, false);
+    public RefreshTask(ContentResolver contentResolver, Uri uri, String symbol) {
+        initialize(contentResolver, false);
         shouldRefreshGold = false;
         shouldRefreshSP = false;
 
         DownloadInfo info = new DownloadInfo();
-
         info.uri = uri;
-
-        if(isAdd) {
-            info.lastUpdate = null;
-            info.stopLossPercent = null;
-        } else {
-            String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_LAST_UPDATE, StocksTable.COLUMN_SL_HIGEST_PRICE, StocksTable.COLUMN_SL_LOWEST_PRICE};
-            Cursor cursor = contentResolver.query(info.uri, projection, null, null, null);
-            cursor.moveToFirst();
-            info.lastUpdate = cursor.getString(1);
-
-            SymbolProfile symbolProfile = ProfileManager.getSymbolData(ctx, symbol);
-            info.stopLossPercent = symbolProfile.stopLossPercent;
-            if(info.stopLossPercent != null) {
-                info.historicalHigh = cursor.getDouble(2);
-                info.historicalLow = cursor.getDouble(3);
-            }
-        }
-
         downloadInfoMap.put(symbol, info);
-        symbols.add(symbol);
 
-        // Get current date and time.
-        curCal = (Calendar)Calendar.getInstance().clone();
-        curDateStr = Util.getDateStrForDb(curCal);
+        symbols.add(symbol);
     }
 
     private PostRefreshAction action = null;
@@ -150,29 +106,7 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
     @Override
     protected List<StockData> doInBackground(String... params) {
         // Download real time data for stock symbols.
-        List<StockData> dataList = DownloadQuote.download(symbols, curDateStr);
-
-        // Download trend data if needed.
-        for(StockData data : dataList) {
-            DownloadInfo info = downloadInfoMap.get(data.symbol);
-            String lastUpdate = info.lastUpdate;
-            Integer stopLossPercent = info.stopLossPercent;
-
-            // isDateSame will return false when null is passed for lastUpdate.
-            // When a stock is added, lastUpdate = null;
-            // When stock is recovered from profile, lastUpdate is null if no stop loss tracking
-            //                                       lastUpdate is buy price date for stop loss if tracking
-            // When refreshed, last update is last time both trends and stop loss info was updated.
-            if(!Util.isDateSame(lastUpdate, curCal)) {
-                if(stopLossPercent != null) {
-                    DownloadHistory.download(data, curCal, lastUpdate, info.historicalHigh, info.historicalLow);
-                } else {
-                    DownloadHistory.download(data, curCal);
-                }
-            }
-        }
-
-        return dataList;
+        return DownloadQuote.download(symbols, Util.getDateStrForDb(Calendar.getInstance()));
     }
 
     // Once data has been downloaded, update database.
@@ -186,7 +120,7 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
 
         for(StockData data : dataList) {
             DownloadInfo info = downloadInfoMap.get(data.symbol);
-            ContentValues values = ContentValuesFactory.createContentValues(data, (info.stopLossPercent != null));
+            ContentValues values = ContentValuesFactory.createContentValues(data);
             contentResolver.update(info.uri, values, null, null);
         }
 
@@ -220,7 +154,7 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
 
     // Used when we should only be doing stuff on the wifi network. Auto refresh etc uses this.
     // Also used when loading the stock list fragment
-    public void download() {
+    public void download(Context ctx) {
         if(autoRefresh) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ctx);
             boolean refreshWifiOnly = sharedPref.getBoolean(SettingsActivity.REFRESH_WIFI_ONLY_KEY, false);

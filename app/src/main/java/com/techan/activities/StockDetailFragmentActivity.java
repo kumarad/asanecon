@@ -55,8 +55,9 @@ public class StockDetailFragmentActivity extends FragmentActivity {
 
         stockCursor.moveToFirst();
 
+        // todo this is really just the last history update. so should probably just get rid of it from here.
         TextView symbolView = (TextView) this.findViewById(R.id.lastUpdate);
-        String lastUpdateStr = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_LAST_UPDATE));
+        String lastUpdateStr = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_LAST_HISTORY_UPDATE));
         symbolView.setText(lastUpdateStr);
 
         symbol = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));

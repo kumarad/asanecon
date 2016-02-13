@@ -2,6 +2,9 @@ package com.techan.memrepo;
 
 import android.util.LruCache;
 
+import com.techan.stockDownload.StockDayPriceInfo;
+
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -35,8 +38,10 @@ public class HistoryRepo {
         prices.put(date, price);
     }
 
-    public void setHistory(SortedMap<String, Double> prices) {
-        this.prices.putAll(prices);
+    public void setHistory(SortedMap<String, StockDayPriceInfo> prices) {
+        for(Map.Entry<String, StockDayPriceInfo> cur : prices.entrySet()) {
+            this.prices.put(cur.getKey(), cur.getValue().getClosingPrice());
+        }
     }
 
     //for(Map.Entry<String, Double> entry : goldRepo.getPrices())

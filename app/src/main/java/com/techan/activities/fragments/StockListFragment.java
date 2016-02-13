@@ -77,7 +77,7 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
             @Override
             public void onRefresh() {
                 swipeView.setRefreshing(true);
-                (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
+                (new RefreshTask(getActivity().getContentResolver(), false)).download(getActivity());
             }
         });
 
@@ -171,7 +171,7 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
         if(appStartup) {
             swipeView.setVisibility(View.INVISIBLE);
             progressView.setVisibility(View.VISIBLE);
-            (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
+            (new RefreshTask(getActivity().getContentResolver(), false)).download(getActivity());
 
             //Ensures we don't unnecessarily refresh stock quotes when we come back to this list
             //from a stock detail fragment.

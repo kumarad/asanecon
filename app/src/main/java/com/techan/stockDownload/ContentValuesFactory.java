@@ -10,7 +10,7 @@ import java.util.Calendar;
 
 public class ContentValuesFactory {
 
-    public static ContentValues createContentValues(StockData stockData, boolean doStopLoss) {
+    public static ContentValues createContentValues(StockData stockData) {
         ContentValues values = new ContentValues();
 
         values.put(StocksTable.COLUMN_PRICE, stockData.price);
@@ -22,29 +22,36 @@ public class ContentValuesFactory {
         values.put(StocksTable.COLUMN_TRADING_VOLUME, stockData.tradingVol);
         values.put(StocksTable.COLUMN_AVG_TRADING_VOLUME, stockData.avgTradingVol);
         values.put(StocksTable.COLUMN_CHANGE, stockData.change);
-        values.put(StocksTable.COLUMN_NAME, stockData.name.replace("\"",""));
-
-        StockTrends curTrends = stockData.stockTrends;
-        if(curTrends != null) {
-            values.put(StocksTable.COLUMN_UP_TREND_COUNT, curTrends.upTrendDayCount);
-            values.put(StocksTable.COLUMN_60_DAY_HIGH, curTrends.high60Day);
-            values.put(StocksTable.COLUMN_90_DAY_LOW, curTrends.low90Day);
-
-            if(doStopLoss) {
-                values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, curTrends.historicalHigh);
-                values.put(StocksTable.COLUMN_SL_LOWEST_PRICE, curTrends.historicalLow);
-                values.put(StocksTable.COLUMN_SL_LOWEST_PRICE_DATE, curTrends.historicalLowDate);
-            }
-        }
+        values.put(StocksTable.COLUMN_NAME, stockData.name.replace("\"", ""));
 
         values.put(StocksTable.COLUMN_DAYS_LOW, stockData.daysLow);
         values.put(StocksTable.COLUMN_DAYS_HIGH, stockData.daysHigh);
 
-        values.put(StocksTable.COLUMN_LAST_UPDATE, stockData.dateStr);
+        values.put(StocksTable.COLUMN_LAST_HISTORY_UPDATE, stockData.dateStr);
 
         return values;
     }
 
+    public static ContentValues createTrendContentValues(StockTrends trends, boolean doStopLoss) {
+        ContentValues values = new ContentValues();
+        values.put(StocksTable.COLUMN_UP_TREND_COUNT, trends.upTrendDayCount);
+        values.put(StocksTable.COLUMN_60_DAY_HIGH, trends.high60Day);
+        values.put(StocksTable.COLUMN_90_DAY_LOW, trends.low90Day);
+
+        if(doStopLoss) {
+            values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, trends.historicalHigh);
+            values.put(StocksTable.COLUMN_SL_LOWEST_PRICE, trends.historicalLow);
+            values.put(StocksTable.COLUMN_SL_LOWEST_PRICE_DATE, trends.historicalLowDate);
+        }
+
+        return values;
+    }
+
+    // Invoked when starting to track the stop loss for a stock using the StopLossDialog.
+    // Since the stop loss tracking is being started from the current date we set the highest price
+    // to the higher value between the current price and buy price. We set the lowest price to the lower
+    // value. When the history is downloaded using DownloadHistory, we compare the history against these
+    // values to detect new lows and highs.
     public static ContentValues createSlAddValuesSameDate(double curPrice, double buyPrice) {
         ContentValues values = new ContentValues();
         values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, (curPrice > buyPrice ? curPrice : buyPrice));
@@ -53,6 +60,11 @@ public class ContentValuesFactory {
         return values;
     }
 
+    // Invoked when starting to track the stop loss for a stock using the StopLossDialog.
+    // This method is invoked if the date to start tracking the stop loss is earlier than the
+    // current date. We set the start high/low for stop loss purposes to the buy price and when
+    // DownloadHistory is invoked it compares to the buy price to detect the lowest low and the
+    // highest high.
     public static ContentValues createSlAddValuesDiffDate(double buyPrice, String slTrackingStartDate) {
         ContentValues values = new ContentValues();
         values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, buyPrice);
@@ -61,16 +73,18 @@ public class ContentValuesFactory {
 
         // Need to set last updated to an earlier date to ensure RefreshTask doesn't
         // think its already updated.
-        values.put(StocksTable.COLUMN_LAST_UPDATE, slTrackingStartDate);
+        values.put(StocksTable.COLUMN_LAST_HISTORY_UPDATE, slTrackingStartDate);
         return values;
     }
 
+    // Invoked when we have lost our db copy and we are recovering from the profile
+    // stored in our json backup file.
     public static ContentValues createValuesForRecovery(SymbolProfile profile) {
         ContentValues values = new ContentValues();
         values.put(StocksTable.COLUMN_SYMBOL, profile.symbol);
         values.put(StocksTable.COLUMN_SL_HIGEST_PRICE, profile.buyPrice);
         values.put(StocksTable.COLUMN_SL_LOWEST_PRICE, profile.buyPrice);
-        values.put(StocksTable.COLUMN_LAST_UPDATE, profile.slTrackingStartDate);
+        values.put(StocksTable.COLUMN_LAST_HISTORY_UPDATE, profile.slTrackingStartDate);
         return values;
     }
 

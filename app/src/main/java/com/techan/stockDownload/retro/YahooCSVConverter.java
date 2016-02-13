@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techan.custom.Util;
 import com.techan.stockDownload.DownloadHistory;
+import com.techan.stockDownload.StockDayPriceInfo;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,14 +27,16 @@ public class YahooCSVConverter implements Converter {
             JavaType javaType = objectMapper.getTypeFactory().constructType(type);
             if(javaType.getRawClass().isInstance((new TreeMap<String, Double>()))) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(body.in()));
-                SortedMap<String, Double> priceMap = new TreeMap<>();
+                SortedMap<String, StockDayPriceInfo> priceMap = new TreeMap<>();
                 String line = reader.readLine(); // First line defines columns
                 while ((line = reader.readLine()) != null) {
                     String[] rowData = line.split(",");
 
-                    Double price = Util.parseDouble(rowData[DownloadHistory.DAY_CLOSE_INDEX]);
+                    Double closePrice = Util.parseDouble(rowData[DownloadHistory.DAY_CLOSE_INDEX]);
+                    Double dayHigh = Util.parseDouble(rowData[DownloadHistory.DAY_HIGH_INDEX]);
+                    Double dayLow = Util.parseDouble(rowData[DownloadHistory.DAY_LOW_INDEX]);
                     String dateStr = rowData[DownloadHistory.DATE_INDEX];
-                    priceMap.put(dateStr, price);
+                    priceMap.put(dateStr, new StockDayPriceInfo(closePrice, dayHigh, dayLow));
                 }
                 return priceMap;
             } else {

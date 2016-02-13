@@ -123,9 +123,10 @@ public class StopLossDialog {
             cr.update(stockUri, values, null, null);
 
             // Need to refresh historical data for this stock.
-            RefreshTask rt = new RefreshTask(parentActivity, parentActivity.getContentResolver(), stockUri, profile.symbol, false);
-            rt.addAction(new CostBasisPostRefreshAction(stockPagerAdapter, profile));
-            rt.download();
+            //todo we need to invoke DownloadHistory here.
+//            RefreshTask rt = new RefreshTask(parentActivity.getContentResolver(), stockUri, profile.symbol, false);
+//            rt.addAction(new CostBasisPostRefreshAction(stockPagerAdapter, profile));
+//            rt.download(parentActivity);
         } else {
             // Start tracking stop loss from todays date.
             ContentValues values = ContentValuesFactory.createSlAddValuesSameDate(curPrice, profile.buyPrice);

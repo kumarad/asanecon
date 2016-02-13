@@ -116,7 +116,7 @@ public class AddDialog {
             values.put(StocksTable.COLUMN_SYMBOL, symbol);
             Uri addedUri = stockListFragment.getActivity().getContentResolver().insert(StockContentProvider.CONTENT_URI, values);
             Uri uri = Uri.parse(StockContentProvider.BASE_URI_STR + addedUri);
-            (new RefreshTask(stockListFragment.getActivity(), stockListFragment.getActivity().getContentResolver(), uri, symbol, true)).download();
+            (new RefreshTask(stockListFragment.getActivity().getContentResolver(), uri, symbol)).download(stockListFragment.getActivity());
         }
 
         loaderManager.restartLoader(StockListFragment.LOADER_ID, null, stockListFragment);

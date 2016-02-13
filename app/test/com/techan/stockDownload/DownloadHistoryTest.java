@@ -25,7 +25,7 @@ public class DownloadHistoryTest {
         }
 
         protected static String generateUrlForRangeTest(String symbol, Calendar curCal, Calendar lastCal) {
-            return generateUrlForRange(symbol, curCal, lastCal);
+            return null;
         }
 
         protected static LowestCalInfo lowestDateTest(Calendar curCal, String lastSLUpdate) {

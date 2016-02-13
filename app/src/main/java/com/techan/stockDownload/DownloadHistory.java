@@ -1,8 +1,18 @@
 package com.techan.stockDownload;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 
+import com.techan.activities.BusService;
 import com.techan.custom.Util;
+import com.techan.database.StocksTable;
+import com.techan.profile.ProfileManager;
+import com.techan.profile.SymbolProfile;
+import com.techan.stockDownload.retro.AbstractStockHistoryDownloader;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -13,10 +23,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
+import java.util.Map;
+import java.util.SortedMap;
 
-public class DownloadHistory {
-    public static final String URL_PREFIX = "http://ichart.yahoo.com/table.csv?s=";
-    public static String DAILY_INTERVAL = "&g=d";
+public class DownloadHistory extends AbstractStockHistoryDownloader {
     public static final int DAY_COUNT_10 = 10;
     public static final int DAY_COUNT_60 = 60;
     public static final int DAY_COUNT_90 = 90;
@@ -26,56 +36,80 @@ public class DownloadHistory {
     public static final int DAY_LOW_INDEX = 3;
     public static final int DAY_CLOSE_INDEX = 4;
 
-    protected static String generateUrl(String symbol, int startMonth, int startDay, int startYear,
-                                      int endMonth, int endDay, int endYear) {
-        // Generate url
-        String url = URL_PREFIX;
-        url += symbol;
-        url += "&a=" + startMonth;
-        url += "&b=" + startDay;
-        url += "&c=" + startYear;
-        url += "&d=" + endMonth;
-        url += "&e=" + endDay;
-        url += "&f=" + endYear;
+    public static class StopLossHistoryDownloaderComplete {}
 
-        url += DAILY_INTERVAL;
+    private final ContentResolver contentResolver;
+    private final Uri uri;
+    private HistoryInfo historyInfo;
+    private LowestCalInfo lowestCalInfo;
+    private boolean includeSL;
 
-        return url;
+    public DownloadHistory(String symbol,
+                           Context ctx,
+                           ContentResolver contentResolver,
+                           Uri uri) {
+        this.contentResolver = contentResolver;
+        this.uri = uri;
+
+        String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_LAST_HISTORY_UPDATE, StocksTable.COLUMN_SL_HIGEST_PRICE, StocksTable.COLUMN_SL_LOWEST_PRICE};
+        Cursor cursor = contentResolver.query(uri, projection, null, null, null);
+        if(cursor != null) {
+            try {
+                SymbolProfile symbolProfile = ProfileManager.getSymbolData(ctx, symbol);
+                startDownload(cursor, symbolProfile);
+            } finally {
+                cursor.close();
+            }
+        } else {
+            // todo nothing we can do here.
+        }
+    }
+
+    private void startDownload(Cursor cursor,
+                                SymbolProfile symbolProfile) {
+        Calendar curCalDate = Calendar.getInstance();
+
+        cursor.moveToFirst();
+        String lastUpdate = cursor.getString(1);
+
+        double historicalHigh = 0;
+        double historicalLow = 0;
+        if (symbolProfile.stopLossPercent != null) {
+            includeSL = true;
+            historicalHigh = cursor.getDouble(2);
+            historicalLow = cursor.getDouble(3);
+        } else {
+            includeSL = false;
+        }
+
+        Calendar curCal = (Calendar) Calendar.getInstance().clone();
+        if (!Util.isDateSame(lastUpdate, curCal)) {
+            if (includeSL) {
+                // If SL information needs to be calculated from a period longer than 90 days ago lowestCalInfo will be set to that date.
+                lowestCalInfo = lowestDate(curCalDate, lastUpdate);
+                historyInfo = new HistoryInfo(historicalHigh, historicalLow);
+                download(symbolProfile.symbol, lowestCalInfo.lowestCal, curCalDate);
+            } else {
+                historyInfo = new HistoryInfo();
+                lowestCalInfo = null;
+                download(symbolProfile.symbol, getStartDate(curCalDate, DAY_COUNT_90), curCalDate);
+            }
+        }
+    }
+
+    @Override
+    public void done() {
+        BusService.getInstance().post(new StopLossHistoryDownloaderComplete());
     }
 
     // Calendar and Yahoo uses 0 based month.
-    protected static String generateUrlForDays(String symbol, Calendar curCal, int count) {
-        int endDay = curCal.get(Calendar.DAY_OF_MONTH);
-        int endMonth = curCal.get(Calendar.MONTH);
-        int endYear = curCal.get(Calendar.YEAR);
-
+    private Calendar getStartDate(Calendar curCal, int count) {
         Calendar startCal = (Calendar)curCal.clone();
         startCal.add(Calendar.DAY_OF_MONTH, count * -1);
-
-        int startDay = startCal.get(Calendar.DAY_OF_MONTH);
-        int startMonth = startCal.get(Calendar.MONTH);
-        int startYear = startCal.get(Calendar.YEAR);
-
-        endDay = endDay -1;
-
-        return generateUrl(symbol, startMonth, startDay, startYear, endMonth, endDay, endYear);
+        return startCal;
     }
 
-    protected static String generateUrlForRange(String symbol, Calendar curCal, Calendar lastCal) {
-        int endDay = curCal.get(Calendar.DAY_OF_MONTH);
-        int endMonth = curCal.get(Calendar.MONTH); // 0 based month
-        int endYear = curCal.get(Calendar.YEAR);
-
-        int startDay = lastCal.get(Calendar.DAY_OF_MONTH);
-        int startMonth = lastCal.get(Calendar.MONTH);
-        int startYear = lastCal.get(Calendar.YEAR);
-
-        endDay = endDay -1;
-
-        return generateUrl(symbol, startMonth, startDay, startYear, endMonth, endDay, endYear);
-    }
-
-    protected static LowestCalInfo lowestDate(Calendar curCal, final String lastSLUpdate) {
+    private LowestCalInfo lowestDate(Calendar curCal, final String lastSLUpdate) {
         Calendar cal90 = (Calendar)curCal.clone();
         cal90.add(Calendar.DAY_OF_MONTH, DAY_COUNT_90 * -1);
 
@@ -89,8 +123,8 @@ public class DownloadHistory {
         }
     }
 
-    protected static void handleTrends(HistoryInfo historyInfo, String[] rowData, int count) {
-        double closePrice = Double.parseDouble(rowData[DAY_CLOSE_INDEX]);
+    private void handleTrends(HistoryInfo historyInfo, StockDayPriceInfo priceInfo, int count) {
+        double closePrice = priceInfo.getClosingPrice();
         if(count <= DAY_COUNT_60 && closePrice > historyInfo.high60Day) {
             historyInfo.high60Day = closePrice;
         }
@@ -115,79 +149,45 @@ public class DownloadHistory {
         }
     }
 
-    protected static void handleStopLoss(HistoryInfo historyInfo, String[] rowData, int count, Integer curDateMinusSlDateWhenSlAfter90Days) {
+    private void handleStopLoss(HistoryInfo historyInfo, String dateStr, StockDayPriceInfo priceInfo, int count, Integer curDateMinusSlDateWhenSlAfter90Days) {
         if(curDateMinusSlDateWhenSlAfter90Days == null ||   // Stop loss tracking start date before 90 days. So need to use each entry regardless for stop loss calculation
            count <= curDateMinusSlDateWhenSlAfter90Days) {  // Only track those days that are within the range that is between the stop loss start date and the cur date.
-            double daysHigh = Double.parseDouble(rowData[DAY_HIGH_INDEX]);
+            double daysHigh = priceInfo.getHigh();
             if(daysHigh > historyInfo.historicalHigh) {
                 historyInfo.historicalHigh = daysHigh;
             }
 
-            double daysLow = Double.parseDouble(rowData[DAY_LOW_INDEX]);
+            double daysLow = priceInfo.getLow();
             if(daysLow < historyInfo.historicalLow) {
                 historyInfo.historicalLow = daysLow;
-                historyInfo.historicalLowDate = Util.getCalStrFromNoTimeStr(rowData[DATE_INDEX]);
+                historyInfo.historicalLowDate = Util.getCalStrFromNoTimeStr(dateStr);
             }
         }
     }
 
-    // StockTrends will be null if exception/error is encountered.
-    protected static void downloadInternal(String url, StockData data, HistoryInfo historyInfo, boolean includeSL, Integer curDateMinusSlDateWhenSlAfter90Days) {
-        AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
-        HttpContext localContext = new BasicHttpContext();
-        HttpGet getRequest = new HttpGet(url);
-        try {
-            HttpResponse response = client.execute(getRequest, localContext);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
-            // Data is returned with latest date on top.
-            int i = 0;
-            String line = reader.readLine();    // First line defines columns.
-            while((line = reader.readLine()) != null) {
-                i++;
-                String[] rowData = line.split(",");
-
-                handleTrends(historyInfo, rowData, i);
-                if(includeSL) {
-                    handleStopLoss(historyInfo, rowData, i, curDateMinusSlDateWhenSlAfter90Days);
-                }
-            }
-
-            StockTrends stockTrends = new StockTrends(historyInfo.upTrendDayCount,
-                                                      historyInfo.high60Day,
-                                                      historyInfo.low90Day);
+    @Override
+    public void handleHistory(String symbol, SortedMap<String, StockDayPriceInfo> prices) {
+        int i = 0;
+        for(Map.Entry<String, StockDayPriceInfo> entry : prices.entrySet()) {
+            i++;
+            handleTrends(historyInfo, entry.getValue(), i);
             if(includeSL) {
-                stockTrends.setHistoricalInfo(historyInfo.historicalHigh,
-                                              historyInfo.historicalLow,
-                                              historyInfo.historicalLowDate);
-            }
-            data.stockTrends = stockTrends;
-        } catch(IOException e) {
-            getRequest.abort();
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(client != null) {
-                client.close();
+                handleStopLoss(historyInfo, entry.getKey(), entry.getValue(), i, lowestCalInfo.curDateMinusSlDateWhenSlAfter90Days);
             }
         }
-    }
 
-    public static void download(StockData data, Calendar curCalDate, final String lastSLUpdate, double historicalHigh, double historicalLow) {
-        if(lastSLUpdate != null) {
-            // If SL information needs to be calculated from a period longer than 90 days ago lowestCalInfo will be set to that date.
-            LowestCalInfo lowestCalInfo = lowestDate(curCalDate, lastSLUpdate);
-            String url = generateUrlForRange(data.symbol, curCalDate, lowestCalInfo.lowestCal);
-            HistoryInfo historyInfo = new HistoryInfo(historicalHigh, historicalLow);
-            downloadInternal(url, data, historyInfo, true, lowestCalInfo.curDateMinusSlDateWhenSlAfter90Days);
-        } else {
-            download(data, curCalDate);
+        StockTrends stockTrends = new StockTrends(historyInfo.upTrendDayCount,
+                                                  historyInfo.high60Day,
+                                                  historyInfo.low90Day);
+        if(includeSL) {
+            stockTrends.setHistoricalInfo(historyInfo.historicalHigh,
+                                          historyInfo.historicalLow,
+                                          historyInfo.historicalLowDate);
         }
+
+        ContentValues values = ContentValuesFactory.createTrendContentValues(stockTrends, includeSL);
+        contentResolver.update(uri, values, null, null);
     }
 
-    public static void download(StockData data, Calendar curCalDate) {
-        String url = generateUrlForDays(data.symbol, curCalDate, DAY_COUNT_90);
-        downloadInternal(url, data, new HistoryInfo(), false, null);
-    }
 }
 
