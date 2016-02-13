@@ -41,11 +41,7 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
     final AtomicBoolean refreshingStockData = new AtomicBoolean(false);
     final AtomicBoolean refreshingSPData = new AtomicBoolean(false);
 
-    static class DownloadInfo {
-        Uri uri;
-    }
-
-    final Map<String, DownloadInfo> downloadInfoMap = new HashMap<>();
+    final Map<String, Uri> downloadInfoMap = new HashMap<>();
 
     private void initialize(ContentResolver contentResolver, boolean autoRefresh) {
         BusService.getInstance().register(this);
@@ -64,19 +60,21 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
 
         String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL};
         Cursor cursor = contentResolver.query(StockContentProvider.CONTENT_URI, projection, null, null, null);
+        if(cursor != null) {
+            try {
+                // Get all the symbols.
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    String symbol = cursor.getString(1);
+                    downloadInfoMap.put(symbol, Uri.parse(StockContentProvider.STOCK_URI_STR + Integer.toString(cursor.getInt(0))));
 
-        // Get all the symbols.
-        cursor.moveToFirst();
-        while(!cursor.isAfterLast()) {
-            DownloadInfo info = new DownloadInfo();
-            info.uri = Uri.parse(StockContentProvider.STOCK_URI_STR + Integer.toString(cursor.getInt(0)));
+                    symbols.add(symbol);
 
-            String symbol = cursor.getString(1);
-            downloadInfoMap.put(symbol, info);
-
-            symbols.add(symbol);
-
-            cursor.moveToNext();
+                    cursor.moveToNext();
+                }
+            } finally {
+                cursor.close();
+            }
         }
     }
 
@@ -86,9 +84,7 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
         shouldRefreshGold = false;
         shouldRefreshSP = false;
 
-        DownloadInfo info = new DownloadInfo();
-        info.uri = uri;
-        downloadInfoMap.put(symbol, info);
+        downloadInfoMap.put(symbol, uri);
 
         symbols.add(symbol);
     }
@@ -119,9 +115,8 @@ public class RefreshTask extends AsyncTask<String, Void, List<StockData>> {
         }
 
         for(StockData data : dataList) {
-            DownloadInfo info = downloadInfoMap.get(data.symbol);
             ContentValues values = ContentValuesFactory.createContentValues(data);
-            contentResolver.update(info.uri, values, null, null);
+            contentResolver.update(downloadInfoMap.get(data.symbol), values, null, null);
         }
 
         if(action != null) {
