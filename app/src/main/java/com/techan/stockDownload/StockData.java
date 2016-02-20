@@ -29,7 +29,6 @@ public class StockData {
                                 CHANGE +
                                 NAME;
 
-
     public String symbol;
     public Double price;
     public Double daysLow;
@@ -43,10 +42,6 @@ public class StockData {
     public Double avgTradingVol;
     public Double change;
     public String name;
-
-    public String dateStr;
-
-    public StockTrends stockTrends;
 
     public StockData(String symbol) {
         this.symbol = symbol;

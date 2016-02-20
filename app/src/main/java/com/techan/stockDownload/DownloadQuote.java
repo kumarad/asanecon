@@ -63,7 +63,6 @@ public class DownloadQuote {
                 stockData.tradingVol = Util.parseDouble(rowData[9]);
                 stockData.avgTradingVol = Util.parseDouble(rowData[10]);
                 stockData.change = Util.parseDouble(rowData[11]);
-                stockData.dateStr = dateStr;
 
                 int nameLength = rowData.length - 12;
                 StringBuilder nameBuilder = new StringBuilder();

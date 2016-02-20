@@ -123,7 +123,7 @@ public class StopLossDialog {
             cr.update(stockUri, values, null, null);
 
             // Need to refresh historical data for this stock.
-            //todo we need to invoke DownloadHistory here.
+            //todo we need to invoke DownloadTrendAndStopLossInfo here.
 //            RefreshTask rt = new RefreshTask(parentActivity.getContentResolver(), stockUri, profile.symbol, false);
 //            rt.addAction(new CostBasisPostRefreshAction(stockPagerAdapter, profile));
 //            rt.download(parentActivity);
@@ -132,6 +132,7 @@ public class StopLossDialog {
             ContentValues values = ContentValuesFactory.createSlAddValuesSameDate(curPrice, profile.buyPrice);
             cr.update(stockUri, values, null, null);
 
+            //todo need to invoke download history before we return or something
             stockPagerAdapter.updateCostBasisFragment(profile);
         }
     }

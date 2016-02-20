@@ -102,11 +102,17 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         StockCostBasisFragment fragment = (StockCostBasisFragment)fragments.get(COST_BASIS);
 
         Cursor cursor = ctx.getContentResolver().query(stockUri, null, null, null, null);
-        cursor.moveToFirst();
-        Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
-        Double highPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_SL_HIGEST_PRICE));
-        Double curPE = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PE));
-        fragment.update(curPrice, highPrice, curPE, profile);
+        if(cursor != null) {
+            try {
+                cursor.moveToFirst();
+                Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
+                Double highPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_SL_HIGEST_PRICE));
+                Double curPE = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PE));
+                fragment.update(curPrice, highPrice, curPE, profile);
+            } finally {
+                cursor.close();
+            }
+        }
     }
 
     protected Fragment createTrendFragment() {

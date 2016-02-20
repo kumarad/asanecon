@@ -70,7 +70,7 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
         portfolioName = this.getArguments().getString(HomeActivity.PORTFOLIO);
         appStartup = this.getArguments().getBoolean(HomeActivity.APP_START_UP);
 
-        progressView = rootView.findViewById(R.id.homeActivityProgress);
+        progressView = rootView.findViewById(R.id.stockListProgress);
         swipeView = (EmptyViewSwipeRefreshLayout)rootView.findViewById(R.id.stockListNonEmptySwipeLayout);
         swipeView.setSwipeableChildren(R.id.stockListScrollView, R.id.stockListView);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -306,10 +306,4 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
     public void setParentActivity(IDrawerActivity activity) {
         drawerActivity = activity;
     }
-
-    public void resetDrawer() {
-        if(drawerActivity != null)
-            drawerActivity.resetDrawer();
-    }
-
 }

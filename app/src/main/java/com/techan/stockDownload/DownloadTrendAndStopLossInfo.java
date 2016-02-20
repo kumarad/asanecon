@@ -26,7 +26,7 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.SortedMap;
 
-public class DownloadHistory extends AbstractStockHistoryDownloader {
+public class DownloadTrendAndStopLossInfo extends AbstractStockHistoryDownloader {
     public static final int DAY_COUNT_10 = 10;
     public static final int DAY_COUNT_60 = 60;
     public static final int DAY_COUNT_90 = 90;
@@ -44,10 +44,10 @@ public class DownloadHistory extends AbstractStockHistoryDownloader {
     private LowestCalInfo lowestCalInfo;
     private boolean includeSL;
 
-    public DownloadHistory(String symbol,
-                           Context ctx,
-                           ContentResolver contentResolver,
-                           Uri uri) {
+    public DownloadTrendAndStopLossInfo(String symbol,
+                                        Context ctx,
+                                        ContentResolver contentResolver,
+                                        Uri uri) {
         this.contentResolver = contentResolver;
         this.uri = uri;
 
@@ -61,7 +61,7 @@ public class DownloadHistory extends AbstractStockHistoryDownloader {
                 cursor.close();
             }
         } else {
-            // todo nothing we can do here.
+            done();
         }
     }
 
@@ -94,6 +94,8 @@ public class DownloadHistory extends AbstractStockHistoryDownloader {
                 lowestCalInfo = null;
                 download(symbolProfile.symbol, getStartDate(curCalDate, DAY_COUNT_90), curCalDate);
             }
+        } else {
+            done();
         }
     }
 

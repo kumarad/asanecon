@@ -27,8 +27,6 @@ public class ContentValuesFactory {
         values.put(StocksTable.COLUMN_DAYS_LOW, stockData.daysLow);
         values.put(StocksTable.COLUMN_DAYS_HIGH, stockData.daysHigh);
 
-        values.put(StocksTable.COLUMN_LAST_HISTORY_UPDATE, stockData.dateStr);
-
         return values;
     }
 
@@ -44,13 +42,15 @@ public class ContentValuesFactory {
             values.put(StocksTable.COLUMN_SL_LOWEST_PRICE_DATE, trends.historicalLowDate);
         }
 
+        values.put(StocksTable.COLUMN_LAST_HISTORY_UPDATE, Util.getDateStrForDb(Calendar.getInstance()));
+
         return values;
     }
 
     // Invoked when starting to track the stop loss for a stock using the StopLossDialog.
     // Since the stop loss tracking is being started from the current date we set the highest price
     // to the higher value between the current price and buy price. We set the lowest price to the lower
-    // value. When the history is downloaded using DownloadHistory, we compare the history against these
+    // value. When the history is downloaded using DownloadTrendAndStopLossInfo, we compare the history against these
     // values to detect new lows and highs.
     public static ContentValues createSlAddValuesSameDate(double curPrice, double buyPrice) {
         ContentValues values = new ContentValues();
@@ -63,7 +63,7 @@ public class ContentValuesFactory {
     // Invoked when starting to track the stop loss for a stock using the StopLossDialog.
     // This method is invoked if the date to start tracking the stop loss is earlier than the
     // current date. We set the start high/low for stop loss purposes to the buy price and when
-    // DownloadHistory is invoked it compares to the buy price to detect the lowest low and the
+    // DownloadTrendAndStopLossInfo is invoked it compares to the buy price to detect the lowest low and the
     // highest high.
     public static ContentValues createSlAddValuesDiffDate(double buyPrice, String slTrackingStartDate) {
         ContentValues values = new ContentValues();

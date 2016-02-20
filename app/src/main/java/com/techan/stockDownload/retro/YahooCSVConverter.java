@@ -3,7 +3,7 @@ package com.techan.stockDownload.retro;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techan.custom.Util;
-import com.techan.stockDownload.DownloadHistory;
+import com.techan.stockDownload.DownloadTrendAndStopLossInfo;
 import com.techan.stockDownload.StockDayPriceInfo;
 
 import java.io.BufferedReader;
@@ -32,10 +32,10 @@ public class YahooCSVConverter implements Converter {
                 while ((line = reader.readLine()) != null) {
                     String[] rowData = line.split(",");
 
-                    Double closePrice = Util.parseDouble(rowData[DownloadHistory.DAY_CLOSE_INDEX]);
-                    Double dayHigh = Util.parseDouble(rowData[DownloadHistory.DAY_HIGH_INDEX]);
-                    Double dayLow = Util.parseDouble(rowData[DownloadHistory.DAY_LOW_INDEX]);
-                    String dateStr = rowData[DownloadHistory.DATE_INDEX];
+                    Double closePrice = Util.parseDouble(rowData[DownloadTrendAndStopLossInfo.DAY_CLOSE_INDEX]);
+                    Double dayHigh = Util.parseDouble(rowData[DownloadTrendAndStopLossInfo.DAY_HIGH_INDEX]);
+                    Double dayLow = Util.parseDouble(rowData[DownloadTrendAndStopLossInfo.DAY_LOW_INDEX]);
+                    String dateStr = rowData[DownloadTrendAndStopLossInfo.DATE_INDEX];
                     priceMap.put(dateStr, new StockDayPriceInfo(closePrice, dayHigh, dayLow));
                 }
                 return priceMap;
