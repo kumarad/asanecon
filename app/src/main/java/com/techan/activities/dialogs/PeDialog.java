@@ -3,18 +3,12 @@ package com.techan.activities.dialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import com.techan.R;
-import com.techan.activities.SettingsActivity;
 import com.techan.activities.StockPagerAdapter;
-import com.techan.custom.SwitchCheckListener;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 

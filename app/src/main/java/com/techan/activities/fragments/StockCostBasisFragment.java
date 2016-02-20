@@ -176,14 +176,12 @@ public class StockCostBasisFragment extends Fragment {
         if(targetPrice != null)
             targetPrice = Util.roundTwoDecimals(targetPrice);
 
-        boolean warningSet = false;
         if((buyPrice != null && buyPrice != 0)) {
             buyPrice = Util.roundTwoDecimals(buyPrice);
             costValView.setText(Double.toString(buyPrice));
             clearWarning();
         } else {
             setWarning();
-            warningSet = true;
         }
 
         if(stockCount != null && stockCount != 0) {
@@ -198,8 +196,8 @@ public class StockCostBasisFragment extends Fragment {
 
         handleStopLossView(slTrackingStartDate, curPrice, slPercent, highPrice);
 
-        boolean targetPriceSet = handleTargetPricing(warningSet, curPrice, targetPrice, lessThanEqual);
-        handleTargetPE(warningSet, targetPriceSet, targetPE, curPE);
+        handleTargetPricing(curPrice, targetPrice, lessThanEqual);
+        handleTargetPE(targetPE, curPE);
     }
 
     protected void handleStopLossView(String slTrackingStartDate, Double curPrice, Integer slPercent, Double highPrice) {
@@ -220,7 +218,7 @@ public class StockCostBasisFragment extends Fragment {
         }
     }
 
-    protected boolean handleTargetPricing(boolean warningSet, Double curPrice, Double targetPrice, Boolean lessThanEqual) {
+    protected boolean handleTargetPricing(Double curPrice, Double targetPrice, Boolean lessThanEqual) {
         boolean set = false;
         if(targetPrice != null && targetPrice != 0) {
             set = true;
@@ -258,7 +256,7 @@ public class StockCostBasisFragment extends Fragment {
         return set;
     }
 
-    private void handleTargetPE(boolean warningSet, boolean targetPriceSet, Double targetPE, Double curPE) {
+    private void handleTargetPE(Double targetPE, Double curPE) {
         if(targetPE != null && targetPE != 0) {
             peTargetView.setVisibility(View.VISIBLE);
             if(targetPE < curPE) {

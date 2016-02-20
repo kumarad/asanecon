@@ -88,13 +88,19 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         BusService.getInstance().register(this);
         progressView.setVisibility(View.VISIBLE);
         contentView.setVisibility(View.INVISIBLE);
+
         new DownloadTrendAndStopLossInfo(symbol, this, getContentResolver(), stockUri);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        BusService.getInstance().unregister(this);
+        try {
+            BusService.getInstance().unregister(this);
+        } catch(Exception e) {
+            // Could be that we are already unregistered  because of the downloadComplete method
+            // being invoked in which case we will get an exception.
+        }
     }
 
     @Subscribe
@@ -105,6 +111,10 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockUri, getApplicationContext(), portfolioName, symbol);
         ViewPager viewPager = (ViewPager) findViewById(R.id.stock_pager);
         viewPager.setAdapter(stockPagerAdapter);
+
+        // Unregister because the event might be published as a part of the stop loss flow and we don't want that
+        // to cause us to re initiate the entire page adapter.
+        BusService.getInstance().unregister(this);
     }
 
     void populateGeneralView(Cursor stockCursor) {
