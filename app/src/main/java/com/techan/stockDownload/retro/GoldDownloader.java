@@ -7,6 +7,8 @@ import com.techan.custom.Util;
 import com.techan.memrepo.HistoryRepo;
 
 import java.util.Calendar;
+import java.util.Map;
+import java.util.TreeMap;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -35,9 +37,12 @@ public class GoldDownloader extends HistoryDownloader {
             @Override
             public void success(GoldData goldData, Response response) {
                 HistoryRepo goldRepo = HistoryRepo.getGoldRepo();
+
+                Map<String, Double> priceMap = new TreeMap<>();
                 for(String[] cur : goldData.data) {
-                    goldRepo.update(cur[0], Double.valueOf(cur[1]));
+                    priceMap.put(cur[0], Double.valueOf(cur[1]));
                 }
+                goldRepo.setHistorySimple(priceMap);
 
                 BusService.getInstance().post(new GoldDownloaderComplete());
             }

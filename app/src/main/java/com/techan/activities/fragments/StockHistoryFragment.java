@@ -39,8 +39,12 @@ public class StockHistoryFragment extends Fragment {
 
         HistoryRepo repo = HistoryRepo.getStockRepo(symbol);
         String lastUpdateDateStr = null;
-        if(repo != null && repo.getPrices().size() > 0) {
-            lastUpdateDateStr = repo.getLatestPriceDate();
+        if(repo != null) {
+            if(repo.alreadyUpdatedToday()) {
+                doneLoading(null);
+            } else if(repo.getPrices().size() > 0) {
+                lastUpdateDateStr = repo.getLatestPriceDate();
+            }
         }
 
         StockHistoryDownloader downloader = StockHistoryDownloader.getInstance();
