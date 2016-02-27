@@ -12,13 +12,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class HistoryRepo {
-    private static final HistoryRepo GOLD_INSTANCE = new HistoryRepo();
     private static final HistoryRepo SP_INSTANCE = new HistoryRepo();
     private static final LruCache<String, HistoryRepo> STOCK_CACHE = new LruCache(20);
-
-    public static HistoryRepo getGoldRepo() {
-        return GOLD_INSTANCE;
-    }
 
     public static HistoryRepo getSPRepo() {
         return SP_INSTANCE;

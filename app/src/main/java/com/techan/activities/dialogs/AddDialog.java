@@ -67,7 +67,7 @@ public class AddDialog {
             return false;
         }
 
-        if(!symbol.matches("[\\.a-zA-Z0-9]+")) {
+        if(!symbol.matches("[\\.a-zA-Z0-9=]+")) {
             Util.showErrorToast(parentActivity, "Stock symbol can only contain letters, numbers and periods.");
             return false;
         }

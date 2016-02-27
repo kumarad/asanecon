@@ -1,7 +1,6 @@
 package com.techan.activities.fragments;
 
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,53 +8,101 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.squareup.otto.Subscribe;
 import com.techan.R;
+import com.techan.activities.BusService;
 import com.techan.custom.ChartBuilder;
-import com.techan.custom.Util;
+import com.techan.memrepo.GoldRepo;
 import com.techan.memrepo.HistoryRepo;
+import com.techan.stockDownload.retro.GoldDownloader;
+import com.techan.stockDownload.retro.SPDownloader;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GoldFragment extends Fragment {
 
+    private AtomicInteger downloadsDone = new AtomicInteger(0);
+    private View progressView;
+    private View contentView;
+    private volatile int expectedDownloads = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.gold_fragment, container, false);
+        View root = inflater.inflate(R.layout.gold_fragment, container, false);
+        progressView = root.findViewById(R.id.goldProgressBar);
+        contentView = root.findViewById(R.id.goldContentView);
+        return root;
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        int color = getActivity().getResources().getColor(R.color.blue);
-        float borderWidth = 2;
+    public void onResume() {
+        super.onResume();
+        BusService.getInstance().register(this);
 
-        Map<String, Double> goldPriceMap = HistoryRepo.getGoldRepo().getPrices();
+        progressView.setVisibility(View.VISIBLE);
+        contentView.setVisibility(View.INVISIBLE);
 
-        final TextView goldSelectionView = (TextView) getActivity().findViewById(R.id.goldChartSelection);
-        final LineChart goldChart = (LineChart) getActivity().findViewById(R.id.goldChart);
-        ChartBuilder.build(color, borderWidth, goldChart, goldSelectionView, goldPriceMap, "Gold", "Price");
-
-
-        Map<String, Double> spPriceMap = HistoryRepo.getSPRepo().getPrices();
-        Map<String, Double> ratioMap = new TreeMap<>();
-        for(Map.Entry<String, Double> curGoldEntry : goldPriceMap.entrySet()) {
-            Double spValue = spPriceMap.get(curGoldEntry.getKey());
-            if(spValue != null) {
-                ratioMap.put(curGoldEntry.getKey(), curGoldEntry.getValue() / spValue);
-            }
+        HistoryRepo goldRepo = GoldRepo.getRepo();
+        if(!goldRepo.alreadyUpdatedToday()) {
+            GoldDownloader.getInstance().get(goldRepo.getLatestPriceDate());
+            expectedDownloads++;
         }
-        final TextView goldSPSelectionView = (TextView) getActivity().findViewById(R.id.goldSPChartSelection);
-        final LineChart goldSPChart = (LineChart) getActivity().findViewById(R.id.goldSPChart);
-        ChartBuilder.build(color, borderWidth, goldSPChart, goldSPSelectionView, ratioMap, "Gold/S&P Ratio", "Gold/S&P Ratio");
+
+        HistoryRepo spRepo = HistoryRepo.getSPRepo();
+        if(!spRepo.alreadyUpdatedToday()) {
+            SPDownloader.getInstance().get(spRepo.getLatestPriceDate());
+            expectedDownloads++;
+        }
+
+        done();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        BusService.getInstance().register(this);
+    }
+
+    @Subscribe
+    public void goldDownloadComplete(GoldDownloader.GoldDownloaderComplete event) {
+        downloadsDone.incrementAndGet();
+        done();
+    }
+
+    @Subscribe
+    public void spDownloadComplete(SPDownloader.SPDownloaderComplete event) {
+        downloadsDone.incrementAndGet();
+        done();
+    }
+
+    private void done() {
+        if(downloadsDone.get() == expectedDownloads) {
+            int color = getActivity().getResources().getColor(R.color.blue);
+            float borderWidth = 2;
+
+            Map<String, Double> goldPriceMap = GoldRepo.getRepo().getPrices();
+
+            final TextView goldSelectionView = (TextView) getActivity().findViewById(R.id.goldChartSelection);
+            final LineChart goldChart = (LineChart) getActivity().findViewById(R.id.goldChart);
+            ChartBuilder.build(color, borderWidth, goldChart, goldSelectionView, goldPriceMap, "Gold", "Price");
+
+
+            Map<String, Double> spPriceMap = HistoryRepo.getSPRepo().getPrices();
+            Map<String, Double> ratioMap = new TreeMap<>();
+            for (Map.Entry<String, Double> curGoldEntry : goldPriceMap.entrySet()) {
+                Double spValue = spPriceMap.get(curGoldEntry.getKey());
+                if (spValue != null) {
+                    ratioMap.put(curGoldEntry.getKey(), curGoldEntry.getValue() / spValue);
+                }
+            }
+            final TextView goldSPSelectionView = (TextView) getActivity().findViewById(R.id.goldSPChartSelection);
+            final LineChart goldSPChart = (LineChart) getActivity().findViewById(R.id.goldSPChart);
+            ChartBuilder.build(color, borderWidth, goldSPChart, goldSPSelectionView, ratioMap, "Gold/S&P Ratio", "Gold/S&P Ratio");
+
+            progressView.setVisibility(View.INVISIBLE);
+            contentView.setVisibility(View.VISIBLE);
+        }
     }
 }
