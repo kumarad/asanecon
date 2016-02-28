@@ -47,8 +47,6 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         fragmentTypes[1] = COST_BASIS;
         fragmentTypes[2] = KEY_STATS;
         fragmentTypes[3] = HISTORY;
-
-
     }
 
     @Override

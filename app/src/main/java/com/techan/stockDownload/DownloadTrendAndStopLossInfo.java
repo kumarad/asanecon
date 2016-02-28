@@ -18,10 +18,6 @@ import java.util.Map;
 import java.util.SortedMap;
 
 public class DownloadTrendAndStopLossInfo extends AbstractStockHistoryDownloader {
-    public static final int DAY_COUNT_10 = 10;
-    public static final int DAY_COUNT_60 = 60;
-    public static final int DAY_COUNT_90 = 90;
-
     public static final int DATE_INDEX = 0;
     public static final int DAY_HIGH_INDEX = 2;
     public static final int DAY_LOW_INDEX = 3;

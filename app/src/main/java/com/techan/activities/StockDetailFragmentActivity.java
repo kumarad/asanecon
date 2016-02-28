@@ -111,6 +111,8 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockUri, getApplicationContext(), portfolioName, symbol);
         ViewPager viewPager = (ViewPager) findViewById(R.id.stock_pager);
         viewPager.setAdapter(stockPagerAdapter);
+        viewPager.setOffscreenPageLimit(StockPagerAdapter.FRAGMENT_COUNT);
+
 
         // Unregister because the event might be published as a part of the stop loss flow and we don't want that
         // to cause us to re initiate the entire page adapter.
