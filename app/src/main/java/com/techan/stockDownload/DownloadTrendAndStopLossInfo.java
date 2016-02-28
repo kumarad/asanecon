@@ -75,7 +75,7 @@ public class DownloadTrendAndStopLossInfo extends AbstractStockHistoryDownloader
 
         Calendar curCal = (Calendar) Calendar.getInstance().clone();
         if (!Util.isDateSame(lastUpdate, curCal)) {
-            trackingStartCounts = trackerCounts(curCalDate, lastUpdate);
+            setupStart(curCalDate, lastUpdate);
             if (includeSL) {
                 // If SL information needs to be calculated from a period longer than 90 days ago trackingStartCounts will be set to that date.
                 historyInfo = new HistoryInfo(historicalHigh, historicalLow);
@@ -95,36 +95,24 @@ public class DownloadTrendAndStopLossInfo extends AbstractStockHistoryDownloader
     }
 
     // Calendar and Yahoo uses 0 based month.
-    private TrackingStartCounts trackerCounts(Calendar curCal, final String lastSLUpdate) {
-        Calendar cal90 = (Calendar)curCal.clone();
-        cal90.add(Calendar.DAY_OF_MONTH, DAY_COUNT_90 * -1);
-
+    private void setupStart(Calendar curCal, final String lastSLUpdate) {
         Calendar calSl;
         if(lastSLUpdate != null) {
             calSl = Util.getCal(lastSLUpdate);
         } else {
-            calSl = cal90;
+            calSl = null;
         }
 
-        if(calSl.before(cal90)) {
-            // Stop loss last update was done longer than 90 days ago.
-            int totalDaysBack = Util.dateDiff(calSl, curCal);
-            int startCountFor90Day = totalDaysBack - Util.dateDiff(cal90, curCal);
-            return new TrackingStartCounts(calSl, startCountFor90Day, 0);
-        } else {
-            // Stop loss last update is within the 90 day period.
-            int startCountForSl = Util.dateDiff(cal90, calSl);
-            return new TrackingStartCounts(cal90, 0, startCountForSl);
-        }
+        trackingStartCounts = new TrackingStartCounts(curCal, calSl);
     }
 
-    private void handleTrends(HistoryInfo historyInfo, StockDayPriceInfo priceInfo, int count) {
+    private void handleTrends(HistoryInfo historyInfo, String dateStr, StockDayPriceInfo priceInfo, int count) {
         double closePrice = priceInfo.getClosingPrice();
-        if(count >= trackingStartCounts.getStartCountFor60Day() && closePrice > historyInfo.high60Day) {
+        if(trackingStartCounts.within60DayRange(dateStr) && closePrice > historyInfo.high60Day) {
             historyInfo.high60Day = closePrice;
         }
 
-        if(count >= trackingStartCounts.getStartCountFor90Day() && closePrice < historyInfo.low90Day ) {
+        if(trackingStartCounts.within90DayRange(dateStr) && closePrice < historyInfo.low90Day ) {
             historyInfo.low90Day = closePrice;
         }
 
@@ -144,8 +132,8 @@ public class DownloadTrendAndStopLossInfo extends AbstractStockHistoryDownloader
         }
     }
 
-    private void handleStopLoss(HistoryInfo historyInfo, String dateStr, StockDayPriceInfo priceInfo, int count) {
-        if(count >= trackingStartCounts.getStartCountForSl()) {  // Only track those days that are within the range that is between the stop loss start date and the cur date.
+    private void handleStopLoss(HistoryInfo historyInfo, String dateStr, StockDayPriceInfo priceInfo) {
+        if(trackingStartCounts.withinSlRange(dateStr)) {  // Only track those days that are within the range that is between the stop loss start date and the cur date.
             double daysHigh = priceInfo.getHigh();
             if(daysHigh > historyInfo.historicalHigh) {
                 historyInfo.historicalHigh = daysHigh;
@@ -161,12 +149,15 @@ public class DownloadTrendAndStopLossInfo extends AbstractStockHistoryDownloader
 
     @Override
     public void handleHistory(String symbol, SortedMap<String, StockDayPriceInfo> prices) {
+        // Yahoo will return potentially less entries than we expect to account for days the market was closed.
+        // But should always have at least 10 entries since we ask for at least 90 days of data.
+        trackingStartCounts.initializeCounts(prices.entrySet().size());
         int i = 0;
         for(Map.Entry<String, StockDayPriceInfo> entry : prices.entrySet()) {
             i++;
-            handleTrends(historyInfo, entry.getValue(), i);
+            handleTrends(historyInfo, entry.getKey(), entry.getValue(), i);
             if(includeSL) {
-                handleStopLoss(historyInfo, entry.getKey(), entry.getValue(), i);
+                handleStopLoss(historyInfo, entry.getKey(), entry.getValue());
             }
         }
 
