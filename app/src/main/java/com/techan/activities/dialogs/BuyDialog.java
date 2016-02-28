@@ -1,10 +1,8 @@
 package com.techan.activities.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -14,8 +12,6 @@ import com.techan.activities.StockPagerAdapter;
 import com.techan.custom.Util;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
-
-import java.util.zip.Inflater;
 
 public class BuyDialog {
 

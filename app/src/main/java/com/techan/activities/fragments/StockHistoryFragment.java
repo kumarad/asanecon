@@ -20,6 +20,7 @@ import java.util.Map;
 
 public class StockHistoryFragment extends Fragment {
     private String symbol;
+    private View rootView;
     private View progressView;
     private View chartView;
 
@@ -29,7 +30,7 @@ public class StockHistoryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.stock_history, container, false);
+        rootView = inflater.inflate(R.layout.stock_history, container, false);
 
         progressView = rootView.findViewById(R.id.stockHistoryProgress);
         chartView = rootView.findViewById(R.id.stockHistoryChartLayout);
@@ -71,8 +72,8 @@ public class StockHistoryFragment extends Fragment {
         float borderWidth = 2;
         Map<String, Double> stockPriceMap = HistoryRepo.getStockRepo(symbol).getPrices();
 
-        final TextView selectionView = (TextView) getActivity().findViewById(R.id.stockHistoryChartSelection);
-        final LineChart chart = (LineChart) getActivity().findViewById(R.id.stockHistoryChart);
+        final TextView selectionView = (TextView) rootView.findViewById(R.id.stockHistoryChartSelection);
+        final LineChart chart = (LineChart) rootView.findViewById(R.id.stockHistoryChart);
         ChartBuilder.build(color, borderWidth, chart, selectionView, stockPriceMap, symbol, "Price");
 
         progressView.setVisibility(View.INVISIBLE);

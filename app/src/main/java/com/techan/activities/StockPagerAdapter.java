@@ -42,10 +42,17 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         this.ctx = ctx;
         this.portfolioName = portfolioName;
         this.symbol = symbol;
+
+        fragmentTypes[0] = TREND;
+        fragmentTypes[1] = COST_BASIS;
+        fragmentTypes[2] = KEY_STATS;
+        fragmentTypes[3] = HISTORY;
+
+
     }
 
     @Override
-    public Object instantiateItem (ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, int position) {
         Fragment fragment = (Fragment)super.instantiateItem(container, position);
         fragments.put(fragmentTypes[position], fragment);
         return fragment;
@@ -195,17 +202,6 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch(position) {
-            case 0:
-                return (fragmentTypes[position] = TREND);
-            case 1:
-                return (fragmentTypes[position] = COST_BASIS);
-            case 2:
-                return (fragmentTypes[position] = KEY_STATS);
-            case 3:
-                return (fragmentTypes[position] = HISTORY);
-        }
-
-        return null;
+        return fragmentTypes[position];
     }
 }
