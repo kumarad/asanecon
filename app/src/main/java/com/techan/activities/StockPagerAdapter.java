@@ -30,27 +30,27 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
     public static final String HISTORY = "History";
 
     private String[] fragmentTypes = new String[FRAGMENT_COUNT];
-    private Map<String, Fragment> fragments = new HashMap<String,Fragment>();
+    private Map<String, Fragment> fragments = new HashMap<>();
     private Uri stockUri;
     private Context ctx;
     private String portfolioName;
     private String symbol;
 
-    // Only use for create not update.
-    private Cursor createCursor;
-
     public StockPagerAdapter(FragmentManager fm, Uri stockUri, Context ctx, String portfolioName, String symbol) {
         super(fm);
         this.stockUri = stockUri;
         this.ctx = ctx;
-        createCursor = ctx.getContentResolver().query(stockUri, null, null, null, null);
-        createCursor.moveToFirst();
         this.portfolioName = portfolioName;
         this.symbol = symbol;
+
+        fragmentTypes[0] = TREND;
+        fragmentTypes[1] = COST_BASIS;
+        fragmentTypes[2] = KEY_STATS;
+        fragmentTypes[3] = HISTORY;
     }
 
     @Override
-    public Object instantiateItem (ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, int position) {
         Fragment fragment = (Fragment)super.instantiateItem(container, position);
         fragments.put(fragmentTypes[position], fragment);
         return fragment;
@@ -62,39 +62,49 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         fragment.setStockPagerAdapter(this);
         Bundle args = new Bundle();
 
-        String symbol = createCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
-        fragment.setSymbol(symbol);
-        args.putString(StockCostBasisFragment.SYMBOL, symbol);
+        Cursor createCursor = ctx.getContentResolver().query(stockUri, null, null, null, null);
+        if(createCursor != null) {
+            try {
+                createCursor.moveToFirst();
 
-        SymbolProfile profile = ProfileManager.getSymbolData(ctx, symbol);
-        if(profile.buyPrice != null) {
-            args.putDouble(StockCostBasisFragment.COST_VAL, profile.buyPrice);
+                String symbol = createCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
+                fragment.setSymbol(symbol);
+                args.putString(StockCostBasisFragment.SYMBOL, symbol);
+
+                SymbolProfile profile = ProfileManager.getSymbolData(ctx, symbol);
+                if (profile.buyPrice != null) {
+                    args.putDouble(StockCostBasisFragment.COST_VAL, profile.buyPrice);
+                }
+
+                if (profile.stockCount != null)
+                    args.putInt(StockCostBasisFragment.COUNT_VAL, profile.stockCount);
+
+                Double price = Util.roundTwoDecimals(createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE)));
+                args.putDouble(StockCostBasisFragment.CUR_PRICE, price);
+
+                if (profile.stopLossPercent != null) {
+                    args.putInt(StockCostBasisFragment.SL_PERCENT, profile.stopLossPercent);
+                    double high = createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_SL_HIGEST_PRICE));
+                    args.putDouble(StockCostBasisFragment.HIGH_PRICE, high);
+                    args.putString(StockCostBasisFragment.SL_TRACKING_START_DATE, profile.slTrackingStartDate);
+                }
+
+                if (profile.targetPrice != null) {
+                    args.putDouble(StockCostBasisFragment.TARGET_PRICE, profile.targetPrice);
+                    args.putBoolean(StockCostBasisFragment.TARGET_LESS_THAN_EQUAL, profile.lessThanEqual);
+                }
+
+                if (profile.peTarget != null) {
+                    args.putDouble(StockCostBasisFragment.TARGET_PE, profile.peTarget);
+                    args.putDouble(StockCostBasisFragment.CUR_PE, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PE)));
+                }
+
+                fragment.setArguments(args);
+            } finally {
+                createCursor.close();
+            }
         }
 
-        if(profile.stockCount != null)
-            args.putInt(StockCostBasisFragment.COUNT_VAL, profile.stockCount);
-
-        Double price = Util.roundTwoDecimals(createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE)));
-        args.putDouble(StockCostBasisFragment.CUR_PRICE, price);
-
-        if(profile.stopLossPercent != null) {
-            args.putInt(StockCostBasisFragment.SL_PERCENT, profile.stopLossPercent);
-            double high = createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_SL_HIGEST_PRICE));
-            args.putDouble(StockCostBasisFragment.HIGH_PRICE, high);
-            args.putString(StockCostBasisFragment.SL_TRACKING_START_DATE, profile.slTrackingStartDate);
-        }
-
-        if(profile.targetPrice != null) {
-            args.putDouble(StockCostBasisFragment.TARGET_PRICE, profile.targetPrice);
-            args.putBoolean(StockCostBasisFragment.TARGET_LESS_THAN_EQUAL, profile.lessThanEqual);
-        }
-
-        if(profile.peTarget != null) {
-            args.putDouble(StockCostBasisFragment.TARGET_PE, profile.peTarget);
-            args.putDouble(StockCostBasisFragment.CUR_PE, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PE)));
-        }
-
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -102,27 +112,42 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         StockCostBasisFragment fragment = (StockCostBasisFragment)fragments.get(COST_BASIS);
 
         Cursor cursor = ctx.getContentResolver().query(stockUri, null, null, null, null);
-        cursor.moveToFirst();
-        Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
-        Double highPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_SL_HIGEST_PRICE));
-        Double curPE = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PE));
-        fragment.update(curPrice, highPrice, curPE, profile);
+        if(cursor != null) {
+            try {
+                cursor.moveToFirst();
+                Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
+                Double highPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_SL_HIGEST_PRICE));
+                Double curPE = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PE));
+                fragment.update(curPrice, highPrice, curPE, profile);
+            } finally {
+                cursor.close();
+            }
+        }
     }
 
     protected Fragment createTrendFragment() {
         Fragment fragment = new StockTrendFragment();
         Bundle args = new Bundle();
 
-        args.putDouble(StockTrendFragment.CUR_PRICE, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE)));
-        args.putDouble(StockTrendFragment.MOV_50_VAL, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_MOV_AVG_50)));
-        args.putDouble(StockTrendFragment.MOV_200_VAL, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_MOV_AVG_200)));
-        args.putInt(StockTrendFragment.DAY_COUNT, (int) createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_UP_TREND_COUNT)));
-        args.putDouble(StockTrendFragment.HIGH_60_DAY, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_60_DAY_HIGH)));
-        args.putDouble(StockTrendFragment.LOW_90_DAY, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_90_DAY_LOW)));
-        args.putDouble(StockTrendFragment.PEG, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PEG)));
-        args.putDouble(StockTrendFragment.VOLUME ,createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_TRADING_VOLUME)));
-        args.putDouble(StockTrendFragment.AVG_VOLUME, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_AVG_TRADING_VOLUME)));
-        args.putDouble(StockTrendFragment.CHANGE, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_CHANGE)));
+        Cursor createCursor = ctx.getContentResolver().query(stockUri, null, null, null, null);
+        if(createCursor != null) {
+            try {
+                createCursor.moveToFirst();
+
+                args.putDouble(StockTrendFragment.CUR_PRICE, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE)));
+                args.putDouble(StockTrendFragment.MOV_50_VAL, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_MOV_AVG_50)));
+                args.putDouble(StockTrendFragment.MOV_200_VAL, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_MOV_AVG_200)));
+                args.putInt(StockTrendFragment.DAY_COUNT, (int) createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_UP_TREND_COUNT)));
+                args.putDouble(StockTrendFragment.HIGH_60_DAY, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_60_DAY_HIGH)));
+                args.putDouble(StockTrendFragment.LOW_90_DAY, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_90_DAY_LOW)));
+                args.putDouble(StockTrendFragment.PEG, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PEG)));
+                args.putDouble(StockTrendFragment.VOLUME, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_TRADING_VOLUME)));
+                args.putDouble(StockTrendFragment.AVG_VOLUME, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_AVG_TRADING_VOLUME)));
+                args.putDouble(StockTrendFragment.CHANGE, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_CHANGE)));
+            } finally {
+                createCursor.close();
+            }
+        }
 
         fragment.setArguments(args);
         return fragment;
@@ -137,7 +162,18 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
 
     protected Fragment createKeyStatsFragment() {
         StockKeyStatsFragment fragment = new StockKeyStatsFragment();
-        fragment.setSymbolAndPrice(symbol, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE)));
+
+        Cursor createCursor = ctx.getContentResolver().query(stockUri, null, null, null, null);
+        if(createCursor != null) {
+            try {
+                createCursor.moveToFirst();
+
+                fragment.setSymbolAndPrice(symbol, createCursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE)));
+            } finally {
+                createCursor.close();
+            }
+        }
+
         return fragment;
     }
 
@@ -164,17 +200,6 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch(position) {
-            case 0:
-                return (fragmentTypes[position] = TREND);
-            case 1:
-                return (fragmentTypes[position] = COST_BASIS);
-            case 2:
-                return (fragmentTypes[position] = KEY_STATS);
-            case 3:
-                return (fragmentTypes[position] = HISTORY);
-        }
-
-        return null;
+        return fragmentTypes[position];
     }
 }

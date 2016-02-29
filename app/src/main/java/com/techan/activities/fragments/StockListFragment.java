@@ -43,6 +43,7 @@ import com.techan.stockDownload.RefreshTask;
 import com.techan.thirdparty.EmptyViewSwipeRefreshLayout;
 
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class StockListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
@@ -63,6 +64,8 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
 
     protected IDrawerActivity drawerActivity;
 
+    AtomicInteger refreshActions = new AtomicInteger(0);
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.stock_list, container, false);
@@ -70,14 +73,14 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
         portfolioName = this.getArguments().getString(HomeActivity.PORTFOLIO);
         appStartup = this.getArguments().getBoolean(HomeActivity.APP_START_UP);
 
-        progressView = rootView.findViewById(R.id.homeActivityProgress);
+        progressView = rootView.findViewById(R.id.stockListProgress);
         swipeView = (EmptyViewSwipeRefreshLayout)rootView.findViewById(R.id.stockListNonEmptySwipeLayout);
         swipeView.setSwipeableChildren(R.id.stockListScrollView, R.id.stockListView);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeView.setRefreshing(true);
-                (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
+                startRefresh();
             }
         });
 
@@ -121,8 +124,22 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
 
     public static class RefreshCompleteEvent {}
 
+    private void startRefresh() {
+        boolean downloadGold = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(SettingsActivity.ENABLE_GOLD_TRACKER, false);
+        (new RefreshTask(getActivity().getContentResolver(), false, downloadGold)).download(getActivity());
+    }
+
     @Subscribe
-    public void refreshComplete(RefreshCompleteEvent event) {
+    public void stockDownloadCompleteComplete(RefreshCompleteEvent event) {
+        refreshComplete();
+    }
+
+    private void refreshComplete() {
+        int refreshesComplete = refreshActions.incrementAndGet();
+        if(refreshesComplete < 1) {
+            return;
+        }
+
         if(swipeView.isRefreshing()) {
             swipeView.setRefreshing(false);
         }
@@ -139,15 +156,23 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
         ContentResolver cr = getActivity().getContentResolver();
         String[] projection = {StocksTable.COLUMN_SYMBOL};
         Cursor cursor = cr.query(StockContentProvider.CONTENT_URI, projection, null, null, null);
-        if(cursor.getCount() == 0) {
-            // Nothing in db. Lets see if we find something in the from the profile manager.
-            Collection<SymbolProfile> symbolProfiles = ProfileManager.getSymbols(getActivity());
-            if(symbolProfiles.size() != 0) {
-                for(SymbolProfile symbolProfile : symbolProfiles) {
-                    ContentValues values = ContentValuesFactory.createValuesForRecovery(symbolProfile);
-                    cr.insert(StockContentProvider.CONTENT_URI, values);
+        if(cursor == null) {
+            return;
+        }
+
+        try {
+            if (cursor.getCount() == 0) {
+                // Nothing in db. Lets see if we find something in the from the profile manager.
+                Collection<SymbolProfile> symbolProfiles = ProfileManager.getSymbols(getActivity());
+                if (symbolProfiles.size() != 0) {
+                    for (SymbolProfile symbolProfile : symbolProfiles) {
+                        ContentValues values = ContentValuesFactory.createValuesForRecovery(symbolProfile);
+                        cr.insert(StockContentProvider.CONTENT_URI, values);
+                    }
                 }
             }
+        } finally {
+            cursor.close();
         }
     }
 
@@ -171,7 +196,7 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
         if(appStartup) {
             swipeView.setVisibility(View.INVISIBLE);
             progressView.setVisibility(View.VISIBLE);
-            (new RefreshTask(getActivity(), getActivity().getContentResolver(), false)).download();
+            startRefresh();
 
             //Ensures we don't unnecessarily refresh stock quotes when we come back to this list
             //from a stock detail fragment.
@@ -306,10 +331,4 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
     public void setParentActivity(IDrawerActivity activity) {
         drawerActivity = activity;
     }
-
-    public void resetDrawer() {
-        if(drawerActivity != null)
-            drawerActivity.resetDrawer();
-    }
-
 }

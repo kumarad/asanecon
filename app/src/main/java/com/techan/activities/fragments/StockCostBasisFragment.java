@@ -88,8 +88,6 @@ public class StockCostBasisFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.stock_cost_basis, container, false);
-        Bundle args = getArguments();
-
         warningView = (TextView)rootView.findViewById(R.id.costWarning);
         costBasisView = (TextView)rootView.findViewById(R.id.costBasisVal);
         costBasisChangeRow = (RelativeLayout)rootView.findViewById(R.id.costBasisChangeRow);
@@ -115,6 +113,15 @@ public class StockCostBasisFragment extends Fragment {
 
         warningView.setText("Set cost basis.");
 
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Bundle args = getArguments();
+
         slProgressBar = (SaundProgressBar) rootView.findViewById(R.id.slprogressbar);
         Drawable indicator = getResources().getDrawable(R.drawable.progress_indicator_b2);
         Rect bounds = new Rect(0, 0, indicator.getIntrinsicWidth() + SaundProgressBar.INDICATOR_PADDING, indicator.getIntrinsicHeight());
@@ -133,15 +140,12 @@ public class StockCostBasisFragment extends Fragment {
                 args.getDouble(CUR_PE));
 
         final String symbol = args.getString(SYMBOL);
-        final LayoutInflater finalLayoutInflater = inflater;
         warningView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BuyDialog.create(view.getContext(), finalLayoutInflater, symbol, stockPagerAdapter);
+                BuyDialog.create(view.getContext(), getActivity().getLayoutInflater(), symbol, stockPagerAdapter);
             }
         });
-
-        return rootView;
     }
 
     public void update(final Double curPrice, Double highPrice, Double curPE, final SymbolProfile profile) {
@@ -176,14 +180,12 @@ public class StockCostBasisFragment extends Fragment {
         if(targetPrice != null)
             targetPrice = Util.roundTwoDecimals(targetPrice);
 
-        boolean warningSet = false;
         if((buyPrice != null && buyPrice != 0)) {
             buyPrice = Util.roundTwoDecimals(buyPrice);
             costValView.setText(Double.toString(buyPrice));
             clearWarning();
         } else {
             setWarning();
-            warningSet = true;
         }
 
         if(stockCount != null && stockCount != 0) {
@@ -198,8 +200,8 @@ public class StockCostBasisFragment extends Fragment {
 
         handleStopLossView(slTrackingStartDate, curPrice, slPercent, highPrice);
 
-        boolean targetPriceSet = handleTargetPricing(warningSet, curPrice, targetPrice, lessThanEqual);
-        handleTargetPE(warningSet, targetPriceSet, targetPE, curPE);
+        handleTargetPricing(curPrice, targetPrice, lessThanEqual);
+        handleTargetPE(targetPE, curPE);
     }
 
     protected void handleStopLossView(String slTrackingStartDate, Double curPrice, Integer slPercent, Double highPrice) {
@@ -220,7 +222,7 @@ public class StockCostBasisFragment extends Fragment {
         }
     }
 
-    protected boolean handleTargetPricing(boolean warningSet, Double curPrice, Double targetPrice, Boolean lessThanEqual) {
+    protected boolean handleTargetPricing(Double curPrice, Double targetPrice, Boolean lessThanEqual) {
         boolean set = false;
         if(targetPrice != null && targetPrice != 0) {
             set = true;
@@ -258,7 +260,7 @@ public class StockCostBasisFragment extends Fragment {
         return set;
     }
 
-    private void handleTargetPE(boolean warningSet, boolean targetPriceSet, Double targetPE, Double curPE) {
+    private void handleTargetPE(Double targetPE, Double curPE) {
         if(targetPE != null && targetPE != 0) {
             peTargetView.setVisibility(View.VISIBLE);
             if(targetPE < curPE) {

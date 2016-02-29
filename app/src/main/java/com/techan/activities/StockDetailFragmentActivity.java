@@ -11,8 +11,11 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import com.squareup.otto.Subscribe;
 import com.techan.R;
 import com.techan.activities.dialogs.BuyDialog;
 import com.techan.activities.dialogs.DeleteDialog;
@@ -24,13 +27,15 @@ import com.techan.custom.Util;
 import com.techan.database.StocksTable;
 import com.techan.profile.Constants;
 import com.techan.progressbar.SaundProgressBar;
+import com.techan.stockDownload.DownloadTrendAndStopLossInfo;
 
 public class StockDetailFragmentActivity extends FragmentActivity {
     private Uri stockUri;
-    private Cursor stockCursor;
     private String symbol;
 
-    private ViewPager viewPager;
+    private View progressView;
+    private View contentView;
+
     private StockPagerAdapter stockPagerAdapter;
     private String portfolioName;
 
@@ -47,27 +52,11 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         stockUri = (Uri)extras.get(StockContentProvider.CONTENT_ITEM_TYPE);
         portfolioName = extras.getString(HomeActivity.PORTFOLIO);
 
-        stockCursor = getContentResolver().query(stockUri, null, null, null, null);
-
-        if(stockCursor.getCount() != 1) {
-            throw new RuntimeException("Was not able to find details for stock.");
-        }
-
-        stockCursor.moveToFirst();
-
-        TextView symbolView = (TextView) this.findViewById(R.id.lastUpdate);
-        String lastUpdateStr = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_LAST_UPDATE));
-        symbolView.setText(lastUpdateStr);
-
-        symbol = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
-        populateGeneralView();
-
-        stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockUri, getApplicationContext(), portfolioName, symbol);
-        viewPager = (ViewPager)findViewById(R.id.stock_pager);
-        viewPager.setAdapter(stockPagerAdapter);
-
         PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.stock_pager_title_strip);
         pagerTabStrip.setTabIndicatorColor(Color.parseColor(Constants.ANDROID_BLUE));
+
+        progressView = findViewById(R.id.stockDetailProgressView);
+        contentView = findViewById(R.id.stockDetailContentView);
 
         ActionBar actionBar = getActionBar();
         if(actionBar != null) {
@@ -75,9 +64,62 @@ public class StockDetailFragmentActivity extends FragmentActivity {
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setTitle(null);
         }
+
+        Cursor stockCursor = getContentResolver().query(stockUri, null, null, null, null);
+        if(stockCursor != null) {
+            try {
+                if (stockCursor.getCount() != 1) {
+                    throw new RuntimeException("Was not able to find details for stock.");
+                }
+
+                stockCursor.moveToFirst();
+
+                symbol = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_SYMBOL));
+                populateGeneralView(stockCursor);
+            } finally {
+                stockCursor.close();
+            }
+        } // Nothing we can do here. Should never happen.
     }
 
-    void populateGeneralView() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        BusService.getInstance().register(this);
+        progressView.setVisibility(View.VISIBLE);
+        contentView.setVisibility(View.INVISIBLE);
+
+        new DownloadTrendAndStopLossInfo(symbol, this, getContentResolver(), stockUri);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        try {
+            BusService.getInstance().unregister(this);
+        } catch(Exception e) {
+            // Could be that we are already unregistered  because of the downloadComplete method
+            // being invoked in which case we will get an exception.
+        }
+    }
+
+    @Subscribe
+    public void downloadComplete(DownloadTrendAndStopLossInfo.StopLossHistoryDownloaderComplete event) {
+        progressView.setVisibility(View.INVISIBLE);
+        contentView.setVisibility(View.VISIBLE);
+
+        stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockUri, getApplicationContext(), portfolioName, symbol);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.stock_pager);
+        viewPager.setAdapter(stockPagerAdapter);
+        viewPager.setOffscreenPageLimit(StockPagerAdapter.FRAGMENT_COUNT);
+
+
+        // Unregister because the event might be published as a part of the stop loss flow and we don't want that
+        // to cause us to re initiate the entire page adapter.
+        BusService.getInstance().unregister(this);
+    }
+
+    void populateGeneralView(Cursor stockCursor) {
         TextView symbolView = (TextView) this.findViewById(R.id.detailNameSymbol);
         String name = stockCursor.getString(StocksTable.stockColumns.get(StocksTable.COLUMN_NAME));
         symbolView.setText(name);

@@ -10,8 +10,9 @@ import org.apache.http.protocol.HttpContext;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class DownloadQuote {
 
@@ -20,20 +21,23 @@ public class DownloadQuote {
     static String SYMBOL_SEPERATOR = "+";
 
     // If error getting info for stock, will end up with no entry in StockData list for the stock.
-    public static List<StockData> download(List<String> symbols, String dateStr) {
+    public static Map<String, StockData> download(Set<String> symbols) {
         // Generate url
         String url = URL_PREFIX;
-        for(int i = 0; i < symbols.size(); ++i) {
-            if(i > 0 && i < symbols.size()) {
+        int symbolCount = 0;
+        for(String curSymbol : symbols) {
+            if(symbolCount < symbols.size()) {
                 url += SYMBOL_SEPERATOR;
             }
-            url += symbols.get(i);
+            url += curSymbol;
+            ++symbolCount;
         }
+
         url += TAG_PREFIX;
 
         url += StockData.TAGS;
 
-        List<StockData> stockDataList = new ArrayList<StockData>();
+        Map<String, StockData> stockDataList = new HashMap<>();
         AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
         HttpContext localContext = new BasicHttpContext();
         HttpGet getRequest = new HttpGet(url);
@@ -63,7 +67,6 @@ public class DownloadQuote {
                 stockData.tradingVol = Util.parseDouble(rowData[9]);
                 stockData.avgTradingVol = Util.parseDouble(rowData[10]);
                 stockData.change = Util.parseDouble(rowData[11]);
-                stockData.dateStr = dateStr;
 
                 int nameLength = rowData.length - 12;
                 StringBuilder nameBuilder = new StringBuilder();
@@ -73,7 +76,7 @@ public class DownloadQuote {
                 }
                 stockData.name = nameBuilder.toString();
 
-                stockDataList.add(stockData);
+                stockDataList.put(symbol, stockData);
             }
         } catch(IOException e) {
             getRequest.abort();

@@ -106,7 +106,6 @@ public class HomeActivity extends Activity implements IDrawerActivity {
         loadDrawerItems();
     }
 
-
     private void loadDrawerItems() {
         menuItems.clear();
         menuItems.add(new DrawerMenuItem(ALL_STOCKS));

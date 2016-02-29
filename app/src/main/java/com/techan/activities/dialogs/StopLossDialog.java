@@ -15,41 +15,46 @@ import android.widget.NumberPicker;
 import com.techan.R;
 import com.techan.activities.SettingsActivity;
 import com.techan.activities.StockPagerAdapter;
+import com.techan.custom.EventedAlertDialog;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.ContentValuesFactory;
-import com.techan.stockDownload.RefreshTask;
+import com.techan.stockDownload.DownloadTrendAndStopLossInfo;
 import com.techan.stockDownload.actions.CostBasisPostRefreshAction;
 
 import java.util.Calendar;
 
 public class StopLossDialog {
-    public static void createError(AlertDialog.Builder alertDialog) {
+    public static void createError(Activity parentActivity) {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(parentActivity);
+        alertDialogBuilder.setTitle("Trailing stop loss");
+
         // Need buyPrice to set stop loss.
-        alertDialog.setTitle("Set buy price first.");
-        alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setTitle("Set buy price first.");
+        alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 //Nada.
             }
         });
 
-        alertDialog.create().show();
+        alertDialogBuilder.create().show();
     }
 
     public static void create(final Activity parentActivity, String symbol, final Uri stockUri, final StockPagerAdapter stockPagerAdapter) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
-        alertDialog.setTitle("Trailing stop loss");
-
         // Get layout inflater
         LayoutInflater inflater = parentActivity.getLayoutInflater();
         View view = inflater.inflate(R.layout.set_stop_loss, null);
+        final View progressView = view.findViewById(R.id.stopLossDialogProgressView);
+        final View contentView = view.findViewById(R.id.stopLossDialogContentView);
+
+        progressView.setVisibility(View.INVISIBLE);
 
         final SymbolProfile profile = ProfileManager.getSymbolData(parentActivity.getApplicationContext(), symbol);
         if(profile.buyPrice == null) {
-            createError(alertDialog);
+            createError(parentActivity);
             return;
         }
 
@@ -69,23 +74,30 @@ public class StopLossDialog {
         datePicker.setCalendarViewShown(false);
         setSlTrackingStartDateOnView(datePicker, profile.slTrackingStartDate);
 
+        final EventedAlertDialog dialog = new EventedAlertDialog(parentActivity);
+
         //Pass null as parent view because its a dialog.
-        alertDialog.setView(view)
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        doAdd(parentActivity, stockUri, profile, np, datePicker, stockPagerAdapter);
-                    }
-                })
-                .setNegativeButton("Clear", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        doClear(profile, stockPagerAdapter);
-                    }
-                });
+        dialog.setView(view);
+        dialog.setTitle("Trailing stop loss");
 
+        view.findViewById(R.id.stopLossDialogStartTracking).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                contentView.animate().translationY(contentView.getHeight());
+                progressView.setVisibility(View.VISIBLE);
+                doAdd(parentActivity, stockUri, profile, np, datePicker, stockPagerAdapter, dialog);
+            }
+        });
 
-        alertDialog.create().show();
+        view.findViewById(R.id.stopLossDialogStopTracking).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                doClear(profile, stockPagerAdapter);
+            }
+        });
+
+        dialog.show();
     }
 
     private static void setSlTrackingStartDateOnView(DatePicker dp, String buyDate) {
@@ -101,7 +113,13 @@ public class StopLossDialog {
     }
 
 
-    private static void doAdd(Activity parentActivity, Uri stockUri, SymbolProfile profile, NumberPicker np, DatePicker datePicker, StockPagerAdapter stockPagerAdapter) {
+    private static void doAdd(Activity parentActivity,
+                              Uri stockUri,
+                              SymbolProfile profile,
+                              NumberPicker np,
+                              DatePicker datePicker,
+                              StockPagerAdapter stockPagerAdapter,
+                              EventedAlertDialog dialog) {
         Integer stopLossPercent = np.getValue();
         // Either way set highestPrice to buyPrice. So that highestPrices is tracked from when stop loss notifications are activated.
         // TODO let user specify trailing vs non trailing
@@ -114,24 +132,33 @@ public class StopLossDialog {
         // Update db with stop loss information.
         ContentResolver cr = parentActivity.getContentResolver();
         Cursor cursor = cr.query(stockUri, null, null, null, null);
-        cursor.moveToFirst();
-        Double curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
+        Double curPrice = null;
+        if(cursor != null) {
+            try {
+                cursor.moveToFirst();
+                curPrice = cursor.getDouble(StocksTable.stockColumns.get(StocksTable.COLUMN_PRICE));
+            } finally {
+                cursor.close();
+            }
+        }
+
+        if(curPrice == null) {
+            return;
+        }
 
         if(Util.isDateLess(Util.getCal(profile.slTrackingStartDate), Util.getCurCalWithZeroTime())) {
             // Date picked is before current date. Add it to the db and have refresh task figure out current stop loss state.
             ContentValues values = ContentValuesFactory.createSlAddValuesDiffDate(profile.buyPrice, profile.slTrackingStartDate);
             cr.update(stockUri, values, null, null);
 
-            // Need to refresh historical data for this stock.
-            RefreshTask rt = new RefreshTask(parentActivity, parentActivity.getContentResolver(), stockUri, profile.symbol, false);
-            rt.addAction(new CostBasisPostRefreshAction(stockPagerAdapter, profile));
-            rt.download();
+            dialog.addAction(new CostBasisPostRefreshAction(stockPagerAdapter, profile));
+            new DownloadTrendAndStopLossInfo(profile.symbol, parentActivity, parentActivity.getContentResolver(), stockUri);
         } else {
             // Start tracking stop loss from todays date.
             ContentValues values = ContentValuesFactory.createSlAddValuesSameDate(curPrice, profile.buyPrice);
             cr.update(stockUri, values, null, null);
-
             stockPagerAdapter.updateCostBasisFragment(profile);
+            dialog.dismiss();
         }
     }
 

@@ -25,10 +25,10 @@ public class DownloadHistoryTest {
         }
 
         protected static String generateUrlForRangeTest(String symbol, Calendar curCal, Calendar lastCal) {
-            return generateUrlForRange(symbol, curCal, lastCal);
+            return null;
         }
 
-        protected static LowestCalInfo lowestDateTest(Calendar curCal, String lastSLUpdate) {
+        protected static TrackingStartCounts lowestDateTest(Calendar curCal, String lastSLUpdate) {
             return lowestDate(curCal, lastSLUpdate);
         }
 
@@ -110,7 +110,7 @@ public class DownloadHistoryTest {
         String endCalStr = endYear + "-" + endMonth + "-" + endDay + " 00:00:00";
         Calendar endCal = Util.getCal(endCalStr);
 
-        LowestCalInfo info = DownloadHistoryTester.lowestDateTest(endCal, startCalStr);
+        TrackingStartCounts info = DownloadHistoryTester.lowestDateTest(endCal, startCalStr);
         assertThat(info.lowestCal, equalTo(startCal));
         assertThat(info.curDateMinusSlDate, equalTo(null));
     }
@@ -128,7 +128,7 @@ public class DownloadHistoryTest {
         String endCalStr = endYear + "-" + endMonth + "-" + endDay + " 00:00:00";
         Calendar endCal = Util.getCal(endCalStr);
 
-        LowestCalInfo info = DownloadHistoryTester.lowestDateTest(endCal, startCalStr);
+        TrackingStartCounts info = DownloadHistoryTester.lowestDateTest(endCal, startCalStr);
         endCal.add(Calendar.DAY_OF_MONTH, DownloadHistory.DAY_COUNT_90 * -1);
         assertThat(info.lowestCal, equalTo(endCal));
         assertThat(info.curDateMinusSlDate, equalTo(3));

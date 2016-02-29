@@ -25,7 +25,7 @@ public class StocksTable {
     public static final String COLUMN_UP_TREND_COUNT = "upTrendCount";
     public static final String COLUMN_60_DAY_HIGH = "high60Day";
     public static final String COLUMN_90_DAY_LOW = "low90Day";
-    public static final String COLUMN_LAST_UPDATE = "lastUpdate";
+    public static final String COLUMN_LAST_HISTORY_UPDATE = "lastHistoryUpdate";
     public static final String COLUMN_SL_HIGEST_PRICE = "slHighestPrice";
     public static final String COLUMN_SL_LOWEST_PRICE = "slLowestPrice";
     public static final String COLUMN_SL_LOWEST_PRICE_DATE = "slLowestPriceDate";
@@ -51,7 +51,7 @@ public class StocksTable {
         stockColumns.put(COLUMN_UP_TREND_COUNT, i++);
         stockColumns.put(COLUMN_60_DAY_HIGH, i++);
         stockColumns.put(COLUMN_90_DAY_LOW, i++);
-        stockColumns.put(COLUMN_LAST_UPDATE, i++);
+        stockColumns.put(COLUMN_LAST_HISTORY_UPDATE, i++);
         stockColumns.put(COLUMN_SL_HIGEST_PRICE, i++);
         stockColumns.put(COLUMN_SL_LOWEST_PRICE, i++);
         stockColumns.put(COLUMN_SL_LOWEST_PRICE_DATE, i++);
@@ -76,7 +76,7 @@ public class StocksTable {
             COLUMN_UP_TREND_COUNT + " real default 0, " +
             COLUMN_60_DAY_HIGH + " real default 0, " +
             COLUMN_90_DAY_LOW + " real default 0," +
-            COLUMN_LAST_UPDATE + " text, " +
+            COLUMN_LAST_HISTORY_UPDATE + " text, " +
             COLUMN_SL_HIGEST_PRICE + " real default 0, " +
             COLUMN_SL_LOWEST_PRICE + " real default 0, " +
             COLUMN_SL_LOWEST_PRICE_DATE + " real default 0," +

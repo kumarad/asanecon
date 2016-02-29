@@ -6,7 +6,7 @@ import android.widget.TextView;
 import com.techan.R;
 import com.techan.activities.HomeActivity;
 import com.techan.custom.Util;
-import com.techan.memrepo.HistoryRepo;
+import com.techan.memrepo.GoldRepo;
 
 public class DrawerMenuGoldItem implements IDrawerMenuItem {
     public DrawerMenuGoldItem() {}
@@ -23,11 +23,11 @@ public class DrawerMenuGoldItem implements IDrawerMenuItem {
 
     @Override
     public void setText(View view) {
-        Double price = HistoryRepo.getGoldRepo().getLatestPrice();
+        Double price = GoldRepo.getRepo().getSpotPrice();
 
         TextView textView = (TextView) view.findViewById(R.id.menuGoldItemPriceText);
-        if(price == null) {
-            textView.setText("-");
+        if(price == null || price == 0) {
+            textView.setText("");
         } else {
             textView.setText(Double.toString(Util.roundTwoDecimals(price)));
         }
