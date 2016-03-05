@@ -42,7 +42,7 @@ public class HomeActivity extends Activity implements IDrawerActivity {
     public static String PORTFOLIO = "PORTFOLIO";
     public static String APP_START_UP = "APP_START_UP";
     public static String ALL_STOCKS = "All stocks";
-    public static String ADD_PORTFOLIO = "Add portfolio";
+    public static String ADD_PORTFOLIO = "Portfolios";
     public static String GOLD = "Gold";
     private DrawerLayout drawerLayout;
     private ListView drawerListView;
