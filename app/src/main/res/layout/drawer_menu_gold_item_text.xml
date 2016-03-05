@@ -11,6 +11,7 @@
         android:layout_marginStart="5dp"
         android:maxWidth="300dp"
         android:text="Gold"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
