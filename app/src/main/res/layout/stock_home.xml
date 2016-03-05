@@ -15,8 +15,8 @@
         android:layout_width="320dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:divider="@null"
         android:choiceMode="singleChoice"
-        android:dividerHeight="1dp"
         android:background="@color/black"
         android:listSelector="@drawable/drawer_selector"
         />
