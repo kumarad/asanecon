@@ -334,9 +334,6 @@ public class StockCostBasisFragment extends Fragment {
         List<String> xVals = new ArrayList<>();
         List<Entry> yVals = new ArrayList<>();
 
-        xVals.add(symbol);
-        xVals.add("");
-
         double symbolAmount = 0;
         double restAmount = 0;
         while(!cursor.isAfterLast()) {
@@ -357,6 +354,8 @@ public class StockCostBasisFragment extends Fragment {
         yVals.add(new Entry(new Float(symbolAmount), 0));
         yVals.add(new Entry(new Float(restAmount), 1));
 
+        xVals.add(Double.toString(Util.roundTwoDecimals((symbolAmount/ (symbolAmount+restAmount)) *100)) + " %");
+        xVals.add("");
 
         PieDataSet pieDataSet = new PieDataSet(yVals, "Dist");
         List<Integer> colors = new ArrayList<>();
@@ -372,6 +371,7 @@ public class StockCostBasisFragment extends Fragment {
         pieChart.setUsePercentValues(true);
         pieChart.setHoleRadius(0);
         pieChart.setTransparentCircleAlpha(0);
+        pieChart.setTouchEnabled(false);
 
         if(symbolAmount == 0) {
             pieChart.setVisibility(View.GONE);
