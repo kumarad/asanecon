@@ -39,7 +39,6 @@ public class StockTrendFragment extends Fragment {
         handleMovingAverages(rootView, inflater, curPrice, args.getDouble(MOV_50_VAL), args.getDouble(MOV_200_VAL));
         handleTrending(rootView, inflater, args.getInt(DAY_COUNT));
         handleVolumes(rootView, inflater, args.getDouble(VOLUME), args.getDouble(AVG_VOLUME), args.getDouble(CHANGE));
-        handlePeg(rootView, inflater, args.getDouble(PEG));
 
         return rootView;
     }
@@ -167,19 +166,4 @@ public class StockTrendFragment extends Fragment {
         }
     }
 
-    protected void handlePeg(View rootView, final LayoutInflater inflater, double peg) {
-        TextView pegView = (TextView) rootView.findViewById(R.id.pegDetail);
-        if(peg > 0)
-            pegView.setText("PEG: " + Double.toString(peg));
-        else
-            pegView.setText("PEG: -");
-
-        TextView pegAlertView = (TextView) rootView.findViewById(R.id.pegAlert);
-        if(peg > 2) {
-            pegAlertView.setText("High valuation");
-            InfoDialog.setOnClickInfoDialog(pegAlertView, inflater, rootView.getResources().getString(R.string.high_valuation));
-        } else {
-            pegAlertView.setVisibility(View.INVISIBLE);
-        }
-    }
 }

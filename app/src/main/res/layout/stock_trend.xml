@@ -5,9 +5,10 @@
         xmlns:custom="http://schemas.android.com/apk/res-auto"
         android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <RelativeLayout
                 android:id="@+id/highLowPlotRow"
@@ -56,7 +57,6 @@
         </RelativeLayout>
 
         <RelativeLayout
-                android:layout_below="@id/highLowPlotRow"
                 android:id="@+id/avgBarRow"
                 style="@style/stockCell">
 
@@ -118,7 +118,6 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_below="@id/avgBarRow"
             android:id="@+id/upTrendCountRow"
             style="@style/stockCell">
 
@@ -159,7 +158,6 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_below="@id/upTrendCountRow"
             android:id="@+id/avgCell"
             style="@style/stockCell">
 
@@ -202,25 +200,6 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-                android:layout_below="@id/avgCell"
-                android:id="@+id/pegRow"
-                style="@style/stockCell">
-
-            <TextView
-                android:id="@+id/pegDetail"
-                android:layout_width="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                    android:id="@+id/pegAlert"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    style="@style/stockAlert"/>
-        </RelativeLayout>
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </ScrollView>
