@@ -128,7 +128,7 @@ public class HomeActivity extends Activity implements IDrawerActivity {
         final DrawerMenuListAdapter adapter = new DrawerMenuListAdapter(this, menuItems);
         drawerListView.setAdapter(adapter);
 
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.blank, R.string.blank) {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_menu_white_24dp, R.string.blank, R.string.blank) {
             @Override
             public void onDrawerStateChanged(int newState) {
                 if(newState == DrawerLayout.STATE_SETTLING) {
@@ -155,7 +155,7 @@ public class HomeActivity extends Activity implements IDrawerActivity {
                     onDrawerClosed(drawerView);
                     isDrawerOpen = false;
                     invalidateOptionsMenu();
-                    actionBar.setTitle(actionBarTitle);
+                    actionBar.setTitle(" " + actionBarTitle);
                 }
             }
         };
@@ -182,14 +182,14 @@ public class HomeActivity extends Activity implements IDrawerActivity {
             Fragment fragment;
             if (menuItems.get(position).getText().equals(GOLD)) {
                 fragment = new GoldFragment();
-                actionBar.setTitle(GOLD);
+                actionBar.setTitle(" " + GOLD);
                 actionBarTitle = GOLD;
             } else {
                 StockListFragment stockListFragment = new StockListFragment();
                 stockListFragment.setParentActivity(this);
                 String portfolioName = menuItems.get(position).getText();
 
-                actionBar.setTitle(portfolioName);
+                actionBar.setTitle(" " + portfolioName);
                 actionBarTitle = portfolioName;
 
                 Bundle bundle = new Bundle();
