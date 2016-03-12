@@ -19,6 +19,11 @@ limitations under the License.
     <style name="appTheme" parent="@android:style/Theme.Holo">
         <item name="android:logo">@android:color/transparent</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_white_24dp</item>
+        <item name="android:actionBarStyle">@style/actionBarTheme</item>
+    </style>
+
+    <style name="actionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/asaneconTheme</item>
     </style>
 
     <style name="Widget">

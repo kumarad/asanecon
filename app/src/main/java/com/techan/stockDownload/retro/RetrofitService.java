@@ -12,13 +12,18 @@ public class RetrofitService {
                                                                 .setClient(new OkClient(createHttpClient()))
                                                                 .build();
 
-    public static final RestAdapter yahooRestAdapter = new RestAdapter.Builder()
+    public static final RestAdapter yahooHistoryRestAdapter = new RestAdapter.Builder()
             .setEndpoint("http://ichart.yahoo.com")
-            .setConverter(new YahooCSVConverter())
+            .setConverter(new YahooHistoryCSVConverter())
             .build();
 
     public static final RestAdapter yahooScraper = new RestAdapter.Builder()
             .setEndpoint("http://finance.yahoo.com").build();
+
+    public static final RestAdapter yahooQuoteAdapter = new RestAdapter.Builder()
+            .setEndpoint("http://download.finance.yahoo.com")
+            .setConverter(new YahooQuoteCSVConverter())
+            .build();
 
     private static OkHttpClient createHttpClient() {
         OkHttpClient client = new OkHttpClient();

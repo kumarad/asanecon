@@ -17,7 +17,7 @@ repositories {
 
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 23
     buildToolsVersion "20.0.0"
 
     defaultConfig {
@@ -43,7 +43,7 @@ android {
 }
 
 dependencies {
-    compile group: 'com.android.support', name: 'support-v4', version:'21.0.0'
+    compile group: 'com.android.support', name: 'appcompat-v7', version:'23.1.1'
 
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.4.3'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.3'
