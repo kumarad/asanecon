@@ -13,7 +13,9 @@ import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 import com.techan.stockDownload.retro.AbstractStockHistoryDownloader;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -30,6 +32,7 @@ public class DownloadTrendAndStopLossInfo extends AbstractStockHistoryDownloader
     private HistoryInfo historyInfo;
     private TrackingStartCounts trackingStartCounts;
     private boolean includeSL;
+    private List<Double> last10DayPriceList = new ArrayList<>();
 
     public DownloadTrendAndStopLossInfo(String symbol,
                                         Context ctx,
@@ -112,18 +115,21 @@ public class DownloadTrendAndStopLossInfo extends AbstractStockHistoryDownloader
             historyInfo.low90Day = closePrice;
         }
 
-        if(count >= trackingStartCounts.getStartCountFor10Day() && historyInfo.trackUpTrend) {
-            if(closePrice < historyInfo.prevDayClose) {
+        if(count >= trackingStartCounts.getStartCountFor10Day()) {
+            last10DayPriceList.add(closePrice);
+        }
+    }
+
+    private void handleUpTrend() {
+        historyInfo.upTrendDayCount = 0;
+        for (int i = last10DayPriceList.size() - 1; i > 0; --i) {
+            double cur = last10DayPriceList.get(i);
+            double prev = last10DayPriceList.get(i-1);
+            if (cur > prev) {
                 // Previous days close is lower. Stock went up.
                 historyInfo.upTrendDayCount++;
-                historyInfo.prevDayClose = closePrice;
             } else {
-                // Previous days price is higher. Not an uptrend.
-                // Stop trying to calculate the uptrend.
-                historyInfo.trackUpTrend = false;
-                if(count == 2) {
-                    historyInfo.upTrendDayCount = 0;
-                }
+                break;
             }
         }
     }
@@ -157,6 +163,7 @@ public class DownloadTrendAndStopLossInfo extends AbstractStockHistoryDownloader
             }
         }
 
+        handleUpTrend();
         StockTrends stockTrends = new StockTrends(historyInfo.upTrendDayCount,
                                                   historyInfo.high60Day,
                                                   historyInfo.low90Day);
