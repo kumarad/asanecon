@@ -6,4 +6,6 @@
     <color name="symbolInPie">#A3FFE0</color>
     <color name="restInPie">#FDDB94</color>
     <color name="asaneconTheme">#93CAB4</color>
+    <color name="backgroundDarkColor">#212121</color>
+    <color name="backgroundActionBarColor">#3F4747</color>
 </resources>

@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
             android:id="@+id/delete"
-            android:showAsAction="always"
+            app:showAsAction="always"
             android:icon="@drawable/ic_delete_white_24dp"
             >
     </item>
 
     <item
             android:id="@+id/set_buy_price"
-            android:showAsAction="collapseActionView"
+            app:showAsAction="collapseActionView"
             android:title="@string/buy_price"
             >
     </item>
 
     <item
             android:id="@+id/set_target_price"
-            android:showAsAction="collapseActionView"
+            app:showAsAction="collapseActionView"
             android:title="@string/target_price"
             >
     </item>
 
     <item
             android:id="@+id/set_pe_target"
-            android:showAsAction="collapseActionView"
+            app:showAsAction="collapseActionView"
             android:title="@string/pe_target"
             >
     </item>
 
     <item
             android:id="@+id/set_stop_loss"
-            android:showAsAction="collapseActionView"
+            app:showAsAction="collapseActionView"
             android:title="@string/stop_loss"
             >
     </item>

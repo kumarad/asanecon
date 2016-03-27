@@ -1,7 +1,5 @@
 package com.techan.activities;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
@@ -10,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HomeActivity extends Activity implements IDrawerActivity {
+public class HomeActivity extends AppCompatActivity implements IDrawerActivity {
     public static String PORTFOLIO = "PORTFOLIO";
     public static String APP_START_UP = "APP_START_UP";
     public static String ALL_STOCKS = "All stocks";
@@ -48,7 +48,7 @@ public class HomeActivity extends Activity implements IDrawerActivity {
     private ListView drawerListView;
     private ActionBarDrawerToggle drawerToggle;
     private boolean isDrawerOpen = false;
-    private ActionBar actionBar;
+    private Toolbar actionBar;
     private boolean resetDrawer = false;
     private String actionBarTitle = null;
     private List<IDrawerMenuItem> menuItems = new ArrayList<>();
@@ -64,11 +64,9 @@ public class HomeActivity extends Activity implements IDrawerActivity {
 
         setContentView(R.layout.stock_home);
 
-        actionBar = getActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-        }
+
+        actionBar = (Toolbar)findViewById(R.id.asaneconToolbar);
+        setSupportActionBar(actionBar);
 
         if(savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt(CURRENT_POSITION);
@@ -149,13 +147,13 @@ public class HomeActivity extends Activity implements IDrawerActivity {
                     isDrawerOpen = true;
                     invalidateOptionsMenu();
 
-                    actionBarTitle = actionBar.getTitle().toString();
-                    actionBar.setTitle(null);
+                    actionBarTitle = getSupportActionBar().getTitle().toString();
+                    getSupportActionBar().setTitle(null);
                 } else if(slideOffset < .45 && isDrawerOpen){
                     onDrawerClosed(drawerView);
                     isDrawerOpen = false;
                     invalidateOptionsMenu();
-                    actionBar.setTitle(" " + actionBarTitle);
+                    getSupportActionBar().setTitle(" " + actionBarTitle);
                 }
             }
         };
@@ -182,14 +180,14 @@ public class HomeActivity extends Activity implements IDrawerActivity {
             Fragment fragment;
             if (menuItems.get(position).getText().equals(GOLD)) {
                 fragment = new GoldFragment();
-                actionBar.setTitle(" " + GOLD);
+                getSupportActionBar().setTitle(" " + GOLD);
                 actionBarTitle = GOLD;
             } else {
                 StockListFragment stockListFragment = new StockListFragment();
                 stockListFragment.setParentActivity(this);
                 String portfolioName = menuItems.get(position).getText();
 
-                actionBar.setTitle(" " + portfolioName);
+                getSupportActionBar().setTitle(" " + portfolioName);
                 actionBarTitle = portfolioName;
 
                 Bundle bundle = new Bundle();
