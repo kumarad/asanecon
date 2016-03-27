@@ -5,9 +5,9 @@ import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -126,7 +126,7 @@ public class HomeActivity extends AppCompatActivity implements IDrawerActivity {
         final DrawerMenuListAdapter adapter = new DrawerMenuListAdapter(this, menuItems);
         drawerListView.setAdapter(adapter);
 
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_menu_white_24dp, R.string.blank, R.string.blank) {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, actionBar, R.string.blank, R.string.blank) {
             @Override
             public void onDrawerStateChanged(int newState) {
                 if(newState == DrawerLayout.STATE_SETTLING) {
@@ -137,23 +137,6 @@ public class HomeActivity extends AppCompatActivity implements IDrawerActivity {
                             adapter.notifyDataSetChanged();
                         }
                     }
-                }
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                if(slideOffset > .55 && !isDrawerOpen) {
-                    onDrawerOpened(drawerView);
-                    isDrawerOpen = true;
-                    invalidateOptionsMenu();
-
-                    actionBarTitle = getSupportActionBar().getTitle().toString();
-                    getSupportActionBar().setTitle(null);
-                } else if(slideOffset < .45 && isDrawerOpen){
-                    onDrawerClosed(drawerView);
-                    isDrawerOpen = false;
-                    invalidateOptionsMenu();
-                    getSupportActionBar().setTitle(" " + actionBarTitle);
                 }
             }
         };
