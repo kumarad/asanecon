@@ -4,7 +4,7 @@
     <PreferenceCategory
         android:title="General Settings">
 
-        <SwitchPreference
+        <com.techan.thirdparty.CustomSwitchPreference
                 android:key="autoRefresh"
                 android:title="Auto Refresh"
                 android:defaultValue="false"
@@ -34,7 +34,7 @@
     <PreferenceCategory
             android:title="Miscellaneous">
 
-        <SwitchPreference
+        <com.techan.thirdparty.CustomSwitchPreference
             android:key="goldTracker"
             android:title="Gold Tracker"
             android:summary="Enable gold price tracking."

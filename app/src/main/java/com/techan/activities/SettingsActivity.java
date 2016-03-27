@@ -1,6 +1,5 @@
 package com.techan.activities;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,13 +9,16 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.techan.R;
 import com.techan.alarm.AlarmReceiver;
+import com.techan.thirdparty.CustomSwitchPreference;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends AppCompatActivity {
     public static final String AUTO_REFRESH_KEY = "autoRefresh";
     public static final String REFRESH_INTERVAL_KEY ="refreshInterval";
     public static final String REFRESH_WIFI_ONLY_KEY = "refreshWifiOnly";
@@ -31,15 +33,12 @@ public class SettingsActivity extends Activity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
 
-        ActionBar actionBar = getActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-        }
+        setContentView(R.layout.settings);
 
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
-                .commit();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.settingsToolbar);
+        setSupportActionBar(toolbar);
+
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsFragment()).commit();
     }
 
     private static void refreshMessage(String refreshValue, Preference preference) {
@@ -56,16 +55,16 @@ public class SettingsActivity extends Activity {
 
             addPreferencesFromResource(R.xml.settings);
 
-            final SwitchPreference refreshPref = (SwitchPreference) getPreferenceManager().findPreference(AUTO_REFRESH_KEY);
+            final CustomSwitchPreference refreshPref = (CustomSwitchPreference) getPreferenceManager().findPreference(AUTO_REFRESH_KEY);
             final ListPreference refreshPreferenceList = (ListPreference)getPreferenceManager().findPreference(REFRESH_INTERVAL_KEY);
             handleRefreshes(getActivity().getApplicationContext(), refreshPref, refreshPreferenceList);
 
-            final SwitchPreference goldTrackerPref = (SwitchPreference) getPreferenceManager().findPreference(ENABLE_GOLD_TRACKER);
+            final CustomSwitchPreference goldTrackerPref = (CustomSwitchPreference) getPreferenceManager().findPreference(ENABLE_GOLD_TRACKER);
             handleGoldTracker(goldTrackerPref, getActivity().getApplicationContext());
         }
     }
 
-    private static void handleGoldTracker(SwitchPreference goldTrackerPref, final Context context) {
+    private static void handleGoldTracker(CustomSwitchPreference goldTrackerPref, final Context context) {
         goldTrackerPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
@@ -82,7 +81,7 @@ public class SettingsActivity extends Activity {
         });
     }
 
-    private static void handleRefreshes(final Context appContext, final SwitchPreference refreshPref,
+    private static void handleRefreshes(final Context appContext, final CustomSwitchPreference refreshPref,
                                         final ListPreference refreshPreferenceList) {
         refreshMessage(refreshPreferenceList.getValue(), refreshPreferenceList);
 
