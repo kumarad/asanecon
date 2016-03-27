@@ -1,13 +1,13 @@
 package com.techan.activities;
 
-import android.app.ActionBar;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,7 +29,7 @@ import com.techan.profile.Constants;
 import com.techan.progressbar.SaundProgressBar;
 import com.techan.stockDownload.DownloadTrendAndStopLossInfo;
 
-public class StockDetailFragmentActivity extends FragmentActivity {
+public class StockDetailFragmentActivity extends AppCompatActivity {
     private Uri stockUri;
     private String symbol;
 
@@ -58,12 +58,10 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         progressView = findViewById(R.id.stockDetailProgressView);
         contentView = findViewById(R.id.stockDetailContentView);
 
-        ActionBar actionBar = getActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setTitle(null);
-        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.stockDetailToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
 
         Cursor stockCursor = getContentResolver().query(stockUri, null, null, null, null);
         if(stockCursor != null) {

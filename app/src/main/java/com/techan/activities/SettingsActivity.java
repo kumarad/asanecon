@@ -8,7 +8,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.SwitchPreference;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -36,6 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.settings);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.settingsToolbar);
+        toolbar.setTitle("Settings");
         setSupportActionBar(toolbar);
 
         getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsFragment()).commit();

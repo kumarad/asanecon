@@ -26,6 +26,8 @@ limitations under the License.
         <!-- Used to color the overflow menu icon -->
         <item name="actionMenuTextColor">#fff</item>
         <item name="android:textColor">#fff</item>
+        <item name="android:windowBackground">@color/backgroundDarkColor</item>
+        <item name="android:colorBackground">@color/backgroundDarkColor</item>
     </style>
 
     <style name="Widget">
