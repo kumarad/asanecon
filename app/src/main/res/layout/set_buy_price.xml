@@ -16,8 +16,8 @@
             android:layout_height="50sp"
             android:weightSum="1.0"
             android:id="@+id/buy_price_row"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
         <TextView
                 android:id="@+id/buy_price"
@@ -42,8 +42,8 @@
             android:layout_height="50sp"
             android:weightSum="1.0"
             android:id="@+id/share_count_row"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
         <TextView
                 android:id="@+id/share_count"

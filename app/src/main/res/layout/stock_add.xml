@@ -21,8 +21,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="50sp"
                 android:singleLine="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:hint="@string/stock_add_hint">
     </EditText>
 
