@@ -42,7 +42,7 @@ public class DeletePortfolioDialog {
         }
 
         @Override
-        public void ok() {
+        public void ok(Dialog dialog) {
             Map<String, Portfolio> portfolios = ProfileManager.getPortfolios(parentActivity);
             Portfolio portfolioToDelete = portfolios.get(portfolioName);
             if (portfolioToDelete != null) {

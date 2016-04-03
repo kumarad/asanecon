@@ -28,6 +28,10 @@ limitations under the License.
         <item name="android:textColor">#fff</item>
         <item name="android:windowBackground">@color/backgroundDarkColor</item>
         <item name="android:colorBackground">@color/backgroundDarkColor</item>
+
+        <item name="colorControlNormal">@color/asaneconTheme</item>
+        <item name="colorControlActivated">@color/asaneconTheme</item>
+        <item name="colorControlHighlight">@color/asaneconTheme</item>
     </style>
 
     <style name="Widget">

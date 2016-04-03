@@ -46,7 +46,7 @@ public class OkCancelDialog extends AlertDialog {
         okView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogAction.ok();
+                dialogAction.ok(me);
             }
         });
 

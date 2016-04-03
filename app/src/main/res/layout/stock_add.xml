@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/backgroundActionBarColor">
+
+    <include layout="@layout/dialog_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <TextView
             android:id="@+id/add_divider"
@@ -18,14 +23,16 @@
                 android:singleLine="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:hint="@string/stock_add_hint"
-                android:layout_below="@id/add_divider">
-        </EditText>
+                android:hint="@string/stock_add_hint">
+    </EditText>
 
     <TextView
             android:id="@+id/add_divider2"
             android:layout_width="fill_parent"
-            android:layout_height="10dip"
-            android:layout_below="@id/stock_add"
-            />
-</RelativeLayout>
+            android:layout_height="10dip"/>
+
+    <include layout="@layout/dialog_ok_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
