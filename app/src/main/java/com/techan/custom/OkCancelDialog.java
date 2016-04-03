@@ -1,8 +1,8 @@
 package com.techan.custom;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,11 +19,11 @@ public class OkCancelDialog extends AlertDialog {
     private boolean showCancel;
     private final Dialog me = this;
 
-    public OkCancelDialog(Activity parentActivity,
+    public OkCancelDialog(Context context,
                           View dialogView,
                           String title,
                           DialogAction dialogAction) {
-        super(parentActivity);
+        super(context);
 
         setView(dialogView);
         this.dialogAction = dialogAction;

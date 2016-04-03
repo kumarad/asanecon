@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/backgroundActionBarColor">
 
-    <TextView
-            android:id="@+id/buy_divider"
-            android:layout_width="fill_parent"
-            android:layout_height="10dp"/>
+    <include layout="@layout/dialog_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="50sp"
             android:weightSum="1.0"
-            android:layout_below="@id/buy_divider"
             android:id="@+id/buy_price_row"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-        >
+            android:layout_marginRight="10dp">
 
         <TextView
                 android:id="@+id/buy_price"
@@ -43,11 +41,9 @@
             android:layout_width="fill_parent"
             android:layout_height="50sp"
             android:weightSum="1.0"
-            android:layout_below="@id/buy_price_row"
             android:id="@+id/share_count_row"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-        >
+            android:layout_marginRight="10dp">
 
         <TextView
                 android:id="@+id/share_count"
@@ -67,4 +63,8 @@
                 />
     </LinearLayout>
 
-</RelativeLayout>
+    <include layout="@layout/dialog_ok_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -72,6 +72,7 @@ public class StockCostBasisFragment extends Fragment {
     String portfolioName;
     View rootView;
     String symbol;
+    View portfolioView;
 
     public void setStockPagerAdapter(StockPagerAdapter stockPagerAdapter) {
         this.stockPagerAdapter = stockPagerAdapter;
@@ -112,6 +113,8 @@ public class StockCostBasisFragment extends Fragment {
         peHighVal = (TextView) rootView.findViewById(R.id.peHighVal);
 
         warningView.setText("Set cost basis.");
+
+        portfolioView = rootView.findViewById(R.id.costBasisPortfolioDistributionView);
 
         return rootView;
     }
@@ -189,11 +192,13 @@ public class StockCostBasisFragment extends Fragment {
         }
 
         if(stockCount != null && stockCount != 0) {
+            portfolioView.setVisibility(View.VISIBLE);
             countValView.setText(Integer.toString(stockCount));
             setupPieChart(rootView);
             showCostBasisViews();
             updateCostBasis(curPrice, buyPrice, stockCount);
         } else {
+            portfolioView.setVisibility(View.GONE);
             countValView.setText("Not set");
             hideCostBasisViews();
         }

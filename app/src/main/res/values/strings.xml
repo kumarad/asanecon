@@ -7,7 +7,7 @@
     <string name="stock_add_button">Add</string>
     <string name="pe_target">PE Target</string>
     <string name="stop_loss">Stop Loss</string>
-    <string name="buy_price">Buy Price</string>
+    <string name="cost_basis">Cost Basis</string>
     <string name="target_price">Target Price</string>
     <string name="pe_notifications">PE Notifications</string>
     <string name="target">Target</string>
