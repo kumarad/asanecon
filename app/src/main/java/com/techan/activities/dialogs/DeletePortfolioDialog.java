@@ -19,7 +19,6 @@ import java.util.Map;
 
 public class DeletePortfolioDialog {
     public static void create(final Activity parentActivity, final String portfolioName) {
-        // Get layout inflater
         LayoutInflater inflater = parentActivity.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.delete_portfolio, null);
 
