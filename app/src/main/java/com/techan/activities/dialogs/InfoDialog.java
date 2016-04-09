@@ -24,7 +24,7 @@ public class InfoDialog {
         });
     }
 
-    private static void create(Context context, LayoutInflater inflater, String info, boolean isHtml) {
+    public static void create(Context context, LayoutInflater inflater, String info, boolean isHtml) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
         // Get layout inflater

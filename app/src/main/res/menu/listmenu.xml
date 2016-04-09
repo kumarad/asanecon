@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
             android:id="@+id/insert"
-            android:showAsAction="ifRoom"
+            app:showAsAction="ifRoom"
             android:title="Add Symbol"
             android:icon="@drawable/ic_add_white_24dp"
             >
@@ -11,28 +12,28 @@
     
     <item
             android:id="@+id/settings"
-            android:showAsAction="collapseActionView"
+            app:showAsAction="collapseActionView"
             android:title="Settings"
             >
     </item>
 
     <item
         android:id="@+id/showCostBasis"
-        android:showAsAction="collapseActionView"
+        app:showAsAction="collapseActionView"
         android:title="Show Cost Basis"
         >
     </item>
 
     <item
             android:id="@+id/deletePortfolio"
-            android:showAsAction="collapseActionView"
+            app:showAsAction="collapseActionView"
             android:title="Delete Portfolio"
             >
     </item>
 
     <item
             android:id="@+id/deleteAllStocks"
-            android:showAsAction="collapseActionView"
+            app:showAsAction="collapseActionView"
             android:title="Delete Everything"
             >
     </item>

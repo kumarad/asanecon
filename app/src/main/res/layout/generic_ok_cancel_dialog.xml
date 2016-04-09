@@ -9,15 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <EditText
-        android:id="@+id/portfolioText"
-        android:layout_width="fill_parent"
-        android:layout_height="50sp"
-        android:singleLine="true"
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:hint="@string/portfolio_add_hint">
-    </EditText>
+        android:paddingTop="10dp"
+        android:id="@+id/genericDialogText"
+        android:text="Generic text"/>
 
     <include layout="@layout/dialog_ok_cancel"
         android:layout_width="match_parent"

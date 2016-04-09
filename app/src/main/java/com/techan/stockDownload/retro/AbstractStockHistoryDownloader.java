@@ -2,7 +2,6 @@ package com.techan.stockDownload.retro;
 
 import android.util.Log;
 
-import com.techan.memrepo.HistoryRepo;
 import com.techan.stockDownload.StockDayPriceInfo;
 
 import java.util.Calendar;
@@ -34,7 +33,7 @@ public abstract class AbstractStockHistoryDownloader extends HistoryDownloader {
 
         endDay = endDay -1;
 
-        RetrofitService.yahooRestAdapter.create(YahooService.class).getHistory(symbol,
+        RetrofitService.yahooHistoryRestAdapter.create(YahooService.class).getHistory(symbol,
                 startMonth,
                 startDay,
                 startYear,

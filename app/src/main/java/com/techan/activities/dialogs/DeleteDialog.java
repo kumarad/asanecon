@@ -2,10 +2,16 @@ package com.techan.activities.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.net.Uri;
+import android.view.LayoutInflater;
+import android.view.View;
 
+import com.techan.R;
 import com.techan.activities.HomeActivity;
+import com.techan.custom.DialogAction;
+import com.techan.custom.OkCancelDialog;
 import com.techan.custom.Util;
 import com.techan.profile.Portfolio;
 import com.techan.profile.ProfileManager;
@@ -14,65 +20,81 @@ import java.util.Map;
 
 public class DeleteDialog {
     public static void create(final Activity parentActivity, final Uri stockUri, final String symbol, final String portfolioName) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(parentActivity);
         boolean deleteFromEverywhere = false;
+        String title;
         if(portfolioName.equals(HomeActivity.ALL_STOCKS)) {
-            alertDialog.setTitle(String.format("Delete stock"));
+            title = "Delete stock";
             deleteFromEverywhere = true;
         } else {
-            alertDialog.setTitle(String.format("Delete stock from %s", portfolioName));
+            title = String.format("Delete stock from %s", portfolioName);
         }
 
-        final boolean deleteAll = deleteFromEverywhere;
-        alertDialog.setMessage("Click yes to confirm");
-        alertDialog.setCancelable(false);
-        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteStock(parentActivity, stockUri, symbol, portfolioName, deleteAll);
-            }
-        });
-        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        LayoutInflater inflater = parentActivity.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.generic_ok_cancel_dialog, null);
+        dialogView.findViewById(R.id.genericDialogText).setVisibility(View.GONE);
+        DeleteStockAction action = new DeleteStockAction(parentActivity, stockUri, symbol, portfolioName, deleteFromEverywhere);
+        OkCancelDialog dialog = new OkCancelDialog(parentActivity, dialogView, title, action);
+        dialog.setOk("Confirm");
+        dialog.setCancel("Cancel");
+        dialog.show();
 
-        alertDialog.create().show();
     }
 
-    private static void deleteStock(Activity parentActivity, Uri stockUri, String symbol, String portfolioName, boolean deleteAll) {
-        if(deleteAll) {
-            parentActivity.getContentResolver().delete(stockUri, null, null);
-            if(!ProfileManager.removeSymbol(parentActivity.getApplicationContext(), symbol)) {
-                Util.showErrorToast(parentActivity, "Oops. Something on your device prevented profile data from being updated.");
-            }
+    private static class DeleteStockAction implements DialogAction {
 
-            for(Map.Entry<String, Portfolio> portfolioEntry : ProfileManager.getPortfolios(parentActivity).entrySet()) {
-                if(portfolioEntry.getValue().getSymbols().contains(symbol)) {
-                    ProfileManager.removeSymbolFromPortfolio(parentActivity, portfolioEntry.getKey(), symbol);
-                }
-            }
-        } else {
-            ProfileManager.removeSymbolFromPortfolio(parentActivity, portfolioName, symbol);
+        private final Activity parentActivity;
+        private final Uri stockUri;
+        private final String symbol;
+        private final String portfolioName;
+        private final boolean deleteAll;
 
-            boolean symbolExistsInOtherPortfolio = false;
-            for(Map.Entry<String, Portfolio> portfolioEntry : ProfileManager.getPortfolios(parentActivity).entrySet()) {
-                if(portfolioEntry.getValue().getSymbols().contains(symbol)) {
-                    symbolExistsInOtherPortfolio = true;
-                    break;
-                }
-            }
-
-            if(!symbolExistsInOtherPortfolio) {
-                parentActivity.getContentResolver().delete(stockUri, null, null);
-                if(!ProfileManager.removeSymbol(parentActivity.getApplicationContext(), symbol)) {
-                    Util.showErrorToast(parentActivity, "Oops. Something on your device prevented profile data from being updated.");
-                }
-            }
+        public DeleteStockAction(Activity parentActivity, Uri stockUri, String symbol, String portfolioName, boolean deleteAll) {
+            this.parentActivity = parentActivity;
+            this.stockUri = stockUri;
+            this.symbol = symbol;
+            this.portfolioName = portfolioName;
+            this.deleteAll = deleteAll;
         }
 
-        parentActivity.finish();
+        @Override
+        public void ok(Dialog dialog) {
+            if (deleteAll) {
+                parentActivity.getContentResolver().delete(stockUri, null, null);
+                if (!ProfileManager.removeSymbol(parentActivity.getApplicationContext(), symbol)) {
+                    Util.showErrorToast(parentActivity, "Oops. Something on your device prevented profile data from being updated.");
+                }
+
+                for (Map.Entry<String, Portfolio> portfolioEntry : ProfileManager.getPortfolios(parentActivity).entrySet()) {
+                    if (portfolioEntry.getValue().getSymbols().contains(symbol)) {
+                        ProfileManager.removeSymbolFromPortfolio(parentActivity, portfolioEntry.getKey(), symbol);
+                    }
+                }
+            } else {
+                ProfileManager.removeSymbolFromPortfolio(parentActivity, portfolioName, symbol);
+
+                boolean symbolExistsInOtherPortfolio = false;
+                for (Map.Entry<String, Portfolio> portfolioEntry : ProfileManager.getPortfolios(parentActivity).entrySet()) {
+                    if (portfolioEntry.getValue().getSymbols().contains(symbol)) {
+                        symbolExistsInOtherPortfolio = true;
+                        break;
+                    }
+                }
+
+                if (!symbolExistsInOtherPortfolio) {
+                    parentActivity.getContentResolver().delete(stockUri, null, null);
+                    if (!ProfileManager.removeSymbol(parentActivity.getApplicationContext(), symbol)) {
+                        Util.showErrorToast(parentActivity, "Oops. Something on your device prevented profile data from being updated.");
+                    }
+                }
+            }
+
+            dialog.cancel();
+            parentActivity.finish();
+        }
+
+        @Override
+        public void cancel(Dialog dialog) {
+            dialog.cancel();
+        }
     }
 }

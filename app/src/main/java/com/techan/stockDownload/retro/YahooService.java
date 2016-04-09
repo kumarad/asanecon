@@ -1,7 +1,9 @@
 package com.techan.stockDownload.retro;
 
+import com.techan.stockDownload.StockData;
 import com.techan.stockDownload.StockDayPriceInfo;
 
+import java.util.Map;
 import java.util.SortedMap;
 
 import retrofit.Callback;
@@ -24,5 +26,10 @@ public interface YahooService {
     @GET("/q/ks")
     void getKeyStats(@Query("s") String symbolPlusKeyStats,
                      Callback<Response> callback);
+
+    @GET("/d/quotes.csv")
+    void downloadQuotes(@Query("s") String symbols,
+                        @Query("f") String tags,
+                        Callback<Map<String, StockData>> callback);
 
 }

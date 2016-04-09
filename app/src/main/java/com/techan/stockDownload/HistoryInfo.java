@@ -1,10 +1,6 @@
 package com.techan.stockDownload;
 
 public class HistoryInfo {
-    // Used internally by DownloadTrendAndStopLossInfo.
-    public double prevDayClose = Double.MAX_VALUE;
-    public boolean trackUpTrend = true;
-
     // Trends
     public double upTrendDayCount = 0;
     public double high60Day = 0;

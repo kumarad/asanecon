@@ -6,9 +6,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
+import com.squareup.otto.Subscribe;
 import com.techan.activities.BusService;
 import com.techan.activities.SettingsActivity;
 import com.techan.activities.fragments.StockListFragment;
@@ -22,7 +22,7 @@ import java.util.*;
 
 // Don't need to worry about thread safety when accessing the ContentProvider
 // because the SQLiteDatabase backing the content provider is thread safe!
-public class RefreshTask extends AsyncTask<String, Void, Map<String, StockData>> {
+public class RefreshTask {
     private static final String GOLD_SYMBOL = "XAUUSD=X";
     private ContentResolver contentResolver;
     private boolean autoRefresh;
@@ -74,28 +74,10 @@ public class RefreshTask extends AsyncTask<String, Void, Map<String, StockData>>
         symbols.add(symbol);
     }
 
-    // Download stock data for the symbol.
-    @Override
-    protected Map<String, StockData> doInBackground(String... params) {
-        // Download real time data for stock symbols.
-        if(symbols.contains(GOLD_SYMBOL)) {
-            // The user add the stock symbol outside of the gold tracker.
-            goldPriceRequestedAsSymbol = true;
-        } else if(downloadGoldSpotPrice){
-            // We need to add the symbol since we need it to track the spot price.
-            symbols.add(GOLD_SYMBOL);
-        }
-
-        return DownloadQuote.download(symbols);
-    }
-
     // Once data has been downloaded, update database.
-    @Override
-    protected void onPostExecute(Map<String, StockData> dataMap) {
-        if(isCancelled()) {
-            endRefresh();
-            return;
-        }
+    @Subscribe
+    public void done(DownloadQuote.DownloadQuoteComplete event) {
+        Map<String, StockData> dataMap = event.getStockData();
 
         if(downloadGoldSpotPrice) {
             // We need to make sure we add the spot price to the GoldRepo
@@ -119,7 +101,7 @@ public class RefreshTask extends AsyncTask<String, Void, Map<String, StockData>>
         endRefresh();
     }
 
-    public void endRefresh() {
+    private void endRefresh() {
         BusService.getInstance().post(new StockListFragment.RefreshCompleteEvent());
         BusService.getInstance().unregister(this);
     }
@@ -145,7 +127,16 @@ public class RefreshTask extends AsyncTask<String, Void, Map<String, StockData>>
         }
 
         if(symbols.size() != 0) {
-            execute();
+            // Download real time data for stock symbols.
+            if(symbols.contains(GOLD_SYMBOL)) {
+                // The user add the stock symbol outside of the gold tracker.
+                goldPriceRequestedAsSymbol = true;
+            } else if(downloadGoldSpotPrice){
+                // We need to add the symbol since we need it to track the spot price.
+                symbols.add(GOLD_SYMBOL);
+            }
+
+            DownloadQuote.download(symbols);
         } else {
             endRefresh();
         }

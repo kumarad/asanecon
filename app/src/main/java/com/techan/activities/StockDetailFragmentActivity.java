@@ -1,13 +1,13 @@
 package com.techan.activities;
 
-import android.app.ActionBar;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,7 +20,7 @@ import com.techan.R;
 import com.techan.activities.dialogs.BuyDialog;
 import com.techan.activities.dialogs.DeleteDialog;
 import com.techan.activities.dialogs.PeDialog;
-import com.techan.activities.dialogs.StopLossDialog;
+import com.techan.activities.dialogs.StopLossDialogFactory;
 import com.techan.activities.dialogs.TargetDialog;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
@@ -29,7 +29,7 @@ import com.techan.profile.Constants;
 import com.techan.progressbar.SaundProgressBar;
 import com.techan.stockDownload.DownloadTrendAndStopLossInfo;
 
-public class StockDetailFragmentActivity extends FragmentActivity {
+public class StockDetailFragmentActivity extends AppCompatActivity {
     private Uri stockUri;
     private String symbol;
 
@@ -58,12 +58,10 @@ public class StockDetailFragmentActivity extends FragmentActivity {
         progressView = findViewById(R.id.stockDetailProgressView);
         contentView = findViewById(R.id.stockDetailContentView);
 
-        ActionBar actionBar = getActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setTitle(null);
-        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.stockDetailToolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
 
         Cursor stockCursor = getContentResolver().query(stockUri, null, null, null, null);
         if(stockCursor != null) {
@@ -196,7 +194,7 @@ public class StockDetailFragmentActivity extends FragmentActivity {
                 PeDialog.create(this, symbol, stockPagerAdapter);
                 return true;
             case R.id.set_stop_loss:
-                StopLossDialog.create(this, symbol, stockUri, stockPagerAdapter);
+                StopLossDialogFactory.create(this, symbol, stockUri, stockPagerAdapter);
                 return true;
             case android.R.id.home:
                 onBackPressed();

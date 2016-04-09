@@ -18,7 +18,7 @@ import retrofit.converter.Converter;
 import retrofit.mime.TypedInput;
 import retrofit.mime.TypedOutput;
 
-public class YahooCSVConverter implements Converter {
+public class YahooHistoryCSVConverter implements Converter {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Override

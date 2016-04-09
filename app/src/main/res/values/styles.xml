@@ -16,9 +16,22 @@ limitations under the License.
 
 <resources>
 
-    <style name="appTheme" parent="@android:style/Theme.Holo">
-        <item name="android:logo">@android:color/transparent</item>
-        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back_white_24dp</item>
+    <style name="appTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <!-- Used to for the title of the Toolbar -->
+        <item name="android:textColorPrimary">#fff</item>
+        <!-- Used to for the title of the Toolbar when parent is Theme.AppCompat.Light -->
+        <item name="android:textColorPrimaryInverse">#fff</item>
+        <!-- Used to color the text of the action menu icons -->
+        <item name="android:textColorSecondary">#fff</item>
+        <!-- Used to color the overflow menu icon -->
+        <item name="actionMenuTextColor">#fff</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:windowBackground">@color/backgroundDarkColor</item>
+        <item name="android:colorBackground">@color/backgroundDarkColor</item>
+
+        <item name="colorControlNormal">@color/asaneconTheme</item>
+        <item name="colorControlActivated">@color/asaneconTheme</item>
+        <item name="colorControlHighlight">@color/asaneconTheme</item>
     </style>
 
     <style name="Widget">

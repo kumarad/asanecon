@@ -3,7 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@color/backgroundActionBarColor">
 
     <ProgressBar
         android:id="@+id/stopLossDialogProgressView"
@@ -13,17 +14,22 @@
         style="@android:style/Widget.ProgressBar.Small"
         />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/stopLossDialogContentView"
+        android:orientation="vertical"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
+        <include layout="@layout/dialog_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="150sp"
                 android:weightSum="1.0"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:id="@+id/edit_stop_loss_percent"
                 >
 
@@ -58,8 +64,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Purchase Date:"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_below="@id/date_divider"
             />
 
@@ -70,45 +74,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/dpText"/>
 
-        <RelativeLayout
-            android:layout_below="@id/slDatePicker"
+        <include layout="@layout/dialog_ok_cancel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/stopLossDialogStartTracking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#33B5E5"
-                android:text="OK"
-                />
-
-            <TextView
-                android:id="@+id/stopLossDialogStopTracking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/stopLossDialogStartTracking"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#33B5E5"
-                android:text="Stop Tracking"
-                />
+            android:layout_height="wrap_content" />
 
 
-        </RelativeLayout>
 
+    </LinearLayout>
 
-    </RelativeLayout>
 
 </RelativeLayout>
