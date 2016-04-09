@@ -210,9 +210,10 @@
             <TextView
                 android:id="@+id/targetPeText"
                 android:layout_width="0dp"
-                android:layout_weight=".20"
+                android:layout_weight=".30"
                 android:text="PE Target:"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"/>
 

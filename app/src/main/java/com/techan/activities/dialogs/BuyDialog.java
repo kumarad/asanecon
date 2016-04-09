@@ -34,7 +34,7 @@ public class BuyDialog {
 
         BuyPriceAction action = new BuyPriceAction(context, profile, buyPriceText, shareCountText, stockPagerAdapter);
         OkCancelDialog dialog = new OkCancelDialog(context, view, "Cost Basis", action);
-        dialog.setOk("Save");
+        dialog.setOk("Set");
         dialog.setCancel("Clear");
         dialog.show();
     }
