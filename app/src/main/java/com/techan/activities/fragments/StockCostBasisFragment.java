@@ -229,7 +229,7 @@ public class StockCostBasisFragment extends Fragment {
 
     protected boolean handleTargetPricing(Double curPrice, Double targetPrice, Boolean lessThanEqual) {
         boolean set = false;
-        if(targetPrice != null && targetPrice != 0) {
+        if(targetPrice != null && targetPrice != 0 && lessThanEqual != null) {
             set = true;
             targetPriceView.setVisibility(View.VISIBLE);
             if(lessThanEqual) {

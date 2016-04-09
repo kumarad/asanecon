@@ -89,7 +89,7 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
                     args.putString(StockCostBasisFragment.SL_TRACKING_START_DATE, profile.slTrackingStartDate);
                 }
 
-                if (profile.targetPrice != null) {
+                if (profile.targetPrice != null && profile.lessThanEqual != null) {
                     args.putDouble(StockCostBasisFragment.TARGET_PRICE, profile.targetPrice);
                     args.putBoolean(StockCostBasisFragment.TARGET_LESS_THAN_EQUAL, profile.lessThanEqual);
                 }
