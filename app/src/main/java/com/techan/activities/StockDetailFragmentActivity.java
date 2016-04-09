@@ -20,7 +20,7 @@ import com.techan.R;
 import com.techan.activities.dialogs.BuyDialog;
 import com.techan.activities.dialogs.DeleteDialog;
 import com.techan.activities.dialogs.PeDialog;
-import com.techan.activities.dialogs.StopLossDialog;
+import com.techan.activities.dialogs.StopLossDialogFactory;
 import com.techan.activities.dialogs.TargetDialog;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
@@ -194,7 +194,7 @@ public class StockDetailFragmentActivity extends AppCompatActivity {
                 PeDialog.create(this, symbol, stockPagerAdapter);
                 return true;
             case R.id.set_stop_loss:
-                StopLossDialog.create(this, symbol, stockUri, stockPagerAdapter);
+                StopLossDialogFactory.create(this, symbol, stockUri, stockPagerAdapter);
                 return true;
             case android.R.id.home:
                 onBackPressed();

@@ -1,29 +1,26 @@
 package com.techan.custom;
 
-import android.app.AlertDialog;
 import android.content.Context;
+import android.view.View;
 
-import com.squareup.otto.Subscribe;
 import com.techan.activities.BusService;
-import com.techan.stockDownload.DownloadTrendAndStopLossInfo;
 import com.techan.stockDownload.actions.PostRefreshAction;
 
-public class EventedAlertDialog extends AlertDialog {
+public abstract class EventedAlertDialog extends OkCancelDialog {
+    protected PostRefreshAction action;
 
-    private PostRefreshAction action;
-
-    public EventedAlertDialog(Context context) {
-        super(context);
+    public EventedAlertDialog(Context context,
+                              View dialogView,
+                              String title,
+                              DialogAction dialogAction) {
+        super(context, dialogView, title, dialogAction);
         BusService.getInstance().register(this);
     }
 
-    @Subscribe
-    public void done(DownloadTrendAndStopLossInfo.StopLossHistoryDownloaderComplete event) {
-        if(action != null) {
-            action.execute();
-        }
-
-        this.dismiss();
+    @Override
+    public void cancel() {
+        BusService.getInstance().unregister(this);
+        super.cancel();
     }
 
     @Override
