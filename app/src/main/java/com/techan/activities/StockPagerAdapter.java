@@ -2,13 +2,19 @@ package com.techan.activities;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.view.ViewGroup;
 
+import com.techan.R;
 import com.techan.activities.fragments.StockCostBasisFragment;
 import com.techan.activities.fragments.StockHistoryFragment;
 import com.techan.activities.fragments.StockKeyStatsFragment;
@@ -30,6 +36,8 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
     public static final String HISTORY = "History";
 
     private String[] fragmentTypes = new String[FRAGMENT_COUNT];
+    private CharSequence[] icons = new CharSequence[FRAGMENT_COUNT];
+
     private Map<String, Fragment> fragments = new HashMap<>();
     private Uri stockUri;
     private Context ctx;
@@ -47,6 +55,20 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         fragmentTypes[1] = COST_BASIS;
         fragmentTypes[2] = KEY_STATS;
         fragmentTypes[3] = HISTORY;
+
+        setIcon(0, R.drawable.ic_trending_up_white_24dp);
+        setIcon(1, R.drawable.ic_account_balance_white_24dp);
+        setIcon(2, R.drawable.ic_equalizer_white_24dp);
+        setIcon(3, R.drawable.ic_timeline_white_24dp);
+    }
+
+    private void setIcon(int index, int id) {
+        Drawable image = ContextCompat.getDrawable(ctx, id);
+        image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
+        SpannableString sb = new SpannableString(" ");
+        ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        icons[index] = sb;
     }
 
     @Override
@@ -200,6 +222,6 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return fragmentTypes[position];
+        return icons[position];
     }
 }

@@ -146,11 +146,13 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_below="@id/peDivRow"
+                android:paddingTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <android.support.design.widget.TabLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
+                        style="@style/IconTabLayout"
                         android:id="@+id/stock_pager"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>

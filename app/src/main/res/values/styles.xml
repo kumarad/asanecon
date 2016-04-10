@@ -37,6 +37,14 @@ limitations under the License.
     <style name="Widget">
     </style>
 
+    <style name="IconTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/IconTextAppearance</item>
+    </style>
+
+    <style name="IconTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
+
     <style name="Widget.ProgressBar">
         <item name="android:indeterminateOnly">true</item>
         <item name="android:indeterminateBehavior">repeat</item>
