@@ -55,6 +55,8 @@ dependencies {
 
     compile group: 'com.github.PhilJay', name:'MPAndroidChart', version:'2.1.3'
 
+    compile 'com.android.support:design:23.1.1'
+
     compile files('libs/androidplot-core-0.5.2.jar')
     compile('com.crashlytics.sdk.android:crashlytics:2.2.3@aar') {
         transitive = true;

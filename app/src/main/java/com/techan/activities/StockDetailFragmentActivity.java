@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -51,9 +52,6 @@ public class StockDetailFragmentActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         stockUri = (Uri)extras.get(StockContentProvider.CONTENT_ITEM_TYPE);
         portfolioName = extras.getString(HomeActivity.PORTFOLIO);
-
-        PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.stock_pager_title_strip);
-        pagerTabStrip.setTabIndicatorColor(Color.parseColor(Constants.ANDROID_BLUE));
 
         progressView = findViewById(R.id.stockDetailProgressView);
         contentView = findViewById(R.id.stockDetailContentView);
@@ -107,8 +105,13 @@ public class StockDetailFragmentActivity extends AppCompatActivity {
         contentView.setVisibility(View.VISIBLE);
 
         stockPagerAdapter = new StockPagerAdapter(getSupportFragmentManager(), stockUri, getApplicationContext(), portfolioName, symbol);
-        ViewPager viewPager = (ViewPager) findViewById(R.id.stock_pager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.stock_pager_title_strip);
         viewPager.setAdapter(stockPagerAdapter);
+
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.stock_pager);
+        tabLayout.setupWithViewPager(viewPager);
+
         viewPager.setOffscreenPageLimit(StockPagerAdapter.FRAGMENT_COUNT);
 
 
