@@ -12,6 +12,7 @@ import com.squareup.otto.Subscribe;
 import com.techan.R;
 import com.techan.activities.BusService;
 import com.techan.custom.ChartBuilder;
+import com.techan.custom.ChartMarkerView;
 import com.techan.memrepo.GoldRepo;
 import com.techan.memrepo.HistoryRepo;
 import com.techan.stockDownload.retro.GoldDownloader;
@@ -84,7 +85,7 @@ public class GoldFragment extends Fragment {
 
             final TextView goldSelectionView = (TextView) getActivity().findViewById(R.id.goldChartSelection);
             final LineChart goldChart = (LineChart) getActivity().findViewById(R.id.goldChart);
-            ChartBuilder.build(color, goldChart, goldSelectionView, goldPriceMap, "Gold", "Price");
+            ChartBuilder.build(color, goldChart, goldSelectionView, goldPriceMap, "Gold", "Price", new ChartMarkerView(getActivity()));
 
 
             Map<String, Double> spPriceMap = HistoryRepo.getSPRepo().getPrices();
@@ -97,7 +98,7 @@ public class GoldFragment extends Fragment {
             }
             final TextView goldSPSelectionView = (TextView) getActivity().findViewById(R.id.goldSPChartSelection);
             final LineChart goldSPChart = (LineChart) getActivity().findViewById(R.id.goldSPChart);
-            ChartBuilder.build(color, goldSPChart, goldSPSelectionView, ratioMap, "Gold/S&P Ratio", "Gold/S&P Ratio");
+            ChartBuilder.build(color, goldSPChart, goldSPSelectionView, ratioMap, "Gold/S&P Ratio", "Gold/S&P Ratio", new ChartMarkerView(getActivity()));
 
             progressView.setVisibility(View.INVISIBLE);
             contentView.setVisibility(View.VISIBLE);

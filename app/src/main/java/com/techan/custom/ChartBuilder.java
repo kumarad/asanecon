@@ -9,20 +9,22 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class ChartBuilder {
+
+
+
     public static void build(int color,
                              LineChart chart,
                              final TextView selectionView,
                              Map<String, Double> valueMap,
                              String label,
-                             final String valueLabel) {
+                             final String valueLabel,
+                             final ChartMarkerView chartMarkerView) {
         // Y Axis setup
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
@@ -53,6 +55,7 @@ public class ChartBuilder {
             yEntryList.add(new Entry(value.floatValue(), i++));
             dates.add(curEntry.getKey());
         }
+        chartMarkerView.setXData(dates);
 
         LineDataSet yDataSet = new LineDataSet(yEntryList, label);
         yDataSet.setDrawFilled(true);
@@ -60,10 +63,12 @@ public class ChartBuilder {
         yDataSet.setFillColor(color);
         yDataSet.setCircleSize(0);
         yDataSet.setColor(color);
+        yDataSet.setDrawHighlightIndicators(false);
 
         LineData data = new LineData(new ArrayList<>(valueMap.keySet()), yDataSet);
         data.setDrawValues(false);
         data.setHighlightEnabled(true);
+
 
         // General chart settings.
         chart.getLegend().setTextColor(Color.WHITE);
@@ -73,17 +78,21 @@ public class ChartBuilder {
         chart.setGridBackgroundColor(Color.TRANSPARENT);
         chart.setBorderColor(color);
         chart.setDescription("");
-        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-                double doubleVal = Util.roundTwoDecimals(e.getVal());
-                selectionView.setText(String.format("Date:  %s     %s:  %s", dates.get(e.getXIndex()), valueLabel, Double.toString(doubleVal)));
-            }
+        chart.setMarkerView(chartMarkerView);
 
-            @Override
-            public void onNothingSelected() {
 
-            }
-        });
+
+//        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+//            @Override
+//            public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+//                double doubleVal = Util.roundTwoDecimals(e.getVal());
+//                selectionView.setText(String.format("Date:  %s     %s:  %s", dates.get(e.getXIndex()), valueLabel, Double.toString(doubleVal)));
+//            }
+//
+//            @Override
+//            public void onNothingSelected() {
+//
+//            }
+//        });
     }
 }

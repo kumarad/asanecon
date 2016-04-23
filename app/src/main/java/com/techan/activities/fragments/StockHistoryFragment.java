@@ -13,6 +13,7 @@ import com.squareup.otto.Subscribe;
 import com.techan.R;
 import com.techan.activities.BusService;
 import com.techan.custom.ChartBuilder;
+import com.techan.custom.ChartMarkerView;
 import com.techan.memrepo.HistoryRepo;
 import com.techan.stockDownload.retro.StockHistoryDownloader;
 
@@ -73,7 +74,13 @@ public class StockHistoryFragment extends Fragment {
 
         final TextView selectionView = (TextView) rootView.findViewById(R.id.stockHistoryChartSelection);
         final LineChart chart = (LineChart) rootView.findViewById(R.id.stockHistoryChart);
-        ChartBuilder.build(color, chart, selectionView, stockPriceMap, symbol, "Price");
+        ChartBuilder.build(color,
+                chart,
+                selectionView,
+                stockPriceMap,
+                symbol,
+                "Price",
+                new ChartMarkerView(getActivity()));
 
         progressView.setVisibility(View.INVISIBLE);
         chartView.setVisibility(View.VISIBLE);
