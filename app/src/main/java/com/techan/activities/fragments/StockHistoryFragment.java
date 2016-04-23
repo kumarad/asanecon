@@ -68,13 +68,12 @@ public class StockHistoryFragment extends Fragment {
 
     @Subscribe
     public void doneLoading(StockHistoryDownloader.StockHistoryDownloaderComplete event) {
-        int color = getActivity().getResources().getColor(R.color.blue);
-        float borderWidth = 2;
+        int color = getActivity().getResources().getColor(R.color.asaneconTheme);
         Map<String, Double> stockPriceMap = HistoryRepo.getStockRepo(symbol).getPrices();
 
         final TextView selectionView = (TextView) rootView.findViewById(R.id.stockHistoryChartSelection);
         final LineChart chart = (LineChart) rootView.findViewById(R.id.stockHistoryChart);
-        ChartBuilder.build(color, borderWidth, chart, selectionView, stockPriceMap, symbol, "Price");
+        ChartBuilder.build(color, chart, selectionView, stockPriceMap, symbol, "Price");
 
         progressView.setVisibility(View.INVISIBLE);
         chartView.setVisibility(View.VISIBLE);

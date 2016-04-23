@@ -18,7 +18,6 @@ import java.util.Map;
 
 public class ChartBuilder {
     public static void build(int color,
-                             float borderWidth,
                              LineChart chart,
                              final TextView selectionView,
                              Map<String, Double> valueMap,
@@ -27,25 +26,23 @@ public class ChartBuilder {
         // Y Axis setup
         YAxis leftAxis = chart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
-        leftAxis.setAxisLineWidth(borderWidth);
+        leftAxis.setDrawAxisLine(false);
         leftAxis.setStartAtZero(false);
-        leftAxis.setAxisLineColor(color);
-        leftAxis.setTextColor(color);
+        leftAxis.setTextColor(Color.WHITE);
 
         YAxis rightAxis = chart.getAxisRight();
         rightAxis.setDrawGridLines(false);
-        rightAxis.setAxisLineWidth(borderWidth);
+        rightAxis.setDrawAxisLine(false);
         rightAxis.setStartAtZero(false);
         rightAxis.setDrawLabels(false);
-        rightAxis.setAxisLineColor(color);
 
         // X Axis setup
         XAxis xAxis = chart.getXAxis();
+        xAxis.setDrawAxisLine(false);
         xAxis.setDrawGridLines(false);
         xAxis.setDrawLabels(false);
         xAxis.setAxisLineColor(color);
         xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
-        xAxis.setAxisLineWidth(borderWidth);
 
         // Set data.
         final List<String> dates = new ArrayList<>();
@@ -58,8 +55,9 @@ public class ChartBuilder {
         }
 
         LineDataSet yDataSet = new LineDataSet(yEntryList, label);
-        yDataSet.setCircleColorHole(color);
-        yDataSet.setCircleColor(color);
+        yDataSet.setDrawFilled(true);
+        yDataSet.setFillAlpha(255);
+        yDataSet.setFillColor(color);
         yDataSet.setCircleSize(0);
         yDataSet.setColor(color);
 
@@ -68,11 +66,10 @@ public class ChartBuilder {
         data.setHighlightEnabled(true);
 
         // General chart settings.
-        chart.getLegend().setTextColor(color);
+        chart.getLegend().setTextColor(Color.WHITE);
         chart.getLegend().setEnabled(false);
 
         chart.setData(data);
-        chart.setBackgroundColor(Color.TRANSPARENT);
         chart.setGridBackgroundColor(Color.TRANSPARENT);
         chart.setBorderColor(color);
         chart.setDescription("");
