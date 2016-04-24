@@ -111,7 +111,7 @@ public class Util {
     public static String getDate(Calendar cal) {
         String str = cal.get(Calendar.YEAR) + "-";
         str += (cal.get(Calendar.MONTH) + 1) + "-";
-        str += (cal.get(Calendar.DAY_OF_MONTH) + 1);
+        str += cal.get(Calendar.DAY_OF_MONTH);
         return str;
     }
 

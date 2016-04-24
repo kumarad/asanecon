@@ -18,6 +18,8 @@ import com.techan.memrepo.HistoryRepo;
 import com.techan.stockDownload.retro.GoldDownloader;
 import com.techan.stockDownload.retro.SPDownloader;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -80,10 +82,19 @@ public class GoldFragment extends Fragment {
 
     private void done() {
         if(downloadsDone.get() == expectedDownloads) {
-            int color = getActivity().getResources().getColor(R.color.blue);
             Map<String, Double> goldPriceMap = GoldRepo.getRepo().getPrices();
 
-           final LineChart goldChart = (LineChart) getActivity().findViewById(R.id.goldChart);
+            int color;
+            Collection<Double> historicalPrices = goldPriceMap.values();
+            Double lastPrice = (Double)historicalPrices.toArray()[historicalPrices.size()-1];
+            if (lastPrice < GoldRepo.getRepo().getSpotPrice()) {
+                color = getActivity().getResources().getColor(R.color.asaneconRed);
+            } else {
+                color = getActivity().getResources().getColor(R.color.asaneconGreen);
+            }
+
+
+            final LineChart goldChart = (LineChart) getActivity().findViewById(R.id.goldChart);
             ChartBuilder.build(color, goldChart, goldPriceMap, "Gold", new ChartMarkerView(getActivity()));
 
 
