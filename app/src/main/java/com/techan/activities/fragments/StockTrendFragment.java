@@ -1,5 +1,6 @@
 package com.techan.activities.fragments;
 
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -61,6 +62,7 @@ public class StockTrendFragment extends Fragment {
             InfoDialog.setOnClickInfoDialog(highLowAlertView, inflater, rootView.getResources().getString(R.string.breakout));
         } else if(curPrice < low90Day) {
             highLowAlertView.setText("Downside");
+            changeAlertColor(highLowAlertView);
             InfoDialog.setOnClickInfoDialog(highLowAlertView, inflater, rootView.getResources().getString(R.string.downside));
         } else {
             highLowAlertView.setVisibility(View.INVISIBLE);
@@ -82,6 +84,7 @@ public class StockTrendFragment extends Fragment {
         TextView mov50AvgAlertView = (TextView) rootView.findViewById(R.id.movAvg50Alert);
         if(curPrice < mov50Avg) {
             mov50AvgAlertView.setText("Down Price Action");
+            changeAlertColor(mov50AvgAlertView);
             InfoDialog.setOnClickInfoDialog(mov50AvgAlertView, inflater, rootView.getResources().getString(R.string.down_price_action));
         } else {
             mov50AvgAlertView.setVisibility(View.INVISIBLE);
@@ -90,6 +93,7 @@ public class StockTrendFragment extends Fragment {
         TextView mov200AvgAlertView = (TextView) rootView.findViewById(R.id.mov200AvgAlert);
         if(curPrice < mov200Avg) {
             mov200AvgAlertView.setText("Bear Trend");
+            changeAlertColor(mov200AvgAlertView);
             InfoDialog.setOnClickInfoDialog(mov200AvgAlertView, inflater, rootView.getResources().getString(R.string.bear_trend));
         } else if(curPrice > mov200Avg) {
             mov200AvgAlertView.setText("Bull Trend");
@@ -154,6 +158,7 @@ public class StockTrendFragment extends Fragment {
             } else {
                 InfoDialog.setOnClickInfoDialog(volAlertView, inflater, rootView.getResources().getString(R.string.distribution_light));
             }
+            changeAlertColor(volAlertView);
         } else if((vol > avgVol && change > 0) || (vol < avgVol && change < 0)) {
             volAlertView.setText("Accumulation");
             if((vol > avgVol && change > 0)) {
@@ -164,6 +169,10 @@ public class StockTrendFragment extends Fragment {
         } else {
             volAlertView.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void changeAlertColor(View view) {
+        view.getBackground().setColorFilter(view.getResources().getColor(R.color.asaneconRed), PorterDuff.Mode.SRC_IN);
     }
 
 }
