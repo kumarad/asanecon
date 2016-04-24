@@ -8,4 +8,6 @@
     <color name="asaneconTheme">#93CAB4</color>
     <color name="backgroundDarkColor">#212121</color>
     <color name="backgroundActionBarColor">#3F4747</color>
+    <color name="asaneconRed">#ba475f</color>
+    <color name="asaneconGreen">#93CAB4</color>
 </resources>

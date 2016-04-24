@@ -8,6 +8,7 @@ import com.techan.stockDownload.actions.PostRefreshAction;
 
 public abstract class EventedAlertDialog extends OkCancelDialog {
     protected PostRefreshAction action;
+    private boolean registered;
 
     public EventedAlertDialog(Context context,
                               View dialogView,
@@ -15,17 +16,27 @@ public abstract class EventedAlertDialog extends OkCancelDialog {
                               DialogAction dialogAction) {
         super(context, dialogView, title, dialogAction);
         BusService.getInstance().register(this);
+        registered = true;
     }
 
     @Override
     public void cancel() {
-        BusService.getInstance().unregister(this);
+        if(registered) {
+            BusService.getInstance().unregister(this);
+            registered = false;
+        }
+
         super.cancel();
     }
 
     @Override
     public void dismiss() {
-        BusService.getInstance().unregister(this);
+        //Handles the case where cancel invokes dismiss.
+        if(registered) {
+            BusService.getInstance().unregister(this);
+            registered = false;
+        }
+
         super.dismiss();
     }
 

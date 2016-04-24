@@ -70,11 +70,13 @@ public class StockCursorAdapter extends SimpleCursorAdapter {
             priceView.setTextColor(Color.GRAY);
             changeView.setTextColor(Color.GRAY);
         } else if (change < 0) {
-            priceView.setTextColor(Color.RED);
-            changeView.setTextColor(Color.RED);
+            int red = convertView.getResources().getColor(R.color.asaneconRed);
+            priceView.setTextColor(red);
+            changeView.setTextColor(red);
         } else {
-            priceView.setTextColor(Color.GREEN);
-            changeView.setTextColor(Color.GREEN);
+            int green = convertView.getResources().getColor(R.color.asaneconGreen);
+            priceView.setTextColor(green);
+            changeView.setTextColor(green);
         }
 
         return row;

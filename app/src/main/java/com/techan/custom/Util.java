@@ -15,6 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techan.R;
+
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -219,10 +221,10 @@ public class Util {
 
     public static void showChange(TextView textView, double change, double original, TextView labelView) {
         if(change < 0) {
-            textView.setTextColor(Color.RED);
+            textView.setTextColor(textView.getResources().getColor(R.color.asaneconRed));
             if(labelView != null) labelView.setText("Loss:");
         } else if(change > 0) {
-            textView.setTextColor(Color.GREEN);
+            textView.setTextColor(textView.getResources().getColor(R.color.asaneconGreen));
             if(labelView != null) labelView.setText("Gain:");
         }
 
@@ -244,7 +246,7 @@ public class Util {
             boolean withinUpperBound = rangeEndCanBeEqual ? value <= rangeEnd : value < rangeEnd;
             boolean withinLowerBound = rangeStartCanBeEqual ? value >= rangeStart : value > rangeStart;
             if(withinLowerBound && withinUpperBound) {
-                view.setTextColor(Color.GREEN);
+                view.setTextColor(view.getResources().getColor(R.color.asaneconGreen));
                 return true;
             }
         }
@@ -261,7 +263,7 @@ public class Util {
             boolean withinUpperBound = rangeEndCanBeEqual ? value <= rangeEnd : value < rangeEnd;
             boolean withinLowerBound = rangeStartCanBeEqual ? value >= rangeStart : value > rangeStart;
             if(withinLowerBound && withinUpperBound) {
-                view.setTextColor(Color.RED);
+                view.setTextColor(view.getResources().getColor(R.color.asaneconRed));
                 return true;
             }
         }

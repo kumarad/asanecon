@@ -47,10 +47,10 @@ public class DrawerSubMenuItem implements IDrawerMenuItem {
             changeView.setText(Double.toString(Util.roundTwoDecimals(overallChange)) + "%");
 
             if(overallChange > 0) {
-                changeView.setTextColor(Color.GREEN);
+                changeView.setTextColor(changeView.getResources().getColor(R.color.asaneconGreen));
                 changeView.setVisibility(View.VISIBLE);
             } else if(overallChange < 0) {
-                changeView.setTextColor(Color.RED);
+                changeView.setTextColor(changeView.getResources().getColor(R.color.asaneconRed));
                 changeView.setVisibility(View.VISIBLE);
             } else {
                 changeView.setVisibility(View.GONE);

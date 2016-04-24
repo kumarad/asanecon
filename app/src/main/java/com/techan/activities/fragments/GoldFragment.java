@@ -83,9 +83,8 @@ public class GoldFragment extends Fragment {
             int color = getActivity().getResources().getColor(R.color.blue);
             Map<String, Double> goldPriceMap = GoldRepo.getRepo().getPrices();
 
-            final TextView goldSelectionView = (TextView) getActivity().findViewById(R.id.goldChartSelection);
-            final LineChart goldChart = (LineChart) getActivity().findViewById(R.id.goldChart);
-            ChartBuilder.build(color, goldChart, goldSelectionView, goldPriceMap, "Gold", "Price", new ChartMarkerView(getActivity()));
+           final LineChart goldChart = (LineChart) getActivity().findViewById(R.id.goldChart);
+            ChartBuilder.build(color, goldChart, goldPriceMap, "Gold", new ChartMarkerView(getActivity()));
 
 
             Map<String, Double> spPriceMap = HistoryRepo.getSPRepo().getPrices();
@@ -96,9 +95,9 @@ public class GoldFragment extends Fragment {
                     ratioMap.put(curGoldEntry.getKey(), curGoldEntry.getValue() / spValue);
                 }
             }
-            final TextView goldSPSelectionView = (TextView) getActivity().findViewById(R.id.goldSPChartSelection);
+
             final LineChart goldSPChart = (LineChart) getActivity().findViewById(R.id.goldSPChart);
-            ChartBuilder.build(color, goldSPChart, goldSPSelectionView, ratioMap, "Gold/S&P Ratio", "Gold/S&P Ratio", new ChartMarkerView(getActivity()));
+            ChartBuilder.build(color, goldSPChart, ratioMap, "Gold/S&P Ratio", new ChartMarkerView(getActivity()));
 
             progressView.setVisibility(View.INVISIBLE);
             contentView.setVisibility(View.VISIBLE);

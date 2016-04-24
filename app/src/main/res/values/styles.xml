@@ -92,4 +92,18 @@ limitations under the License.
         <item name="android:layout_marginBottom">3dp</item>
     </style>
 
+    <style name="stockAlertPositive">
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:background">@drawable/rounded_edges_green</item>
+        <item name="android:layout_marginBottom">3dp</item>
+    </style>
+
+    <style name="stockAlertNegative">
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:background">@drawable/rounded_edges_red</item>
+        <item name="android:layout_marginBottom">3dp</item>
+    </style>
+
 </resources>

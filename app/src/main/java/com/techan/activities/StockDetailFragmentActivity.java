@@ -20,6 +20,7 @@ import com.squareup.otto.Subscribe;
 import com.techan.R;
 import com.techan.activities.dialogs.BuyDialog;
 import com.techan.activities.dialogs.DeleteDialog;
+import com.techan.activities.dialogs.HistoryDialogFactory;
 import com.techan.activities.dialogs.PeDialog;
 import com.techan.activities.dialogs.StopLossDialogFactory;
 import com.techan.activities.dialogs.TargetDialog;
@@ -184,6 +185,9 @@ public class StockDetailFragmentActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.history:
+                HistoryDialogFactory.create(this, stockUri, symbol);
+                return true;
             case R.id.delete:
                 DeleteDialog.create(this, stockUri, symbol, portfolioName);
                 return true;

@@ -16,6 +16,8 @@ public class ChartMarkerView extends MarkerView {
     private final TextView textView2;
     private List<String> xData;
 
+    private float xOffsetMultipler;
+
     public ChartMarkerView(Context context) {
         super(context, R.layout.chart_pop_view);
         textView1 = (TextView) findViewById(R.id.chartPopupText1);
@@ -30,12 +32,18 @@ public class ChartMarkerView extends MarkerView {
     public void refreshContent(Entry e, Highlight highlight) {
         textView1.setText(String.format("%s", e.getVal()));
         textView2.setText(xData.get(e.getXIndex()));
+
+        if(e.getXIndex() > xData.size() - 10) {
+            xOffsetMultipler = 1.08f;
+        } else {
+            xOffsetMultipler = 2;
+        }
     }
 
     @Override
     public int getXOffset() {
         // this will center the marker-view horizontally
-        return -(getWidth() / 2);
+        return (int) -(getWidth() / xOffsetMultipler);
     }
 
     @Override

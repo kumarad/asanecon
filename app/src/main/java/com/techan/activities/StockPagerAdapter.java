@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 
 import com.techan.R;
 import com.techan.activities.fragments.StockCostBasisFragment;
-import com.techan.activities.fragments.StockHistoryFragment;
 import com.techan.activities.fragments.StockKeyStatsFragment;
 import com.techan.activities.fragments.StockTrendFragment;
 import com.techan.custom.Util;
@@ -29,11 +28,10 @@ import java.util.Map;
 
 // Returns a fragment corresponding to one of the sections/tabs/pages.
 public class StockPagerAdapter extends FragmentPagerAdapter {
-    public static final int FRAGMENT_COUNT = 4;
+    public static final int FRAGMENT_COUNT = 3;
     public static final String COST_BASIS = "Cost Basis";
     public static final String TREND = "Trends";
     public static final String KEY_STATS = "Key Statistics";
-    public static final String HISTORY = "History";
 
     private String[] fragmentTypes = new String[FRAGMENT_COUNT];
     private CharSequence[] icons = new CharSequence[FRAGMENT_COUNT];
@@ -54,12 +52,10 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         fragmentTypes[0] = TREND;
         fragmentTypes[1] = COST_BASIS;
         fragmentTypes[2] = KEY_STATS;
-        fragmentTypes[3] = HISTORY;
 
         setIcon(0, R.drawable.ic_trending_up_white_24dp);
         setIcon(1, R.drawable.ic_account_balance_white_24dp);
         setIcon(2, R.drawable.ic_equalizer_white_24dp);
-        setIcon(3, R.drawable.ic_timeline_white_24dp);
     }
 
     private void setIcon(int index, int id) {
@@ -175,13 +171,6 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
         return fragment;
     }
 
-    protected Fragment createHistoryFragment() {
-        StockHistoryFragment fragment = new StockHistoryFragment();
-        fragment.setSymbol(symbol);
-        return fragment;
-
-    }
-
     protected Fragment createKeyStatsFragment() {
         StockKeyStatsFragment fragment = new StockKeyStatsFragment();
 
@@ -208,8 +197,6 @@ public class StockPagerAdapter extends FragmentPagerAdapter {
                 return createCostBasisFragment();
             case 2:
                 return createKeyStatsFragment();
-            case 3:
-                return createHistoryFragment();
         }
 
         return null;

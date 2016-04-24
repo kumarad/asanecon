@@ -1,7 +1,6 @@
 package com.techan.custom;
 
 import android.graphics.Color;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -20,10 +19,8 @@ public class ChartBuilder {
 
     public static void build(int color,
                              LineChart chart,
-                             final TextView selectionView,
                              Map<String, Double> valueMap,
                              String label,
-                             final String valueLabel,
                              final ChartMarkerView chartMarkerView) {
         // Y Axis setup
         YAxis leftAxis = chart.getAxisLeft();
@@ -79,20 +76,5 @@ public class ChartBuilder {
         chart.setBorderColor(color);
         chart.setDescription("");
         chart.setMarkerView(chartMarkerView);
-
-
-
-//        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-//            @Override
-//            public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-//                double doubleVal = Util.roundTwoDecimals(e.getVal());
-//                selectionView.setText(String.format("Date:  %s     %s:  %s", dates.get(e.getXIndex()), valueLabel, Double.toString(doubleVal)));
-//            }
-//
-//            @Override
-//            public void onNothingSelected() {
-//
-//            }
-//        });
     }
 }

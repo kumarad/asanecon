@@ -50,7 +50,7 @@
                         android:layout_height="wrap_content"
                         android:text="Valuation"
                         android:textStyle="bold"
-                        android:layout_marginLeft="5dp"/>
+                        android:layout_marginStart="5dp"/>
 
                     <LinearLayout
                         android:id="@+id/valuationAlert"
@@ -63,9 +63,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="\u00A0\u2713\u00A0"
+                            android:text="\u00A0\u00A0i\u00A0\u00A0"
                             android:textStyle="bold"
-                            style="@style/stockAlert"/>
+                            style="@style/stockAlertPositive"/>
                     </LinearLayout>
 
                 </RelativeLayout>
@@ -155,9 +155,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="\u00A0\u00A0!\u00A0\u00A0"
+                            android:text="\u00A0\u00A0i\u00A0\u00A0"
                             android:textStyle="bold"
-                            style="@style/stockAlert"/>
+                            style="@style/stockAlertNegative"/>
 
                     </LinearLayout>
 
@@ -248,9 +248,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="\u00A0\u00A0!\u00A0\u00A0"
+                            android:text="\u00A0\u00A0i\u00A0\u00A0"
                             android:textStyle="bold"
-                            style="@style/stockAlert"/>
+                            style="@style/stockAlertNegative"/>
 
                     </LinearLayout>
 
@@ -323,8 +323,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="\u00A0\u2713\u00A0"
-                            style="@style/stockAlert"/>
+                            android:text="\u00A0\u00A0i\u00A0\u00A0"
+                            style="@style/stockAlertPositive"/>
 
                     </LinearLayout>
 
