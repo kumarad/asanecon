@@ -19,6 +19,10 @@ public class KeyStatsRepo {
     }
 
     public StockKeyStats get(String symbol) {
+        if (symbol == null) {
+            return null;
+        }
+
         return cache.get(symbol);
     }
 }

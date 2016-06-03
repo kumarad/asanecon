@@ -76,8 +76,6 @@ public class StockKeyStatsFragment extends Fragment {
         progressView.setVisibility(View.INVISIBLE);
 
         StockKeyStats stats = KeyStatsRepo.getRepo().get(symbol);
-
-
         if(stats != null) {
             statsView.setVisibility(View.VISIBLE);
             noStatsView.setVisibility(View.INVISIBLE);
