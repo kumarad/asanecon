@@ -24,8 +24,8 @@ android {
         applicationId "com.techan"
         minSdkVersion 17
         targetSdkVersion 24
-        versionCode 20
-        versionName "0.0.20"
+        versionCode 21
+        versionName "0.0.21"
     }
 
     buildTypes {
