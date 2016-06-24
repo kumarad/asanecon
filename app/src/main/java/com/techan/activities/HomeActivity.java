@@ -184,7 +184,7 @@ public class HomeActivity extends AppCompatActivity implements IDrawerActivity {
             FragmentManager fragmentManager = getFragmentManager();
             android.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.homeFrameContainer, fragment);
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             transaction.commit();
         }
 
