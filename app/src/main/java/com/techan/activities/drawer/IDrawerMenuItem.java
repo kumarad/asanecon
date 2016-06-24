@@ -7,8 +7,9 @@ public interface IDrawerMenuItem {
     Integer MENU_SUB_ITEM_TYPE_ID = 1;
     Integer MENU_ADD_ITEM_TYPE_ID = 2;
     Integer MENU_GOLD_ITEM_TYPE_ID = 3;
+    Integer MENU_HEADER_ITEM_TYPE_ID = 4;
 
-    Integer DRAWER_MENU_ITEM_TYPE_COUNT = 4;
+    Integer DRAWER_MENU_ITEM_TYPE_COUNT = 5;
 
     int getItemTypeId();
     int getLayoutId();

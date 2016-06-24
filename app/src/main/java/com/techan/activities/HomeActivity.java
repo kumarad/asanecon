@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +20,7 @@ import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Subscribe;
 import com.techan.R;
 import com.techan.activities.dialogs.AddPortfolio;
+import com.techan.activities.drawer.DrawerHeaderItem;
 import com.techan.activities.drawer.DrawerMenuAddItem;
 import com.techan.activities.drawer.DrawerMenuGoldItem;
 import com.techan.activities.drawer.DrawerMenuItem;
@@ -71,7 +71,8 @@ public class HomeActivity extends AppCompatActivity implements IDrawerActivity {
         if(savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt(CURRENT_POSITION);
         } else {
-            currentPosition = 0;
+            // The asanecon banner is at position 0.
+            currentPosition = 1;
         }
 
         loadDrawerItems();
@@ -106,6 +107,7 @@ public class HomeActivity extends AppCompatActivity implements IDrawerActivity {
 
     private void loadDrawerItems() {
         menuItems.clear();
+        menuItems.add(new DrawerHeaderItem());
         menuItems.add(new DrawerMenuItem(ALL_STOCKS));
 
         if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(SettingsActivity.ENABLE_GOLD_TRACKER, false)) {
