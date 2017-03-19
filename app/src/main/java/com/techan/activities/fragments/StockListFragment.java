@@ -125,8 +125,7 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
     public static class RefreshCompleteEvent {}
 
     private void startRefresh() {
-        boolean downloadGold = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(SettingsActivity.ENABLE_GOLD_TRACKER, false);
-        (new RefreshTask(getActivity().getContentResolver(), false, downloadGold)).download(getActivity());
+        (new RefreshTask(getActivity().getContentResolver(), false)).download(getActivity());
     }
 
     @Subscribe

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.squareup.otto.Subscribe;
@@ -19,7 +18,6 @@ import com.techan.stockDownload.retro.GoldDownloader;
 import com.techan.stockDownload.retro.SPDownloader;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -87,12 +85,21 @@ public class GoldFragment extends Fragment {
             int color;
             Collection<Double> historicalPrices = goldPriceMap.values();
             Double lastPrice = (Double)historicalPrices.toArray()[historicalPrices.size()-1];
-            if (lastPrice < GoldRepo.getRepo().getSpotPrice()) {
-                color = getActivity().getResources().getColor(R.color.asaneconRed);
+            final Double spotPrice = GoldRepo.getRepo().getSpotPrice();
+            if (spotPrice != null && spotPrice > 0) {
+                if (lastPrice <= GoldRepo.getRepo().getSpotPrice()) {
+                    color = getActivity().getResources().getColor(R.color.asaneconGreen);
+                } else {
+                    color = getActivity().getResources().getColor(R.color.asaneconRed);
+                }
             } else {
-                color = getActivity().getResources().getColor(R.color.asaneconGreen);
+                final Double secondToLastPrice = (Double)historicalPrices.toArray()[historicalPrices.size()-2];
+                if (lastPrice >= secondToLastPrice) {
+                    color = getActivity().getResources().getColor(R.color.asaneconGreen);
+                } else {
+                    color = getActivity().getResources().getColor(R.color.asaneconRed);
+                }
             }
-
 
             final LineChart goldChart = (LineChart) getActivity().findViewById(R.id.goldChart);
             ChartBuilder.build(color, goldChart, goldPriceMap, "Gold", new ChartMarkerView(getActivity()));

@@ -40,8 +40,8 @@ public class RefreshTask {
     }
 
     // Refresh everything.
-    public RefreshTask(ContentResolver contentResolver, boolean autoRefresh, boolean downloadGoldSpotPrice) {
-        this.downloadGoldSpotPrice = downloadGoldSpotPrice;
+    public RefreshTask(ContentResolver contentResolver, boolean autoRefresh) {
+        this.downloadGoldSpotPrice = true;
         initialize(contentResolver, autoRefresh);
 
         String[] projection = {StocksTable.COLUMN_ID, StocksTable.COLUMN_SYMBOL};
@@ -128,14 +128,18 @@ public class RefreshTask {
 
         if(symbols.size() != 0) {
             // Download real time data for stock symbols.
-            if(symbols.contains(GOLD_SYMBOL)) {
-                // The user add the stock symbol outside of the gold tracker.
+            if (symbols.contains(GOLD_SYMBOL)) {
+                // The user added the stock symbol outside of the gold tracker.
                 goldPriceRequestedAsSymbol = true;
-            } else if(downloadGoldSpotPrice){
-                // We need to add the symbol since we need it to track the spot price.
-                symbols.add(GOLD_SYMBOL);
             }
+        }
 
+        if (downloadGoldSpotPrice){
+            // We need to add the symbol since we need it to track the spot price. Might already be there. But thats ok.
+            symbols.add(GOLD_SYMBOL);
+        }
+
+        if (symbols.size() != 0) {
             DownloadQuote.download(symbols);
         } else {
             endRefresh();
