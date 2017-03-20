@@ -21,7 +21,6 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String AUTO_REFRESH_KEY = "autoRefresh";
     public static final String REFRESH_INTERVAL_KEY ="refreshInterval";
     public static final String REFRESH_WIFI_ONLY_KEY = "refreshWifiOnly";
-    public static final String SHOW_COST_BASIS = "showCostBasis";
     public static final String ENABLE_GOLD_TRACKER = "goldTracker";
     public static final int STOP_LOSS_DEFAULT = 25;
 
@@ -123,18 +122,6 @@ public class SettingsActivity extends AppCompatActivity {
             AlarmReceiver.cancelAutoRefresh(parent);
             AlarmReceiver.setAutoRefresh(parent, Integer.parseInt(refreshIntervalStr));
         }
-    }
-
-    public static boolean getCostBasisSetting(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(SettingsActivity.SHOW_COST_BASIS, false);
-    }
-
-    public static void setCostBasisSetting(Context context, boolean showCostBasis) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(SettingsActivity.SHOW_COST_BASIS, showCostBasis);
-        editor.commit();
     }
 
     @Override

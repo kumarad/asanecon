@@ -1,30 +1,31 @@
 package com.techan.custom;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.techan.R;
-import com.techan.activities.SettingsActivity;
 import com.techan.profile.ProfileManager;
 import com.techan.profile.SymbolProfile;
 
 public class StockCursorAdapter extends SimpleCursorAdapter {
 
-    Context context;
-    Activity activity;
+    private Context context;
+    private boolean showCostBasis;
 
-    public StockCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+
+    public StockCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags, boolean showCostBasis) {
         super(context, layout, c, from, to, flags);
 
         this.context = context;
-        this.activity = (Activity)context;
+        this.showCostBasis = showCostBasis;
+    }
+
+    public void updateCostBasis(boolean showCostBasis) {
+        this.showCostBasis = showCostBasis;
     }
 
     @Override
@@ -43,9 +44,6 @@ public class StockCursorAdapter extends SimpleCursorAdapter {
 
         TextView priceView = (TextView) convertView.findViewById(R.id.listPrice);
         TextView changeView = (TextView) convertView.findViewById(R.id.listChange);
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean showCostBasis = prefs.getBoolean(SettingsActivity.SHOW_COST_BASIS, false);
 
         Double price = c.getDouble(2);
         price = Util.roundTwoDecimals(price);

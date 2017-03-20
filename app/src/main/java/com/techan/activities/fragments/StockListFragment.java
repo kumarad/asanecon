@@ -62,6 +62,8 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
     protected ListView listView;
     private View progressView;
 
+    private boolean showCostBasis = false;
+
     protected IDrawerActivity drawerActivity;
 
     AtomicInteger refreshActions = new AtomicInteger(0);
@@ -186,7 +188,7 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
             // Create a cursor that maps each stock symbol to the appropriate field on the UI.
             String[] from = new String[] {StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_CHANGE};
             int[] to = new int[] { R.id.listSymbol, R.id.listPrice, R.id.listChange};
-            adapter = new StockCursorAdapter(getActivity(), R.layout.stock_row, null, from, to, 0);
+            adapter = new StockCursorAdapter(getActivity(), R.layout.stock_row, null, from, to, 0, showCostBasis);
 
             listView.setAdapter(adapter);
         }
@@ -247,8 +249,6 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.listmenu, menu);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean showCostBasis = prefs.getBoolean(SettingsActivity.SHOW_COST_BASIS, false);
         MenuItem costVsCurrentItem = menu.findItem(R.id.showCostBasis);
         if(showCostBasis) {
             costVsCurrentItem.setTitle(getString(R.string.showCurrentPrice));
@@ -278,7 +278,6 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
                 settings();
                 return true;
             case R.id.showCostBasis:
-                boolean showCostBasis = SettingsActivity.getCostBasisSetting(getActivity());
                 if(showCostBasis) {
                     item.setTitle(getString(R.string.showCurrentPrice));
                     showCostBasis = false;
@@ -286,7 +285,7 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
                     item.setTitle(getString(R.string.showCostBasis));
                     showCostBasis = true;
                 }
-                SettingsActivity.setCostBasisSetting(getActivity(), showCostBasis);
+                adapter.updateCostBasis(showCostBasis);
                 adapter.notifyDataSetInvalidated();
                 getActivity().invalidateOptionsMenu();
                 return true;
