@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -63,6 +62,7 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
     private View progressView;
 
     private boolean showCostBasis = false;
+    private boolean showStopLoss = false;
 
     protected IDrawerActivity drawerActivity;
 
@@ -188,7 +188,7 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
             // Create a cursor that maps each stock symbol to the appropriate field on the UI.
             String[] from = new String[] {StocksTable.COLUMN_SYMBOL, StocksTable.COLUMN_PRICE, StocksTable.COLUMN_CHANGE};
             int[] to = new int[] { R.id.listSymbol, R.id.listPrice, R.id.listChange};
-            adapter = new StockCursorAdapter(getActivity(), R.layout.stock_row, null, from, to, 0, showCostBasis);
+            adapter = new StockCursorAdapter(getActivity(), R.layout.stock_row, null, from, to, 0);
 
             listView.setAdapter(adapter);
         }
@@ -250,10 +250,17 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.listmenu, menu);
         MenuItem costVsCurrentItem = menu.findItem(R.id.showCostBasis);
+        MenuItem stopLossItem = menu.findItem(R.id.showStopLoss);
         if(showCostBasis) {
             costVsCurrentItem.setTitle(getString(R.string.showCurrentPrice));
         } else {
             costVsCurrentItem.setTitle(getString(R.string.showCostBasis));
+        }
+
+        if (showStopLoss) {
+            stopLossItem.setTitle(getString(R.string.showCurrentPrice));
+        } else {
+            stopLossItem.setTitle("Show Stop Loss");
         }
 
         MenuItem deleteAllStocksItem = menu.findItem(R.id.deleteAllStocks);
@@ -284,9 +291,23 @@ public class StockListFragment extends Fragment implements LoaderManager.LoaderC
                 } else {
                     item.setTitle(getString(R.string.showCostBasis));
                     showCostBasis = true;
+                    showStopLoss = false;
                 }
-                adapter.updateCostBasis(showCostBasis);
+                adapter.update(showCostBasis, showStopLoss);
                 adapter.notifyDataSetInvalidated();
+                getActivity().invalidateOptionsMenu();
+                return true;
+            case R.id.showStopLoss:
+                if (showStopLoss) {
+                    item.setTitle("Show Current Price");
+                    showStopLoss = false;
+                } else {
+                    item.setTitle("Show Stop Loss");
+                    showStopLoss = true;
+                    showCostBasis = false;
+                }
+                adapter.update(showCostBasis, showStopLoss);
+                adapter.notifyDataSetInvalidated();;
                 getActivity().invalidateOptionsMenu();
                 return true;
             case R.id.deletePortfolio:

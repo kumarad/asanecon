@@ -215,7 +215,7 @@ public class StockCostBasisFragment extends Fragment {
         if(slPercent != null && slPercent != 0) {
             stopLossView.setVisibility(View.VISIBLE);
             int progress = 0;
-            double low = highPrice - ((((double)slPercent)*highPrice)/100.00);
+            double low = getLowPrice(highPrice, slPercent);
             if(curPrice > low && curPrice <= highPrice) {
                 progress = (int)(((curPrice - low)*100.00)/(highPrice - low));
             } // else lower. Can't be higher!
@@ -225,6 +225,10 @@ public class StockCostBasisFragment extends Fragment {
         } else {
             stopLossView.setVisibility(View.GONE);
         }
+    }
+
+    public static double getLowPrice(double highPrice, int slPercent) {
+        return highPrice - ((((double)slPercent)*highPrice)/100.00);
     }
 
     protected boolean handleTargetPricing(Double curPrice, Double targetPrice, Boolean lessThanEqual) {

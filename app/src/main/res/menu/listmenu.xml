@@ -25,6 +25,14 @@
     </item>
 
     <item
+        android:id="@+id/showStopLoss"
+        app:showAsAction="collapseActionView"
+        android:title="Show Stop Loss"
+        >
+    </item>
+
+
+    <item
             android:id="@+id/deletePortfolio"
             app:showAsAction="collapseActionView"
             android:title="Delete Portfolio"

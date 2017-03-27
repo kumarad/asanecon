@@ -1,11 +1,9 @@
 package com.techan.activities;
 
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +25,6 @@ import com.techan.activities.dialogs.TargetDialog;
 import com.techan.contentProvider.StockContentProvider;
 import com.techan.custom.Util;
 import com.techan.database.StocksTable;
-import com.techan.profile.Constants;
 import com.techan.progressbar.SaundProgressBar;
 import com.techan.stockDownload.DownloadTrendAndStopLossInfo;
 
